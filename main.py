@@ -1,1 +1,1 @@
-print('Wellcome to Moshe Pizza!')
+print('Welcome to Moshe Pizza!')
