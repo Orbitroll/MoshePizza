@@ -1,9 +1,14 @@
-print('Welcome to Moshe Pizza!')
-name = input('Please enter your name: ')
-order = input(f'Dear {name},where do you want to sit? : ')
-while not 'inside' in order and not 'outside' in order:
-    order = input(f'Dear {name},please tell me where you want to sit? : ')
-if 'inside' in order:
-    print(f'Great! We have a nice table for you inside, {name}.')
-elif 'outside' in order:
-    print(f' {name} its cold outside but do whatever you want.')
+import abc
+class _Pizza(classmethod):
+    def __init__(self, size: str, crust: str, topping: list = None):
+        self.size = size
+        self.crust = crust
+        self.topping = topping if topping else []
+
+    def add_topping(self, topping: str):
+        if topping not in self.topping:
+            self.topping.append(topping)
+
+    def __str__(self):
+        return f' {self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}'
+
