@@ -1,5 +1,4 @@
-import abc
-class _Pizza(classmethod):
+class Pizza():
     def __init__(self, size: str, crust: str, topping: list = None):
         self.size = size
         self.crust = crust
