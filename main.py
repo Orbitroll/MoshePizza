@@ -11,4 +11,3 @@ class _Pizza(classmethod):
 
     def __str__(self):
         return f' {self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}'
-
