@@ -26,3 +26,6 @@ def create_pizza():
 
     return jsonify(pizza.to_dict()), 201
 
+if __name__ == '__main__':
+    app.run(port=5000, debug=True)
+
