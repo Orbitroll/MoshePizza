@@ -13,7 +13,7 @@ class _Pizza:
             self.topping.append(topping)
 
     def str(self):
-        return f'} {self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}'
+        return f'{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}'
 
 @app.post('/pizza')
 def create_pizza():
