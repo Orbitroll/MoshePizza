@@ -1,0 +1,13 @@
+id:
+recieved:
+	{"date": {"day":14, "month": 08, "year": 2025}, 
+	"time": {"hour":22, "minutes":09, "seconds": 35}}
+address: city, street, building number, entrance, floor, apartment
+items:
+	if CustomPizza:{ 
+			"size": None,
+			"crust": None,
+			"topping": None
+		}
+			
+	else:
