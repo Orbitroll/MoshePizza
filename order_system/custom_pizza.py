@@ -1,5 +1,12 @@
-from main import Pizza
+import json
+from pathlib import path
+from MoshePizza/main import Pizza
 from flask import request
+
+with open:
+    order = json.load("order.json")
+
+print(order[id])
 
 class CustomPizza(Pizza):
     def __init__(self, size, crust, topping = None):
