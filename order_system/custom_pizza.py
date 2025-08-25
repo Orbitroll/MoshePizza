@@ -1,6 +1,5 @@
 import json
-from pathlib import path
-from MoshePizza/main import Pizza
+from main import _Pizza
 from flask import request
 
 with open:
@@ -8,7 +7,7 @@ with open:
 
 print(order[id])
 
-class CustomPizza(Pizza):
+class CustomPizza(_Pizza):
     def __init__(self, size, crust, topping = None):
         super().__init__(size, crust, topping)
 
