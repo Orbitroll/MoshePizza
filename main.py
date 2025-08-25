@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
+
 app = Flask('Pizza Moshe')
 orders = []
+
 
 class Pizza:
     def __init__(self, size: str = "small", crust: str = "thin", topping: list | None = None):
@@ -49,6 +51,7 @@ def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
     return jsonify(orders[-1]), 200
+
 
 @app.get('/pizza/all')
 def all_orders():
