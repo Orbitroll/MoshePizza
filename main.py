@@ -32,7 +32,6 @@ def create_pizza():
 
 
 @app.get('/pizza')
-@app.get('/pizza')
 def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
