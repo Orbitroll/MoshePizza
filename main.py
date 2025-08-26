@@ -51,7 +51,7 @@ def last_orders():
     return jsonify(orders[-1]), 200
 
 
-@app.get('order/pizza/all-orders')
+@app.get('/order/pizza/all-orders')
 def all_orders():
     return jsonify(orders), 200
 
