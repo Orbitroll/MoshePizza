@@ -1,0 +1,29 @@
+{
+"order":
+    {
+    "id":123456,
+    "recieved":
+        {
+        "date": {"day":14, "month":8, "year":2025}, 
+        "time": {"hour":22, "minutes":9, "seconds": 35}
+        },
+    "address":
+        { 
+        "city":"city",
+        "street":"street",
+        "building number":"int:building number",
+        "entrance":"entrance",
+        "floor":"floor",
+        "apartment":"apartment"
+        },
+    "items":
+        {
+        "CustomPizza":
+            { 
+                    "size": "None",
+                    "crust": "None",
+                    "topping": "None"
+            }
+        }
+    }
+}

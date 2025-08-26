@@ -1,13 +1,13 @@
 import json
-from main import _Pizza
-from flask import request
+from main import Pizza
+from flask import Flask, request, jsonify, redirect, url_for
 
 with open:
     order = json.load("order.json")
 
 print(order[id])
 
-class CustomPizza(_Pizza):
+class CustomPizza(Pizza):
     def __init__(self, size, crust, topping = None):
         super().__init__(size, crust, topping)
 
@@ -17,6 +17,6 @@ class CustomPizza(_Pizza):
 
 #idea for logic - json to python, will implement later.
 
-if CustomPizza:
-    globals()["custompizza" + order[id]] = Pizza("size","crust","topping") 
+##if CustomPizza:
+    ##globals()["custompizza" + order[id]] = Pizza("size","crust","topping") 
     

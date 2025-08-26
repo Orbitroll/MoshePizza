@@ -26,7 +26,7 @@ class Pizza:
         return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
 
 
-@app.post('/MoshePizza/order/pizza')
+@app.post('/moshepizza/order/pizza')
 def create_pizza():
     data = request.get_json(silent=True) or {}
 
@@ -45,14 +45,14 @@ def create_pizza():
     return jsonify(order), 201
 
 
-@app.get('/MoshePizza//order/pizza')
+@app.get('/moshepizza//order/pizza')
 def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
     return jsonify(orders[-1]), 200
 
 
-@app.get('/MoshePizza/order/pizza/all-orders')
+@app.get('/moshepizza/order/pizza/all-orders')
 def all_orders():
     return jsonify(orders), 200
 
@@ -67,7 +67,7 @@ def costumer():
     return f'welcome to Moshe Pizza'
 
 
-@app.route('/MoshePizza/<name>')
+@app.route('/moshepizza/<name>')
 def logon(name):
     if name in admins:
         return redirect(url_for('admin_page'))
