@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 
 app = Flask('Pizza Moshe')
 orders = []
+admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
 
 
 class Pizza:
@@ -25,7 +26,7 @@ class Pizza:
         return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
 
 
-@app.post('/order/pizza')
+@app.post('/MoshePizza/order/pizza')
 def create_pizza():
     data = request.get_json(silent=True) or {}
 
@@ -44,16 +45,34 @@ def create_pizza():
     return jsonify(order), 201
 
 
-@app.get('/order/pizza')
+@app.get('/MoshePizza//order/pizza')
 def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
     return jsonify(orders[-1]), 200
 
 
-@app.get('/order/pizza/all-orders')
+@app.get('/MoshePizza/order/pizza/all-orders')
 def all_orders():
     return jsonify(orders), 200
+
+
+@app.route('/admin_page')
+def admin():
+    return f'Welcome Slave'
+
+
+@app.route('/customer_page')
+def costumer():
+    return f'welcome to Moshe Pizza'
+
+
+@app.route('/MoshePizza/<name>')
+def logon(name):
+    if name in admins:
+        return redirect(url_for('admin_page'))
+    else:
+        return redirect(url_for('customer_page'))
 
 
 if __name__ == '__main__':
