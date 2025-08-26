@@ -25,15 +25,13 @@ class Pizza:
         return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
 
 
-@app.post('/pizza')
+@app.post('/order/pizza')
 def create_pizza():
     data = request.get_json(silent=True) or {}
 
     size = data.get("size", "small")
     crust = data.get("crust", "thin")
     topping = data.get("topping", [])
-
-    # נרמול תוספות
     if isinstance(topping, str):
         topping = [topping]
     elif not isinstance(topping, list):
@@ -46,14 +44,14 @@ def create_pizza():
     return jsonify(order), 201
 
 
-@app.get('/pizza')
+@app.get('/order/pizza')
 def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
     return jsonify(orders[-1]), 200
 
 
-@app.get('/pizza/all')
+@app.get('order/pizza/all-orders')
 def all_orders():
     return jsonify(orders), 200
 
