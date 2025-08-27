@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify, redirect, url_for
+from utils import Yavne_weather, NeapolitanPizza
 import json
 import os
 from pathlib import Path
 
-app = Flask('Pizza Moshe')
+pp = Flask('Pizza Moshe')
 orders = []
 admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
 json_dir = Path(__file__).resolve().parent / "jsons"
@@ -83,7 +84,7 @@ def all_orders():
     return jsonify(orders), 200
 
 
-@app.route('/admin_page')
+@app.route('/moshepizza/admin_page')
 def admin():
     return f'Welcome Slave'
 
@@ -99,6 +100,20 @@ def logon(name):
         return redirect(url_for('admin_page'))
     else:
         return redirect(url_for('customer_page'))
+
+
+@app.get('/moshepizza/admin_page/Kitchen_bon')
+def make_dough():
+    weather = Yavne_weather()
+    current = weather.temperature("Yavne", "IL")["current"]
+
+    pizza = NeapolitanPizza()
+    recipe = pizza.dough(
+        ball_weight=300,
+        temp_c=current["temp_c"],
+        humidity_pct=current["humidity_pct"]
+    )
+    return jsonify(recipe), 200
 
 
 if __name__ == '__main__':

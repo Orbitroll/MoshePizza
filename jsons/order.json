@@ -2,6 +2,10 @@
 "order":
     {
     "id":123456,
+    "customer_name":"Ron Dayan",
+    "order_type":"delivery",
+    "phone_number":"0501234567",
+    "table":"address",
     "recieved":
         {
         "date": {"day":14, "month":8, "year":2025}, 
@@ -9,12 +13,12 @@
         },
     "address":
         { 
-        "city":"city",
-        "street":"street",
-        "building number":"int:building number",
-        "entrance":"entrance",
-        "floor":"floor",
-        "apartment":"apartment"
+        "city":"Akko",
+        "street":"Herzel",
+        "building number":25,
+        "entrance":"B",
+        "floor":"ground",
+        "apartment":1
         },
     "items":
         {
