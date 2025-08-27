@@ -4,7 +4,7 @@ import json
 import os
 from pathlib import Path
 
-pp = Flask('Pizza Moshe')
+app = Flask('Pizza Moshe')
 orders = []
 admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
 json_dir = Path(__file__).resolve().parent / "jsons"
