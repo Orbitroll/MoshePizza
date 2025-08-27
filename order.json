@@ -22,7 +22,7 @@
         },
     "items":
         {
-        "CustomPizza":
+        "pizza":
             { 
                     "size": "None",
                     "crust": "None",
