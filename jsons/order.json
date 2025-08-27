@@ -1,7 +1,7 @@
 {
 "order":
     {
-    "id":424242,
+    "id":3256,
     "customer_name":"Ron Dayan",
     "order_type":"delivery",
     "phone_number":"0501234567",
@@ -24,9 +24,9 @@
         {
         "pizza":
             { 
-                    "size": "None",
-                    "crust": "None",
-                    "topping": "None"
+                    "size": "small",
+                    "crust": "thick",
+                    "topping": "onions"
             }
         }
     }
