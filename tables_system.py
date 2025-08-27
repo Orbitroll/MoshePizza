@@ -15,8 +15,7 @@ class Table:
             self.time = time
             self.date = date
             self.customer = customer
-            table_instances += 1 
-            return table_instances
+            table_instances += 1
     
     def __del__(self):
         Table.table_instances -= 1
