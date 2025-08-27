@@ -1,15 +1,14 @@
 import json
+import os
 from main import Pizza
 from flask import Flask, request, jsonify, redirect, url_for
 
-with open:
-    order = json.load("order.json")
-
-print(order[id])
 
 class CustomPizza(Pizza):
-    def __init__(self, size, crust, topping = None):
-        super().__init__(size, crust, topping)
+     def __init__(self, size: str = "small", crust: str = "thin", topping: list | None = None):
+        self.size = size
+        self.crust = crust
+        self.topping = topping or []
 
 
 
