@@ -8,13 +8,21 @@ app = Flask('Pizza Moshe')
 orders = []
 admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
 json_dir = Path(__file__).resolve().parent / "jsons"
+temp_dir = Path(__file__).resolve().parent / "temp_orders"
 order_storage = json_dir/"order.json"
 
 def load_order():
     with open(order_storage, "r", encoding="utf-8") as f:
         return json.load(f)
 
-url_id = int(load_order()["order"]["id"])
+def order_fetch(url_id:int):
+        fetched_path = temp_dir/(f"order_{url_id}.json")
+        if not fetched_path.exists():
+            return None
+        with open(fetched_path, "r", encoding="utf-8") as f:
+            return json.load(f)    
+
+current_id = int(load_order()["order"]["id"])
 
 class Pizza:
     def __init__(self, size: str = "small", crust: str = "thin", topping: list | None = None):
@@ -36,12 +44,15 @@ class Pizza:
     def __str__(self):
         return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
 
-@app.get('/moshepizza/order/<int:url_id>')
-def current_order(url_id:int):
-    current_meal = load_order()
-    if current_meal["order"]["id"] == url_id:
-        return current_meal
 
+@app.get('/moshepizza/order/<int:url_id>')
+def order_show(url_id:int):
+        fetched_json = order_fetch(url_id)
+        if (fetched_json != None) and (fetched_json["id"] == url_id):
+            return fetched_json
+        elif fetched_json == None:
+            return jsonify({"error": "Order not found"}), 404
+        
 
 @app.post('/moshepizza/order/pizza')
 def create_pizza():
@@ -60,6 +71,7 @@ def create_pizza():
 
     pizza_is = Pizza(size, crust, topping)
     order = pizza_is.to_dict()
+    order["id"] = order_id
     orders.append(order)
     
     folder = "temp_orders"
