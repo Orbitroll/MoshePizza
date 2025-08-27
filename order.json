@@ -2,6 +2,8 @@
 "order":
     {
     "id":123456,
+    "order_type":"delivery",
+    "table":"address",
     "recieved":
         {
         "date": {"day":14, "month":8, "year":2025}, 
