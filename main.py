@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify, redirect, url_for
+from flask import Flask, request, jsonify, redirect, url_for, render_template_string, render_template
 from utils import Yavne_weather, NeapolitanPizza
 import json
+import random
 import os
 from pathlib import Path
 
@@ -9,7 +10,9 @@ orders = []
 admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
 json_dir = Path(__file__).resolve().parent / "jsons"
 temp_dir = Path(__file__).resolve().parent / "temp_orders"
+pages_dir = Path(__file__).resolve().parent / "templates"
 order_storage = json_dir/"order.json"
+order_page = pages_dir/"order.html"
 
 def load_order():
     with open(order_storage, "r", encoding="utf-8") as f:
@@ -22,7 +25,7 @@ def order_fetch(url_id:int):
         with open(fetched_path, "r", encoding="utf-8") as f:
             return json.load(f)    
 
-current_id = int(load_order()["order"]["id"])
+current_id = int(load_order()["id"])
 
 class Pizza:
     def __init__(self, size: str = "small", crust: str = "thin", topping: list | None = None):
@@ -54,13 +57,30 @@ def order_show(url_id:int):
             return jsonify({"error": "Order not found"}), 404
         
 
+@app.route('/moshepizza/order/')
+def ordering_page():
+    return render_template('order.html')
+
+
+@app.post('/moshepizza/order/place-order')
+def place_order():
+    order_id = random.randint(100000, 999999)
+    data = request.get_json()
+    data['id'] = order_id
+    with open(order_storage,"w") as f:
+        json.dump(data, f, indent = 4)  
+    return 'Order placed successfully'
+
+
+
+
 @app.post('/moshepizza/order/pizza')
 def create_pizza():
     data = load_order() or {}
     pizza = data.get("order", {}).get("items", {}).get("pizza", {})
-    order_id = data.get("order", {}).get("id", "unknown")
+    order_id = data.get("id", {})
 
-
+    type = pizza.get("type", "custom")
     size = pizza.get("size", "small")
     crust = pizza.get("crust", "thin")
     topping = pizza.get("topping", [])
@@ -71,6 +91,7 @@ def create_pizza():
 
     pizza_is = Pizza(size, crust, topping)
     order = pizza_is.to_dict()
+    order["type"] = type
     order["id"] = order_id
     orders.append(order)
     

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order - Pizza Moshe Yavne</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/logo.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Pizza Moshe Logo" class="logo-img">
+                </div>
+                <div class="logo-stack">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                    <div class="logo-tagline">THE MOST ADVANCED PIZZA IN THE WORLD</div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="delivery.html">Delivery</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="order.html">Order</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Order Section -->
+    <section id="order" class="order-section">
+        <div class="container">
+            <h2 class="section-title">Place Your Order</h2>
+            <p class="section-subtitle">Join the resistance. One pizza at a time.</p>
+            
+            <div class="order-form">
+                <form id="orderForm" action="{{ url_for('place_order') }}" method="POST">
+                    <!-- Customer Information -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">
+                            <i class="fas fa-user"></i>
+                            Customer Information
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customer_name">Full Name</label>
+                                <input type="text" id="customer_name" name="customer_name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Phone Number</label>
+                                <input type="tel" id="phone_number" name="phone_number" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Details -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">
+                            <i class="fas fa-shopping-cart"></i>
+                            Order Details
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="order_type">Order Type</label>
+                                <select id="order_type" name="order_type" required>
+                                    <option value="">Select order type...</option>
+                                    <option value="delivery">Delivery</option>
+                                    <option value="pickup">Pickup</option>
+                                    <option value="dine-in">Dine In</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="table">Table/Address</label>
+                                <input type="text" id="table" name="table" placeholder="Table number or 'address' for delivery">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address Information (shown when delivery is selected) -->
+                    <div class="form-section" id="addressSection" style="display: none;">
+                        <h3 class="form-section-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Delivery Address
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city">
+                            </div>
+                            <div class="form-group">
+                                <label for="street">Street</label>
+                                <input type="text" id="street" name="street">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="building_number">Building Number</label>
+                                <input type="number" id="building_number" name="building_number">
+                            </div>
+                            <div class="form-group">
+                                <label for="entrance">Entrance</label>
+                                <input type="text" id="entrance" name="entrance" placeholder="A, B, C...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="floor">Floor</label>
+                                <input type="text" id="floor" name="floor" placeholder="ground, 1, 2...">
+                            </div>
+                            <div class="form-group">
+                                <label for="apartment">Apartment</label>
+                                <input type="number" id="apartment" name="apartment">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pizza Details -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">
+                            <i class="fas fa-pizza-slice"></i>
+                            Pizza Details
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pizza_type">Pizza Type</label>
+                                <select id="pizza_type" name="pizza_type" required>
+                                    <option value="">Select pizza type...</option>
+                                    <option value="custom">Custom</option>
+                                    <option value="margherita">Margherita</option>
+                                    <option value="pepperoni">Pepperoni</option>
+                                    <option value="veggie">Veggie</option>
+                                    <option value="supreme">Supreme</option>
+                                    <option value="bbq-chicken">BBQ Chicken</option>
+                                    <option value="mediterranean">Mediterranean</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pizza_size">Size</label>
+                                <select id="pizza_size" name="pizza_size" required>
+                                    <option value="">Select size...</option>
+                                    <option value="small">Small</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="large">Large</option>
+                                    <option value="extra-large">Extra Large</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pizza_crust">Crust</label>
+                                <select id="pizza_crust" name="pizza_crust" required>
+                                    <option value="">Select crust...</option>
+                                    <option value="thin">Thin</option>
+                                    <option value="thick">Thick</option>
+                                    <option value="stuffed">Stuffed</option>
+                                    <option value="gluten-free">Gluten Free</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pizza_topping">Topping</label>
+                                <input type="text" id="pizza_topping" name="pizza_topping" placeholder="e.g., onions, mushrooms, pepperoni...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-rocket"></i>
+                        Place Order
+                    </button>
+                </form>
+
+                <!-- Order Preview -->
+                <div class="order-preview" id="orderPreview" style="display: none;">
+                    <h3 class="form-section-title">
+                        <i class="fas fa-eye"></i>
+                        Order Preview
+                    </h3>
+                    <div class="json-preview">
+                        <pre id="jsonOutput"></pre>
+                    </div>
+                    <div class="preview-actions">
+                        <button type="button" class="btn btn-secondary" id="editOrder">
+                            <i class="fas fa-edit"></i>
+                            Edit Order
+                        </button>
+                        <button type="button" class="btn btn-success" id="confirmOrder">
+                            <i class="fas fa-check"></i>
+                            Confirm & Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                </div>
+                <div class="footer-message">
+                    <p>Fighting corporate food, one slice at a time.</p>
+                    <p>&copy; 2025 Pizza Moshe Yavne. No corporate overlords allowed.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.PLACE_ORDER_URL = "{{ url_for('place_order') }}";
+    </script>
+
+    <script>
+        // Order form handling and JSON generation
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderForm = document.getElementById('orderForm');
+            const addressSection = document.getElementById('addressSection');
+            const orderTypeSelect = document.getElementById('order_type');
+            const orderPreview = document.getElementById('orderPreview');
+            const jsonOutput = document.getElementById('jsonOutput');
+            const editOrderBtn = document.getElementById('editOrder');
+            const confirmOrderBtn = document.getElementById('confirmOrder');
+
+            const PLACE_ORDER_URL = window.PLACE_ORDER_URL;
+
+            console.log('JavaScript loaded'); // Debug line
+            console.log('Order form found:', orderForm); // Debug line
+
+            // Show/hide address section based on order type
+            orderTypeSelect.addEventListener('change', function() {
+                console.log('Order type changed to:', this.value); // Debug line
+                if (this.value === 'delivery') {
+                    addressSection.style.display = 'block';
+                    // Make address fields required
+                    const addressFields = addressSection.querySelectorAll('input');
+                    addressFields.forEach(field => field.required = true);
+                } else {
+                    addressSection.style.display = 'none';
+                    // Remove required from address fields
+                    const addressFields = addressSection.querySelectorAll('input');
+                    addressFields.forEach(field => field.required = false);
+                }
+            });
+
+            // Handle form submission
+            orderForm.addEventListener('submit', function(e) {
+                console.log('Form submitted, preventing default'); // Debug line
+                e.preventDefault();
+                generateOrderPreview();
+            });
+
+            // Edit order button
+            editOrderBtn.addEventListener('click', function() {
+                orderPreview.style.display = 'none';
+                orderForm.style.display = 'block';
+            });
+
+            // Confirm order button
+            confirmOrderBtn.addEventListener('click', function() {
+                saveOrder();
+            });
+
+            // Generate order preview
+            function generateOrderPreview() {
+                console.log('Generating order preview'); // Debug line
+                const formData = new FormData(orderForm);
+                const orderData = {};
+
+                // Convert FormData to object
+                for (let [key, value] of formData.entries()) {
+                    orderData[key] = value;
+                }
+
+                console.log('Order data:', orderData); // Debug line
+
+                // Build the JSON structure matching the example
+                const orderJson = {
+                    order: {
+                        customer_name: orderData.customer_name,
+                        order_type: orderData.order_type,
+                        phone_number: orderData.phone_number,
+                        table: orderData.table,
+                        address: orderData.order_type === 'delivery' ? {
+                            city: orderData.city,
+                            street: orderData.street,
+                            "building number": parseInt(orderData.building_number) || 0,
+                            entrance: orderData.entrance,
+                            floor: orderData.floor,
+                            apartment: parseInt(orderData.apartment) || 0
+                        } : 'irrelevant',
+                        items: {
+                            pizza: {
+                                type: orderData.pizza_type,
+                                size: orderData.pizza_size,
+                                crust: orderData.pizza_crust,
+                                topping: orderData.pizza_topping
+                            }
+                        }
+                    }
+                };
+
+                // Display the preview
+                jsonOutput.textContent = JSON.stringify(orderJson, null, 4);
+                orderForm.style.display = 'none';
+                orderPreview.style.display = 'block';
+                console.log('Order preview displayed'); // Debug line
+            }
+
+            // Save order to JSON file
+            async function saveOrder() {
+                console.log('Attempting to save order'); // Debug line
+                try {
+                    const formData = new FormData(orderForm);
+                    const orderData = {};
+
+                    // Convert FormData to object
+                    for (let [key, value] of formData.entries()) {
+                        orderData[key] = value;
+                    }
+
+                    // Build the final JSON structure
+                    const orderJson = {
+                        order: {
+                            customer_name: orderData.customer_name,
+                            order_type: orderData.order_type,
+                            phone_number: orderData.phone_number,
+                            table: orderData.table,
+                            address: orderData.order_type === 'delivery' ? {
+                                city: orderData.city,
+                                street: orderData.street,
+                                "building number": parseInt(orderData.building_number) || 0,
+                                entrance: orderData.entrance,
+                                floor: orderData.floor,
+                                apartment: parseInt(orderData.apartment) || 0
+                            } : 'Irrelevant',
+                            items: {
+                                pizza: {
+                                    type: orderData.pizza_type,
+                                    size: orderData.pizza_size,
+                                    crust: orderData.pizza_crust,
+                                    topping: orderData.pizza_topping
+                                }
+                            }
+                        }
+                    };
+
+                    // Send to server to save
+                    const response = await fetch(PLACE_ORDER_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(orderJson)
+                    });
+
+                    if (response.ok) {
+                        showSuccessMessage();
+                        // Reset form
+                        orderForm.reset();
+                        orderPreview.style.display = 'none';
+                        orderForm.style.display = 'block';
+                        addressSection.style.display = 'none';
+                    } else {
+                        throw new Error('Failed to save order');
+                    }
+                } catch (error) {
+                    console.error('Error saving order:', error);
+                    showErrorMessage();
+                }
+            }
+
+            // Show success message
+            function showSuccessMessage() {
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Order Saved Successfully!</h3>
+                    <p>Your order has been saved to order.json</p>
+                `;
+                
+                document.querySelector('.order-section .container').appendChild(successDiv);
+                
+                // Remove after 5 seconds
+                setTimeout(() => {
+                    successDiv.remove();
+                }, 5000);
+            }
+
+            // Show error message
+            function showErrorMessage() {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error Saving Order</h3>
+                    <p>There was a problem saving your order. Please try again.</p>
+                `;
+                
+                document.querySelector('.order-section .container').appendChild(errorDiv);
+                
+                // Remove after 5 seconds
+                setTimeout(() => {
+                    errorDiv.remove();
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
