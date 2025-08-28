@@ -6,7 +6,7 @@
     "order_type":"delivery",
     "phone_number":"0501234567",
     "table":"address",
-    "recieved":
+    "timestamp":
         {
         "date": {"day":14, "month":8, "year":2025}, 
         "time": {"hour":22, "minutes":9, "seconds": 35}

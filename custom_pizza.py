@@ -13,9 +13,3 @@ class CustomPizza(Pizza):
 
 
 
-
-#idea for logic - json to python, will implement later.
-
-##if CustomPizza:
-    ##globals()["custompizza" + order[id]] = Pizza("size","crust","topping") 
-    
