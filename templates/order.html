@@ -37,13 +37,14 @@
     </header>
 
     <!-- Order Section -->
-    <section id="order" class="order-section">
+    <section id="order" class="order-section order-page">
         <div class="container">
             <h2 class="section-title">Place Your Order</h2>
             <p class="section-subtitle">Join the resistance. One pizza at a time.</p>
-            
-            <div class="order-form">
-                <form id="orderForm" action="{{ url_for('place_order') }}" method="POST">
+
+            <div class="order-content">
+                <div class="order-form">
+                    <form id="orderForm" action="{{ url_for('place_order') }}" method="POST">
                     <!-- Customer Information -->
                     <div class="form-section">
                         <h3 class="form-section-title">
@@ -78,9 +79,13 @@
                                     <option value="dine-in">Dine In</option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="tableGroup">
                                 <label for="table">Table/Address</label>
                                 <input type="text" id="table" name="table" placeholder="Table number or 'address' for delivery">
+                            </div>
+                            <div class="form-group" id="notesGroup" style="display: none;">
+                                <label for="notes">Delivery Notes</label>
+                                <textarea id="notes" name="notes" placeholder="Entrance code, gate, directions, or other requests"></textarea>
                             </div>
                         </div>
                     </div>
@@ -172,7 +177,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-large">
+                    <button type="submit" class="btn btn-primary btn-large sticky-submit">
                         <i class="fas fa-rocket"></i>
                         Place Order
                     </button>
@@ -198,6 +203,24 @@
                         </button>
                     </div>
                 </div>
+                </div>
+
+                <!-- Right-side Art -->
+                <aside class="order-art">
+                    <img
+                        class="order-image"
+                        src="{{ url_for('static', filename='assets/20250819_2302_Cyberpunk Pizza Chef_remix_01k31ynbx9e67aj10w7kdbaqxv.png') }}"
+                        alt="Cyberpunk Pizza Chef"
+                        loading="lazy"
+                    />
+                    <img
+                        class="order-image"
+                        src="{{ url_for('static', filename='assets/20250829_1803_Chef with Undercut_remix_01k3v5hbzkfbxvbqqyb4e9kcbw.png') }}"
+                        alt="Chef with Undercut"
+                        loading="lazy"
+                    />
+                </aside>
+            </div>
             </div>
         </div>
     </section>
@@ -243,20 +266,32 @@
             console.log('JavaScript loaded'); // Debug line
             console.log('Order form found:', orderForm); // Debug line
 
-            // Show/hide address section based on order type
+            // Show/hide address section and swap table/notes based on order type
+            const tableGroup = document.getElementById('tableGroup');
+            const notesGroup = document.getElementById('notesGroup');
+            const tableInput = document.getElementById('table');
+            const notesTextarea = document.getElementById('notes');
+
+            function updateOrderTypeUI(value) {
+                const isDelivery = value === 'delivery';
+                // Address section toggle + required
+                addressSection.style.display = isDelivery ? 'block' : 'none';
+                const addressFields = addressSection.querySelectorAll('input');
+                addressFields.forEach(field => field.required = isDelivery);
+
+                // Swap Table field with Notes field
+                tableGroup.style.display = isDelivery ? 'none' : 'block';
+                notesGroup.style.display = isDelivery ? 'block' : 'none';
+                // Disable the hidden field so FormData ignores it
+                tableInput.disabled = isDelivery;
+                notesTextarea.disabled = !isDelivery;
+            }
+
+            // Initialize UI on load and on change
+            updateOrderTypeUI(orderTypeSelect.value);
             orderTypeSelect.addEventListener('change', function() {
                 console.log('Order type changed to:', this.value); // Debug line
-                if (this.value === 'delivery') {
-                    addressSection.style.display = 'block';
-                    // Make address fields required
-                    const addressFields = addressSection.querySelectorAll('input');
-                    addressFields.forEach(field => field.required = true);
-                } else {
-                    addressSection.style.display = 'none';
-                    // Remove required from address fields
-                    const addressFields = addressSection.querySelectorAll('input');
-                    addressFields.forEach(field => field.required = false);
-                }
+                updateOrderTypeUI(this.value);
             });
 
             // Handle form submission
@@ -296,7 +331,8 @@
                         customer_name: orderData.customer_name,
                         order_type: orderData.order_type,
                         phone_number: orderData.phone_number,
-                        table: orderData.table,
+                        table: orderData.order_type === 'delivery' ? 'irrelevant' : orderData.table,
+                        notes: orderData.order_type === 'delivery' ? (orderData.notes || '') : '',
                         address: orderData.order_type === 'delivery' ? {
                             city: orderData.city,
                             street: orderData.street,
@@ -341,7 +377,8 @@
                             customer_name: orderData.customer_name,
                             order_type: orderData.order_type,
                             phone_number: orderData.phone_number,
-                            table: orderData.table,
+                            table: orderData.order_type === 'delivery' ? 'Irrelevant' : orderData.table,
+                            notes: orderData.order_type === 'delivery' ? (orderData.notes || '') : '',
                             address: orderData.order_type === 'delivery' ? {
                                 city: orderData.city,
                                 street: orderData.street,

@@ -3,7 +3,8 @@
         "customer_name": "Ron Dayan",
         "order_type": "delivery",
         "phone_number": "0506793640",
-        "table": "25-B Herzel Street",
+        "table": "Irrelevant",
+        "notes": "door code #2525#",
         "address": {
             "city": "Akko",
             "street": "Herzel",
@@ -14,12 +15,12 @@
         },
         "items": {
             "pizza": {
-                "type": "veggie",
+                "type": "margherita",
                 "size": "medium",
-                "crust": "stuffed",
+                "crust": "thick",
                 "topping": "onions"
             }
         }
     },
-    "id": 853054
+    "id": 457846
 }

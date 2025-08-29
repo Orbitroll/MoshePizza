@@ -1224,24 +1224,79 @@ body {
     background: var(--cyber-gray);
 }
 
+.order-page {
+    padding: 60px 0;
+}
+
+.order-page:first-of-type {
+    padding-top: 130px; /* ensure title clears the fixed header */
+}
+
+.order-content {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 30px;
+    align-items: start;
+}
+
+.order-art {
+    position: relative;
+}
+
+.order-image {
+    width: 100%;
+    height: auto;
+    max-width: 420px;
+    border-radius: 15px;
+    border: 3px solid var(--neon-orange);
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+    display: block;
+}
+
+.order-image + .order-image {
+    margin-top: 16px;
+}
+
 .order-form {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0;
     background: var(--darker-blue);
-    padding: 40px;
+    padding: 28px; /* tighter */
     border: 2px solid var(--teal-accent);
     border-radius: 15px;
     box-shadow: 0 0 30px rgba(32, 178, 170, 0.3);
 }
 
+/* Keep the submit button visible without scrolling */
+.order-form .sticky-submit {
+    position: sticky;
+    bottom: 12px;
+    z-index: 5;
+    display: block;
+}
+
+/* Further compact spacing on order page only */
+.order-page .form-section {
+    padding: 18px;
+    margin-bottom: 14px;
+}
+
+.order-page .form-section-title {
+    margin-bottom: 12px;
+}
+
+.order-page .form-row {
+    gap: 10px;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 14px; /* tighter */
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 12px; /* tighter */
 }
 
 .form-group label {
@@ -1256,7 +1311,7 @@ body {
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 15px;
+    padding: 10px 12px; /* tighter */
     background: var(--cyber-gray);
     border: 2px solid var(--neon-blue);
     border-radius: 8px;
@@ -1280,9 +1335,9 @@ body {
 
 .btn-large {
     width: 100%;
-    padding: 20px;
-    font-size: 1.2rem;
-    margin-top: 20px;
+    padding: 16px; /* tighter */
+    font-size: 1.1rem;
+    margin-top: 12px; /* tighter */
 }
 
 /* Contact Section */
@@ -2561,6 +2616,16 @@ body {
 
 /* Responsive Design for Order Form */
 @media (max-width: 768px) {
+    .order-content {
+        grid-template-columns: 1fr;
+    }
+    .order-art {
+        order: -1;
+        margin-bottom: 20px;
+    }
+    .order-image {
+        max-width: 100%;
+    }
     .form-row {
         grid-template-columns: 1fr;
         gap: 15px;
