@@ -84,7 +84,7 @@ def create_pizza():
 
 
 
-@app.get('/moshepizza//order/pizza')
+@app.get('/moshepizza/order/pizza')
 def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
@@ -129,4 +129,5 @@ def make_dough():
 
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host='0.0.0.0',port=5000)
+
