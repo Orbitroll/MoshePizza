@@ -1,33 +1,25 @@
 {
-"order":
-    {
-    "id":3256,
-    "customer_name":"Ron Dayan",
-    "order_type":"delivery",
-    "phone_number":"0501234567",
-    "table":"address",
-    "timestamp":
-        {
-        "date": {"day":14, "month":8, "year":2025}, 
-        "time": {"hour":22, "minutes":9, "seconds": 35}
+    "order": {
+        "customer_name": "Ron Dayan",
+        "order_type": "delivery",
+        "phone_number": "0506793640",
+        "table": "25-B Herzel Street",
+        "address": {
+            "city": "Akko",
+            "street": "Herzel",
+            "building number": 25,
+            "entrance": "b",
+            "floor": "ground",
+            "apartment": 1
         },
-    "address":
-        { 
-        "city":"Akko",
-        "street":"Herzel",
-        "building number":25,
-        "entrance":"B",
-        "floor":"ground",
-        "apartment":1
-        },
-    "items":
-        {
-        "pizza":
-            { 
-                    "size": "small",
-                    "crust": "thick",
-                    "topping": "onions"
+        "items": {
+            "pizza": {
+                "type": "veggie",
+                "size": "medium",
+                "crust": "stuffed",
+                "topping": "onions"
             }
         }
-    }
+    },
+    "id": 853054
 }
