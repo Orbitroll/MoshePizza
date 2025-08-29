@@ -1,26 +1,31 @@
 {
     "order": {
         "customer_name": "Ron Dayan",
-        "order_type": "delivery",
+        "order_type": "dine-in",
         "phone_number": "0506793640",
-        "table": "Irrelevant",
-        "notes": "door code #2525#",
-        "address": {
-            "city": "Akko",
-            "street": "Herzel",
-            "building number": 25,
-            "entrance": "b",
-            "floor": "ground",
-            "apartment": 1
-        },
+        "table": "1",
+        "notes": "",
+        "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "margherita",
+                "type": "bbq-chicken",
                 "size": "medium",
                 "crust": "thick",
                 "topping": "onions"
             }
         }
     },
-    "id": 457846
+    "id": 842322,
+    "timestamp": {
+        "date": {
+            "day": 29,
+            "month": 8,
+            "year": 2025
+        },
+        "time": {
+            "hour": 19,
+            "minutes": 1,
+            "seconds": 56
+        }
+    }
 }

@@ -4,6 +4,7 @@ import json
 import random
 import os
 from pathlib import Path
+from clock import timestamp
 
 app = Flask('Pizza Moshe')
 orders = []
@@ -26,6 +27,7 @@ def order_fetch(url_id:int):
             return json.load(f)    
 
 current_id = int(load_order()["id"])
+current_table = load_order()["order"]["table"]
 
 class Pizza:
     def __init__(self, size: str = "small", crust: str = "thin", topping: list | None = None):
@@ -67,6 +69,8 @@ def place_order():
     order_id = random.randint(100000, 999999)
     data = request.get_json()
     data['id'] = order_id
+    data['timestamp'] = timestamp
+
     with open(order_storage,"w") as f:
         json.dump(data, f, indent = 4)  
     return 'Order placed successfully'
@@ -79,6 +83,7 @@ def create_pizza():
     data = load_order() or {}
     pizza = data.get("order", {}).get("items", {}).get("pizza", {})
     order_id = data.get("id", {})
+    time = data.get("timestamp", {}).get("time", {})
 
     type = pizza.get("type", "custom")
     size = pizza.get("size", "small")
@@ -93,6 +98,7 @@ def create_pizza():
     order = pizza_is.to_dict()
     order["type"] = type
     order["id"] = order_id
+    order["time"] = time
     orders.append(order)
     
     folder = "temp_orders"
@@ -110,6 +116,13 @@ def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
     return jsonify(orders[-1]), 200
+
+
+@app.get('/moshepizza/order/table-<int:table_id>')
+def table_show(table_id):
+    pass
+
+
 
 
 @app.get('/moshepizza/order/pizza/all-orders')
