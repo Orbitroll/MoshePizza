@@ -5,7 +5,7 @@
 class Table:
     table_instances = 0
     max_instances = 20
-    def __init__(self, table_num: int, time:dict, date:dict, customer:str):
+    def __init__(self, table_num: int, time:dict, date:dict, customer:str, waiter:str):
         
         if Table.table_instances >= Table.max_instances:
             raise OverflowError('No available table')
@@ -14,6 +14,7 @@ class Table:
             self.time = time
             self.date = date
             self.customer = customer
+            self.waiter = waiter
             table_instances += 1
     
     def __del__(self):
