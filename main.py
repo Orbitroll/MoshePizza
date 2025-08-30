@@ -1,3 +1,4 @@
+import app
 from flask import Flask, request, jsonify, redirect, url_for, render_template_string, render_template
 from classes import Yavne_weather, NeapolitanPizza
 import json
@@ -6,6 +7,8 @@ import os
 from pathlib import Path
 from clock import timestamp
 from admins.admin import admin_bp
+
+app.register_blueprint(admin_bp,url_prefix='/admin')
 
 app = Flask('Pizza Moshe')
 orders = []
@@ -153,9 +156,7 @@ def all_pizzas():
     return jsonify(orders), 200
 
 
-@app.route('/moshepizza/admin_page')
-def admin():
-    return f'Welcome Slave'
+
 
 
 @app.route('/customer_page')

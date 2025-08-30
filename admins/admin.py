@@ -16,3 +16,6 @@ def make_dough():
     )
     return jsonify(recipe), 200
 
+@admin_bp.route('/')
+def admin():
+    return f'welcome sadmin'
