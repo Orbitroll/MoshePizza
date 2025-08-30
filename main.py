@@ -1,32 +1,28 @@
-from flask import Flask, request, jsonify, redirect, url_for, render_template_string, render_template
-from classes import Yavne_weather, NeapolitanPizza , Pizza
+from flask import Flask, request, jsonify, redirect, url_for,render_template
+import data
 import json
 import random
 import os
-from pathlib import Path
 from clock import timestamp
-from admins.admin import admin_bp
-from users.Users import users_bp
+from data import orders_dir, orders, order_storage, temp_dir
+from classes import Order
 
 app = Flask('Pizza Moshe')
+from admins.admin import admin_bp
+from users.Users import users_bp
 
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(users_bp, url_prefix='/users')
 
-
-orders = []
-admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
-json_dir = Path(__file__).resolve().parent / "jsons"
-temp_dir = Path(__file__).resolve().parent / "temp_pizzas"
-pages_dir = Path(__file__).resolve().parent / "templates"
-orders_dir = Path(__file__).resolve().parent / "orders"
-order_storage = json_dir / "order.json"
-order_page = pages_dir / "order.html"
+order_mgr = Order(order_storage=order_storage, orders_dir=orders_dir)
 
 
 def load_order():
-    with open(order_storage, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return order_mgr.load_order()
+
+
+def order_fetch(url_id: int):
+    return order_mgr.order_fetch(url_id)
 
 
 def pizza_fetch(url_id: int):
@@ -37,19 +33,8 @@ def pizza_fetch(url_id: int):
         return json.load(f)
 
 
-def order_fetch(url_id: int):
-    fetched_path = orders_dir / (f"order_{url_id}.json")
-    if not fetched_path.exists():
-        return None
-    with open(fetched_path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
 current_id = int(load_order()["id"])
 current_table = load_order()["order"]["table"]
-
-
-
 
 
 @app.get('/order/pizza/<int:url_id>')
@@ -92,38 +77,6 @@ def order_show(url_id: int):
         return jsonify({"error": "Order not found"}), 404
 
 
-@app.post('/order/pizza')
-def create_pizza():
-    data = load_order() or {}
-    pizza = data.get("order", {}).get("items", {}).get("pizza", {})
-    order_id = data.get("id", {})
-    time = data.get("timestamp", {}).get("time", {})
-
-    type = pizza.get("type", "custom")
-    size = pizza.get("size", "small")
-    crust = pizza.get("crust", "thin")
-    topping = pizza.get("topping", [])
-    if isinstance(topping, str):
-        topping = [topping]
-    elif not isinstance(topping, list):
-        return jsonify({"error": "topping must be a list or string"}), 400
-
-    pizza_is = Pizza(size, crust, topping)
-    order = pizza_is.to_dict()
-    order["type"] = type
-    order["id"] = order_id
-    order["time"] = time
-    orders.append(order)
-
-    folder = "temp_pizzas"
-    os.makedirs(folder, exist_ok=True)
-    file_path = os.path.join(folder, f"pizza_{order_id}.json")
-    with open(file_path, "w") as f:
-        json.dump(order, f, indent=4)
-
-    return jsonify(order), 201
-
-
 @app.get('/order/pizza')
 def last_orders():
     if not orders:
@@ -141,12 +94,9 @@ def all_pizzas():
     return jsonify(orders), 200
 
 
-
-
-
 @app.route('/<name>')
 def logon(name):
-    if name in admins:
+    if name in data.admins:
         return redirect(url_for('admin'))
     else:
         return redirect(url_for('users'))

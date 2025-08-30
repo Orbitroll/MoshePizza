@@ -1,6 +1,6 @@
 import requests
-
-# from main import Pizza
+import json
+from pathlib import Path
 
 geo_search = "https://geocoding-api.open-meteo.com/v1/search"
 get_temperature = "https://api.open-meteo.com/v1/forecast"
@@ -127,6 +127,31 @@ class Pizza:
 
     def __str__(self):
         return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
+
+
+class Order:
+    def __init__(self, order_storage: str, orders_dir: str):
+        self.order_storage = Path(order_storage)
+        self.orders_dir = Path(orders_dir)
+
+    def load_order(self):
+        if not self.order_storage.exists():
+            return None
+        try:
+            with open(self.order_storage, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            return None
+
+    def order_fetch(self, url_id: int):
+        fetched_path = self.orders_dir / f"order_{url_id}.json"
+        if not fetched_path.exists():
+            return None
+        try:
+            with open(fetched_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            return None
 
 # yavne = Yavne_weather()
 # temperature = yavne.temperature("Yavne", "IL")["current"]["temp_c"]
