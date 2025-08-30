@@ -69,7 +69,7 @@ class Pizza:
         return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
 
 
-@app.get('/moshepizza/order/pizza/<int:url_id>')
+@app.get('/order/pizza/<int:url_id>')
 def pizza_show(url_id: int):
     fetched_json = pizza_fetch(url_id)
     if (fetched_json != None) and (fetched_json["id"] == url_id):
@@ -78,12 +78,12 @@ def pizza_show(url_id: int):
         return jsonify({"error": "Pizza not found"}), 404
 
 
-@app.route('/moshepizza/order/')
+@app.route('/order/')
 def ordering_page():
     return render_template('order.html')
 
 
-@app.post('/moshepizza/order/place-order')
+@app.post('/order/place-order')
 def place_order():
     order_id = random.randint(100000, 999999)
     data = request.get_json()
@@ -100,7 +100,7 @@ def place_order():
     return 'Order placed successfully'
 
 
-@app.get('/moshepizza/order/<int:url_id>')
+@app.get('/order/<int:url_id>')
 def order_show(url_id: int):
     fetched_json = order_fetch(url_id)
     if (fetched_json != None) and (fetched_json["id"] == url_id):
@@ -109,7 +109,7 @@ def order_show(url_id: int):
         return jsonify({"error": "Order not found"}), 404
 
 
-@app.post('/moshepizza/order/pizza')
+@app.post('/order/pizza')
 def create_pizza():
     data = load_order() or {}
     pizza = data.get("order", {}).get("items", {}).get("pizza", {})
@@ -141,29 +141,27 @@ def create_pizza():
     return jsonify(order), 201
 
 
-@app.get('/moshepizza/order/pizza')
+@app.get('/order/pizza')
 def last_orders():
     if not orders:
         return jsonify({"message": "nothing yet"}), 200
     return jsonify(orders[-1]), 200
 
 
-@app.get('/moshepizza/order/table-<int:table_id>')
+@app.get('/order/table-<int:table_id>')
 def table_show(table_id):
     pass
 
 
-@app.get('/moshepizza/order/pizza/all-pizzas')
+@app.get('/order/pizza/all-pizzas')
 def all_pizzas():
     return jsonify(orders), 200
 
 
-@app.route('/customer_page')
-def costumer():
-    return f'welcome to Pizza Moshe'
 
 
-@app.route('/moshepizza/<name>')
+
+@app.route('/<name>')
 def logon(name):
     if name in admins:
         return redirect(url_for('admin'))
