@@ -3,7 +3,7 @@ from classes import Yavne_weather, NeapolitanPizza ,Pizza
 import json
 import os
 from data import orders
-from main import load_order
+from orders import load_order
 
 admin_bp = Blueprint('admin_bp', __name__)
 

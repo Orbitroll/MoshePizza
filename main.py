@@ -5,7 +5,7 @@ import random
 import os
 from clock import timestamp
 from data import orders_dir, orders, order_storage, temp_dir
-from classes import Order
+from admins.orders import load_order ,order_fetch
 
 app = Flask('Pizza Moshe')
 from admins.admin import admin_bp
@@ -13,16 +13,6 @@ from users.Users import users_bp
 
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(users_bp, url_prefix='/users')
-
-order_mgr = Order(order_storage=order_storage, orders_dir=orders_dir)
-
-
-def load_order():
-    return order_mgr.load_order()
-
-
-def order_fetch(url_id: int):
-    return order_mgr.order_fetch(url_id)
 
 
 def pizza_fetch(url_id: int):

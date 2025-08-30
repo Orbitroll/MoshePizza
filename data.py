@@ -9,3 +9,4 @@ pages_dir = Path(__file__).resolve().parent / "templates"
 orders_dir = Path(__file__).resolve().parent / "orders"
 order_storage = json_dir / "order.json"
 order_page = pages_dir / "order.html"
+
