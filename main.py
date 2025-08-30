@@ -1,4 +1,3 @@
-import app
 from flask import Flask, request, jsonify, redirect, url_for, render_template_string, render_template
 from classes import Yavne_weather, NeapolitanPizza
 import json
@@ -8,11 +7,12 @@ from pathlib import Path
 from clock import timestamp
 from admins.admin import admin_bp
 from users.Users import users_bp
+app = Flask('Pizza Moshe')
 
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(users_bp, url_prefix='/users')
 
-app = Flask('Pizza Moshe')
+
 orders = []
 admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
 json_dir = Path(__file__).resolve().parent / "jsons"
