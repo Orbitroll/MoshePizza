@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify, redirect, url_for, render_template_string, render_template
-from utils import Yavne_weather, NeapolitanPizza
+from classes import Yavne_weather, NeapolitanPizza
 import json
 import random
 import os
 from pathlib import Path
 from clock import timestamp
+from admins.admin import admin_bp
 
 app = Flask('Pizza Moshe')
 orders = []
@@ -148,18 +149,7 @@ def logon(name):
         return redirect(url_for('customer_page'))
 
 
-@app.get('/moshepizza/admin_page/Kitchen_bon')
-def make_dough():
-    weather = Yavne_weather()
-    current = weather.temperature("Yavne", "IL")["current"]
 
-    pizza = NeapolitanPizza()
-    recipe = pizza.dough(
-        ball_weight=300,
-        temp_c=current["temp_c"],
-        humidity_pct=current["humidity_pct"]
-    )
-    return jsonify(recipe), 200
 
 
 if __name__ == '__main__':
