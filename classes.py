@@ -108,6 +108,26 @@ class NeapolitanPizza:
         }
 
 
+class Pizza:
+    def __init__(self, size: str = "small", crust: str = "thin", topping: list | None = None):
+        self.size = size
+        self.crust = crust
+        self.topping = topping or []
+
+    def add_topping(self, topping: str):
+        if topping not in self.topping:
+            self.topping.append(topping)
+
+    def to_dict(self):
+        return {
+            "size": self.size,
+            "crust": self.crust,
+            "topping": self.topping if self.topping else ["regular pizza , noob"]
+        }
+
+    def __str__(self):
+        return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
+
 # yavne = Yavne_weather()
 # temperature = yavne.temperature("Yavne", "IL")["current"]["temp_c"]
 # humidity = yavne.temperature('yavne', 'IL')["current"]["humidity_pct"]
