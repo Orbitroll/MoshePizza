@@ -7,8 +7,10 @@ import os
 from pathlib import Path
 from clock import timestamp
 from admins.admin import admin_bp
+from users.Users import users_bp
 
-app.register_blueprint(admin_bp,url_prefix='/admin')
+app.register_blueprint(admin_bp, url_prefix='/admin')
+app.register_blueprint(users_bp, url_prefix='/users')
 
 app = Flask('Pizza Moshe')
 orders = []
@@ -17,30 +19,34 @@ json_dir = Path(__file__).resolve().parent / "jsons"
 temp_dir = Path(__file__).resolve().parent / "temp_pizzas"
 pages_dir = Path(__file__).resolve().parent / "templates"
 orders_dir = Path(__file__).resolve().parent / "orders"
-order_storage = json_dir/"order.json"
-order_page = pages_dir/"order.html"
+order_storage = json_dir / "order.json"
+order_page = pages_dir / "order.html"
+
 
 def load_order():
     with open(order_storage, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def pizza_fetch(url_id:int):
-        fetched_path = temp_dir/(f"pizza_{url_id}.json")
-        if not fetched_path.exists():
-            return None
-        with open(fetched_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-        
-def order_fetch(url_id:int):
-        fetched_path = orders_dir/(f"order_{url_id}.json")
-        if not fetched_path.exists():
-            return None
-        with open(fetched_path, "r", encoding="utf-8") as f:
-            return json.load(f)       
+
+def pizza_fetch(url_id: int):
+    fetched_path = temp_dir / (f"pizza_{url_id}.json")
+    if not fetched_path.exists():
+        return None
+    with open(fetched_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def order_fetch(url_id: int):
+    fetched_path = orders_dir / (f"order_{url_id}.json")
+    if not fetched_path.exists():
+        return None
+    with open(fetched_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 current_id = int(load_order()["id"])
 current_table = load_order()["order"]["table"]
+
 
 class Pizza:
     def __init__(self, size: str = "small", crust: str = "thin", topping: list | None = None):
@@ -64,13 +70,13 @@ class Pizza:
 
 
 @app.get('/moshepizza/order/pizza/<int:url_id>')
-def pizza_show(url_id:int):
-        fetched_json = pizza_fetch(url_id)
-        if (fetched_json != None) and (fetched_json["id"] == url_id):
-            return fetched_json
-        elif fetched_json == None:
-            return jsonify({"error": "Pizza not found"}), 404
-        
+def pizza_show(url_id: int):
+    fetched_json = pizza_fetch(url_id)
+    if (fetched_json != None) and (fetched_json["id"] == url_id):
+        return fetched_json
+    elif fetched_json == None:
+        return jsonify({"error": "Pizza not found"}), 404
+
 
 @app.route('/moshepizza/order/')
 def ordering_page():
@@ -84,24 +90,23 @@ def place_order():
     data['id'] = order_id
     data['timestamp'] = timestamp
 
-    with open(order_storage,"w") as f:
-        json.dump(data, f, indent = 4)
+    with open(order_storage, "w") as f:
+        json.dump(data, f, indent=4)
     orders_name = "orders"
     os.makedirs(orders_name, exist_ok=True)
     file_path = os.path.join(orders_name, f"order_{order_id}.json")
-    with open(file_path,"w") as f:
-        json.dump(data, f, indent = 4)  
+    with open(file_path, "w") as f:
+        json.dump(data, f, indent=4)
     return 'Order placed successfully'
 
+
 @app.get('/moshepizza/order/<int:url_id>')
-def order_show(url_id:int):
-        fetched_json = order_fetch(url_id)
-        if (fetched_json != None) and (fetched_json["id"] == url_id):
-            return fetched_json
-        elif fetched_json == None:
-            return jsonify({"error": "Order not found"}), 404
-
-
+def order_show(url_id: int):
+    fetched_json = order_fetch(url_id)
+    if (fetched_json != None) and (fetched_json["id"] == url_id):
+        return fetched_json
+    elif fetched_json == None:
+        return jsonify({"error": "Order not found"}), 404
 
 
 @app.post('/moshepizza/order/pizza')
@@ -126,15 +131,14 @@ def create_pizza():
     order["id"] = order_id
     order["time"] = time
     orders.append(order)
-    
+
     folder = "temp_pizzas"
     os.makedirs(folder, exist_ok=True)
     file_path = os.path.join(folder, f"pizza_{order_id}.json")
-    with open(file_path,"w") as f:
-        json.dump(order, f, indent = 4)
-    
-    return jsonify(order), 201
+    with open(file_path, "w") as f:
+        json.dump(order, f, indent=4)
 
+    return jsonify(order), 201
 
 
 @app.get('/moshepizza/order/pizza')
@@ -149,14 +153,9 @@ def table_show(table_id):
     pass
 
 
-
-
 @app.get('/moshepizza/order/pizza/all-pizzas')
 def all_pizzas():
     return jsonify(orders), 200
-
-
-
 
 
 @app.route('/customer_page')
@@ -167,14 +166,10 @@ def costumer():
 @app.route('/moshepizza/<name>')
 def logon(name):
     if name in admins:
-        return redirect(url_for('admin_page'))
+        return redirect(url_for('admin'))
     else:
-        return redirect(url_for('customer_page'))
-
-
-
+        return redirect(url_for('users'))
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000)
-
+    app.run(host='0.0.0.0', port=5000)

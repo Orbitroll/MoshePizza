@@ -1,8 +1,9 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
+from classes import Yavne_weather, NeapolitanPizza
+
+admin_bp = Blueprint('admin_bp', __name__)
 
 
-
-admin_bp=Blueprint('admin_bp',__name__)
 @admin_bp.get('/Kitchen_bon')
 def make_dough():
     weather = Yavne_weather()
@@ -15,6 +16,7 @@ def make_dough():
         humidity_pct=current["humidity_pct"]
     )
     return jsonify(recipe), 200
+
 
 @admin_bp.route('/')
 def admin():
