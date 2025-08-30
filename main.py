@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, redirect, url_for, render_template_string, render_template
-from classes import Yavne_weather, NeapolitanPizza
+from classes import Yavne_weather, NeapolitanPizza , Pizza
 import json
 import random
 import os
@@ -7,6 +7,7 @@ from pathlib import Path
 from clock import timestamp
 from admins.admin import admin_bp
 from users.Users import users_bp
+
 app = Flask('Pizza Moshe')
 
 app.register_blueprint(admin_bp, url_prefix='/admin')
