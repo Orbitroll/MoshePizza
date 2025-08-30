@@ -10,8 +10,9 @@ app = Flask('Pizza Moshe')
 orders = []
 admins = ['Ron', 'Mohammad', 'Moshe', 'Shlomi']
 json_dir = Path(__file__).resolve().parent / "jsons"
-temp_dir = Path(__file__).resolve().parent / "temp_orders"
+temp_dir = Path(__file__).resolve().parent / "temp_pizzas"
 pages_dir = Path(__file__).resolve().parent / "templates"
+orders_dir = Path(__file__).resolve().parent / "orders"
 order_storage = json_dir/"order.json"
 order_page = pages_dir/"order.html"
 
@@ -19,12 +20,20 @@ def load_order():
     with open(order_storage, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def order_fetch(url_id:int):
-        fetched_path = temp_dir/(f"order_{url_id}.json")
+def pizza_fetch(url_id:int):
+        fetched_path = temp_dir/(f"pizza_{url_id}.json")
         if not fetched_path.exists():
             return None
         with open(fetched_path, "r", encoding="utf-8") as f:
-            return json.load(f)    
+            return json.load(f)
+        
+def order_fetch(url_id:int):
+        fetched_path = orders_dir/(f"order_{url_id}.json")
+        if not fetched_path.exists():
+            return None
+        with open(fetched_path, "r", encoding="utf-8") as f:
+            return json.load(f)       
+
 
 current_id = int(load_order()["id"])
 current_table = load_order()["order"]["table"]
@@ -50,13 +59,13 @@ class Pizza:
         return f"{self.size} pizza , {self.crust} {self.topping if self.topping else 'regular pizza , noob'}"
 
 
-@app.get('/moshepizza/order/<int:url_id>')
-def order_show(url_id:int):
-        fetched_json = order_fetch(url_id)
+@app.get('/moshepizza/order/pizza/<int:url_id>')
+def pizza_show(url_id:int):
+        fetched_json = pizza_fetch(url_id)
         if (fetched_json != None) and (fetched_json["id"] == url_id):
             return fetched_json
         elif fetched_json == None:
-            return jsonify({"error": "Order not found"}), 404
+            return jsonify({"error": "Pizza not found"}), 404
         
 
 @app.route('/moshepizza/order/')
@@ -72,8 +81,21 @@ def place_order():
     data['timestamp'] = timestamp
 
     with open(order_storage,"w") as f:
+        json.dump(data, f, indent = 4)
+    orders_name = "orders"
+    os.makedirs(orders_name, exist_ok=True)
+    file_path = os.path.join(orders_name, f"order_{order_id}.json")
+    with open(file_path,"w") as f:
         json.dump(data, f, indent = 4)  
     return 'Order placed successfully'
+
+@app.get('/moshepizza/order/<int:url_id>')
+def order_show(url_id:int):
+        fetched_json = order_fetch(url_id)
+        if (fetched_json != None) and (fetched_json["id"] == url_id):
+            return fetched_json
+        elif fetched_json == None:
+            return jsonify({"error": "Order not found"}), 404
 
 
 
@@ -101,9 +123,9 @@ def create_pizza():
     order["time"] = time
     orders.append(order)
     
-    folder = "temp_orders"
+    folder = "temp_pizzas"
     os.makedirs(folder, exist_ok=True)
-    file_path = os.path.join(folder, f"order_{order_id}.json")
+    file_path = os.path.join(folder, f"pizza_{order_id}.json")
     with open(file_path,"w") as f:
         json.dump(order, f, indent = 4)
     
@@ -125,8 +147,8 @@ def table_show(table_id):
 
 
 
-@app.get('/moshepizza/order/pizza/all-orders')
-def all_orders():
+@app.get('/moshepizza/order/pizza/all-pizzas')
+def all_pizzas():
     return jsonify(orders), 200
 
 
