@@ -41,3 +41,9 @@ class Table:
         self.is_taken = False
         Table.tables_taken.remove(self.table_num)
 
+def to_dict(self):
+        return {
+            "table_num": self.table_num,
+            "time": self.time,
+            "topping": self.topping if self.topping else ["regular pizza , noob"]
+        }
