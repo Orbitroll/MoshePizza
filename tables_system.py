@@ -45,5 +45,8 @@ def to_dict(self):
         return {
             "table_num": self.table_num,
             "time": self.time,
-            "topping": self.topping if self.topping else ["regular pizza , noob"]
+            "date":self.date,
+            "customer":self.customer,
+            "waiter":self.waiter,
+            "is_taken":self.is_taken
         }
