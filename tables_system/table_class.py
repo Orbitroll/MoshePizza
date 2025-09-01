@@ -41,12 +41,27 @@ class Table:
         self.is_taken = False
         Table.tables_taken.remove(self.table_num)
 
-def to_dict(self):
-        return {
-            "table_num": self.table_num,
-            "time": self.time,
-            "date":self.date,
-            "customer":self.customer,
-            "waiter":self.waiter,
-            "is_taken":self.is_taken
-        }
+    def to_dict(self):
+            return {
+                "table_num": self.table_num,
+                "time": self.time,
+                "date":self.date,
+                "customer":self.customer,
+                "waiter":self.waiter,
+                "is_taken":self.is_taken
+            }
+
+    def display_free():
+        free_tables = []
+        for i in range(1,21):
+            if i not in Table.tables_taken:
+                free_tables.append(i)               
+        print('tables', *free_tables, 'are free')
+
+    
+
+
+
+
+
+
