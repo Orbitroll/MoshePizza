@@ -24,7 +24,7 @@ def pizza_fetch(url_id: int):
 
 
 current_id = int(load_order()["id"])
-current_table = load_order()["order"]["table"]
+
 
 
 @app.get('/order/pizza/<int:url_id>')
@@ -73,10 +73,6 @@ def last_orders():
         return jsonify({"message": "nothing yet"}), 200
     return jsonify(orders[-1]), 200
 
-
-@app.get('/order/table-<int:table_id>')
-def table_show(table_id):
-    pass
 
 
 @app.get('/order/pizza/all-pizzas')
