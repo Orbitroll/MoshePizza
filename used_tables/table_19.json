@@ -1,0 +1,18 @@
+{
+    "table_num": 18,
+    "timestamp": {
+        "date": {
+            "day": 3,
+            "month": 9,
+            "year": 2025
+        },
+        "time": {
+            "hour": 22,
+            "minutes": 7,
+            "seconds": 26
+        }
+    },
+    "customer": "Ron Dayan",
+    "waiter": "Ron",
+    "is_taken": true
+}

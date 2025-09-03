@@ -1,11 +1,25 @@
-## pulling data from json, if order_type == sitting then:
-##create a new object with the Table class with the relevant parameters.
 
 
 class Table:
     table_instances = 0
     max_instances = 20
     tables_taken = []
+    tables_waiters = {"Ron":0, "Shlomi":0, "Muhammad":0, "Moshe":0}
+    available_waiters = []
+    
+    def available_w():
+         Table.available_waiters.clear()
+         for k, v in Table.tables_waiters.items():
+              if v < 5:
+                    Table.available_waiters.append(k)
+              if v >= 5:
+                try:
+                    Table.available_waiters.remove(k)
+                except ValueError:
+                     pass
+                        
+                                 
+
 
     def taken_table(self):
             if self.table_num > 20 or self.table_num < 1 or self.table_num in Table.tables_taken:
@@ -18,8 +32,35 @@ class Table:
             Table.tables_taken.append(self.table_num) 
             Table.table_instances += 1 
 
+    def choose_waiter(self):
+         Table.available_w()
+         if Table.available_waiters == []:
+              print('No available waiter, talk to Moshe')
+              return
+         else:
+            waiter = input('Choose a waiter to serve this table:')
+            while waiter not in Table.tables_waiters:
+                Table.available_w()
+                waiter = input(f'Waiter does not exist, choose the following waiters:{",".join(Table.available_waiters)}')
+            while waiter not in Table.available_waiters:
+                Table.available_w()
+                waiter = input(f'Waiter not available, try these waiters instead:{",".join(Table.available_waiters)}')
+                if Table.available_waiters == []:
+                    print('No available waiter, talk to Moshe')
+                    return
+                if waiter not in Table.tables_waiters or waiter not in Table.available_waiters:
+                    Table.available_w()
+                    print(f'Waiter does not exist or is not available, choose the following waiters:{",".join(Table.available_waiters)}')
+
+                    continue
+         Table.tables_waiters[waiter] += 1     
+         self.waiter = waiter
+                
+              
+
+
     
-    def __init__(self, table_num: int, timestamp:dict, customer:str, waiter:str, is_taken:bool = None):
+    def __init__(self, table_num:int, timestamp:dict, customer:str, waiter:str, is_taken:bool = None):
         
         if Table.table_instances >= Table.max_instances:
             raise OverflowError('No available table')
@@ -32,19 +73,21 @@ class Table:
             self.is_taken = is_taken
 
         self.taken_table()
+        self.choose_waiter()
         
-            
     
     def __del__(self):
         Table.table_instances -= 1
         self.is_taken = False
         Table.tables_taken.remove(self.table_num)
+        Table.tables_waiters[self.waiter] -= 1 
+        self.waiter = None
+        
 
     def to_dict(self):
             return {
                 "table_num": self.table_num,
-                "time": self.time,
-                "date":self.date,
+                "timestamp": self.timestamp,
                 "customer":self.customer,
                 "waiter":self.waiter,
                 "is_taken":self.is_taken

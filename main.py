@@ -10,10 +10,11 @@ from admins.orders import load_order ,order_fetch
 app = Flask('Pizza Moshe')
 from admins.admin import admin_bp
 from users.Users import users_bp
+from tables_system.tables_flask import tables_bp
 
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(users_bp, url_prefix='/users')
-
+app.register_blueprint(tables_bp, url_prefix='/tables')
 
 def pizza_fetch(url_id: int):
     fetched_path = temp_dir / (f"pizza_{url_id}.json")
