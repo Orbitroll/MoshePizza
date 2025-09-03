@@ -33,9 +33,11 @@ current_id = int(load_order()["id"])
 @app.get('/order/pizza/<int:url_id>')
 def pizza_show(url_id: int):
     fetched_json = pizza_fetch(url_id)
-    if (fetched_json != None) and (fetched_json["id"] == url_id):
-        return fetched_json
-    elif fetched_json == None:
+    if fetched_json is not None and (fetched_json["id"] == url_id):
+        logger.log(f"Pizza {url_id} found successfully")
+        return jsonify(fetched_json) , 200
+    elif fetched_json is None:
+        logger.log(f"{url_id} error: Pizza not found")
         return jsonify({"error": "Pizza not found"}), 404
 
 
