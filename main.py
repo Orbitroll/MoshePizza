@@ -4,8 +4,11 @@ import json
 import random
 import os
 from clock import timestamp
-from data import orders_dir, orders, order_storage, temp_dir
+from data import  orders, order_storage, temp_dir
 from admins.orders import load_order ,order_fetch
+from loggs.logger import Logger
+
+logger = Logger("orders.log")
 
 app = Flask('Pizza Moshe')
 from admins.admin import admin_bp
@@ -46,7 +49,7 @@ def place_order():
     order_id = random.randint(100000, 999999)
     data = request.get_json()
     data['id'] = order_id
-    data['timestamp'] = timestamp
+    data['timestamp'] = timestamp()
 
     with open(order_storage, "w") as f:
         json.dump(data, f, indent=4)
@@ -55,6 +58,8 @@ def place_order():
     file_path = os.path.join(orders_name, f"order_{order_id}.json")
     with open(file_path, "w") as f:
         json.dump(data, f, indent=4)
+    logger.log(f"New order placed: id={order_id}, {timestamp()}")
+    orders.append(data)
     return 'Order placed successfully'
 
 

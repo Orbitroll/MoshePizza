@@ -1,9 +1,13 @@
 import datetime
 
 class Logger:
-    file = None
-    def __init__(self,file):
-        Logger.file=open(file,'a+')
+    def __init__(self, file):
+        self.file = open(file, 'a+', encoding='utf-8')
 
-    def log(self):
-        Logger.log(f'{datetime.datetime.now().hour}:{datetime.datetime.now().minute} {data}')
+    def log(self, message: str):
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.file.write(f"[{now}] {message}\n")
+        self.file.flush()
+
+    def close(self):
+        self.file.close()
