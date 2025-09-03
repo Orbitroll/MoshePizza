@@ -21,8 +21,10 @@ app.register_blueprint(users_bp, url_prefix='/users')
 def pizza_fetch(url_id: int):
     fetched_path = temp_dir / (f"pizza_{url_id}.json")
     if not fetched_path.exists():
+        logger.log(f'Pizza fetch failed: file not found for id={url_id}')
         return None
     with open(fetched_path, "r", encoding="utf-8") as f:
+        logger.log(f'ID : {url_id} Was fetched')
         return json.load(f)
 
 
