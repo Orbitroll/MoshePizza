@@ -1,5 +1,6 @@
 
 
+
 class Table:
     table_instances = 0
     max_instances = 20
@@ -12,21 +13,18 @@ class Table:
          for k, v in Table.tables_waiters.items():
               if v < 5:
                     Table.available_waiters.append(k)
-              if v >= 5:
-                try:
-                    Table.available_waiters.remove(k)
-                except ValueError:
-                     pass
                         
                                  
 
 
     def taken_table(self):
+
             if self.table_num > 20 or self.table_num < 1 or self.table_num in Table.tables_taken:
                 self.table_num = int(input('The table you chose is taken, larger than 20, or smaller than 1, please choose another table from 1-20:'))
                 if self.table_num > 20 or self.table_num < 1 or self.table_num in Table.tables_taken:
                     while self.table_num > 20 or self.table_num < 1 or self.table_num in Table.tables_taken :
                         self.table_num = int(input('The table you chose is taken, larger than 20, or smaller than 1, try again:'))
+
 
             self.is_taken = True
             Table.tables_taken.append(self.table_num) 
@@ -38,13 +36,13 @@ class Table:
               print('No available waiter, talk to Moshe')
               return
          else:
-            waiter = input('Choose a waiter to serve this table:')
+            waiter = input('Choose a waiter to serve this table:').strip().title()
             while waiter not in Table.tables_waiters:
                 Table.available_w()
-                waiter = input(f'Waiter does not exist, choose the following waiters:{",".join(Table.available_waiters)}')
+                waiter = input(f'Waiter does not exist, choose the following waiters:{",".join(Table.available_waiters)}').strip().title()
             while waiter not in Table.available_waiters:
                 Table.available_w()
-                waiter = input(f'Waiter not available, try these waiters instead:{",".join(Table.available_waiters)}')
+                waiter = input(f'Waiter not available, try these waiters instead:{",".join(Table.available_waiters)}').strip().title()
                 if Table.available_waiters == []:
                     print('No available waiter, talk to Moshe')
                     return
@@ -76,12 +74,15 @@ class Table:
         self.choose_waiter()
         
     
-    def __del__(self):
+    def clear_table(self):
         Table.table_instances -= 1
         self.is_taken = False
         Table.tables_taken.remove(self.table_num)
         Table.tables_waiters[self.waiter] -= 1 
         self.waiter = None
+        self.timestamp = None
+        self.customer = None
+
         
 
     def to_dict(self):

@@ -3,7 +3,7 @@ from tables_system.table_class import Table
 from pathlib import Path
 import os, json
 from data import order_storage
-
+import data
 
 
 def load_order():
@@ -33,11 +33,19 @@ def new_table():
 
         table_name =  f"table_{table_num}"
         globals()[table_name] = Table(table_num= table_num, timestamp=timestamp, customer= customer, waiter= waiter, is_taken= is_taken)
+        if table_num != globals()[table_name].table_num:
+             changed_num = int(globals()[table_name].table_num)
+             globals()[table_name].clear_table()
+             globals()[f"table_{changed_num}"] = Table(table_num= changed_num, timestamp=timestamp, customer= customer, waiter= waiter, is_taken= is_taken)
+        table_name = f"table_{globals()[table_name].table_num}"
+        data["order"]["table"] =  globals()[table_name].table_num
+        with open(order_storage, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
         data_dict = globals()[table_name].to_dict()
 
         tables_name = "used_tables"
         os.makedirs(tables_name, exist_ok=True)
-        file_path = os.path.join(tables_name, f"table_{table_num}.json")
+        file_path = os.path.join(tables_name, f"{table_name}.json")
         with open(file_path, "w") as f:
             json.dump(data_dict, f, indent=4)
         return 'Table created successfully'
