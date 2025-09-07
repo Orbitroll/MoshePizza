@@ -25,10 +25,10 @@ class Table:
                     while self.table_num > 20 or self.table_num < 1 or self.table_num in Table.tables_taken :
                         self.table_num = int(input('The table you chose is taken, larger than 20, or smaller than 1, try again:'))
 
-
-            self.is_taken = True
-            Table.tables_taken.append(self.table_num) 
-            Table.table_instances += 1 
+            else:
+                self.is_taken = True
+                Table.tables_taken.append(self.table_num) 
+                Table.table_instances += 1 
 
     def choose_waiter(self):
          Table.available_w()
@@ -50,7 +50,7 @@ class Table:
                     Table.available_w()
                     print(f'Waiter does not exist or is not available, choose the following waiters:{",".join(Table.available_waiters)}')
                     continue
-                
+
          Table.tables_waiters[waiter] += 1     
          self.waiter = waiter
                 
