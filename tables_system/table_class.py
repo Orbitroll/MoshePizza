@@ -49,8 +49,8 @@ class Table:
                 if waiter not in Table.tables_waiters or waiter not in Table.available_waiters:
                     Table.available_w()
                     print(f'Waiter does not exist or is not available, choose the following waiters:{",".join(Table.available_waiters)}')
-
                     continue
+                
          Table.tables_waiters[waiter] += 1     
          self.waiter = waiter
                 

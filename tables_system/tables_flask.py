@@ -15,6 +15,13 @@ def load_order():
         except (json.JSONDecodeError, OSError):
             return None
 
+def load_table():
+        table_num = int(load_order()["order"]["table"])
+        table_name =  f"table_{table_num}"
+        file_path = os.path.join("used_tables", f"{table_name}.json")
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+
 tables_bp = Blueprint('tables_bp', __name__)
 
 
@@ -33,12 +40,19 @@ def new_table():
 
         table_name =  f"table_{table_num}"
         globals()[table_name] = Table(table_num= table_num, timestamp=timestamp, customer= customer, waiter= waiter, is_taken= is_taken)
+        #if table number was switched due to taken_table()
         if table_num != globals()[table_name].table_num:
+             #load the old table from the saved jsons
+             old_table = load_table()
              changed_num = int(globals()[table_name].table_num)
-             globals()[table_name].clear_table()
-             globals()[f"table_{changed_num}"] = Table(table_num= changed_num, timestamp=timestamp, customer= customer, waiter= waiter, is_taken= is_taken)
-        table_name = f"table_{globals()[table_name].table_num}"
-        data["order"]["table"] =  globals()[table_name].table_num
+             chosen_waiter = (globals()[table_name].table_num)
+             new_name = f"table_{changed_num}"
+             globals()[f"{new_name}"] = Table(table_num= changed_num, timestamp=timestamp, customer= customer, waiter= chosen_waiter, is_taken= is_taken)
+             Table.clear_table(globals()[table_name])
+             globals()[table_name] = Table(table_num= table_num, timestamp=old_table["timestamp"], customer= old_table["customer"], waiter=old_table["waiter"], is_taken= old_table["is_taken"])
+             table_name = new_name
+        
+        data["order"]["table"] = int(globals()[table_name].table_num)
         with open(order_storage, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
         data_dict = globals()[table_name].to_dict()
