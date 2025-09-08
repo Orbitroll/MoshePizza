@@ -1,6 +1,8 @@
 
 from data import takent_json
 import json
+
+
 class Table:
     table_instances = 0
     max_instances = 20
@@ -42,7 +44,7 @@ class Table:
 
 
             if self.table_num > 20 or self.table_num < 1 or self.table_num in taken_data:
-                self.table_num = int(input('The table you chose is taken, larger than 20, or smaller than 1, please choose another table from 1-20:'))
+                self.table_num = int(input('The table the customer chose is taken, larger than 20, or smaller than 1, please choose another table from 1-20:'))
                 if self.table_num > 20 or self.table_num < 1 or self.table_num in taken_data:
                     while self.table_num > 20 or self.table_num < 1 or self.table_num in taken_data :
                         self.table_num = int(input('The table you chose is taken, larger than 20, or smaller than 1, try again:'))
@@ -81,9 +83,7 @@ class Table:
                 
                 
               
-
-
-    
+ 
     def __init__(self, table_num:int, timestamp:dict, customer:str, waiter:str, is_taken:bool = None):
         
         if Table.table_instances >= Table.max_instances:
