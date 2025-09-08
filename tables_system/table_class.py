@@ -1,5 +1,5 @@
 
-
+from data import takent_json
 
 class Table:
     table_instances = 0
@@ -8,6 +8,9 @@ class Table:
     tables_waiters = {"Ron":0, "Shlomi":0, "Muhammad":0, "Moshe":0}
     available_waiters = []
     
+    def tables_take():
+         
+
     def available_w():
          Table.available_waiters.clear()
          for k, v in Table.tables_waiters.items():

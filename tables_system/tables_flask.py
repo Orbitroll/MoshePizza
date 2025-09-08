@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, request, jsonify, redirect, url_for,render_t
 from tables_system.table_class import Table
 from pathlib import Path
 import os, json
-from data import order_storage
+from data import order_storage, takent_json
 import data
 
 
@@ -48,7 +48,7 @@ def new_table():
              chosen_waiter = (globals()[table_name].table_num)
              new_name = f"table_{changed_num}"
              globals()[f"{new_name}"] = Table(table_num= changed_num, timestamp=timestamp, customer= customer, waiter= chosen_waiter, is_taken= is_taken)
-             Table.clear_table(globals()[table_name])
+             globals()[table_name].clear_table()
              globals()[table_name] = Table(table_num= table_num, timestamp=old_table["timestamp"], customer= old_table["customer"], waiter=old_table["waiter"], is_taken= old_table["is_taken"])
              table_name = new_name
         

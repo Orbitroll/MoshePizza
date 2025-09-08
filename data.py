@@ -10,4 +10,5 @@ tables_dir = Path(__file__).resolve().parent / "used_tables"
 orders_dir = Path(__file__).resolve().parent / "orders"
 order_storage = json_dir / "order.json"
 order_page = pages_dir / "order.html"
-
+table_jsons = Path(__file__).resolve().parent / "tables_system"/"jsons"
+takent_json = table_jsons / "tables_taken.json"
