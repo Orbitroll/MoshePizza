@@ -21,6 +21,16 @@ def load_table():
         file_path = os.path.join("used_tables", f"{table_name}.json")
         with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
+        
+def load_taken():
+        if not takent_json.exists():
+            return None
+        try:
+            with open(takent_json, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            return None     
+     
 
 tables_bp = Blueprint('tables_bp', __name__)
 
@@ -45,11 +55,21 @@ def new_table():
              #load the old table from the saved jsons
              old_table = load_table()
              changed_num = int(globals()[table_name].table_num)
-             chosen_waiter = (globals()[table_name].table_num)
+             chosen_waiter = (globals()[table_name].waiter)
              new_name = f"table_{changed_num}"
              globals()[f"{new_name}"] = Table(table_num= changed_num, timestamp=timestamp, customer= customer, waiter= chosen_waiter, is_taken= is_taken)
-             globals()[table_name].clear_table()
-             globals()[table_name] = Table(table_num= table_num, timestamp=old_table["timestamp"], customer= old_table["customer"], waiter=old_table["waiter"], is_taken= old_table["is_taken"])
+             t = globals()[table_name]
+             t.table_num = old_table["table_num"]
+             t.timestamp = old_table["timestamp"]
+             t.customer = old_table["customer"]
+             t.waiter = old_table["waiter"]
+             t.is_taken = old_table["is_taken"]
+
+             Table.table_instances += 1
+             if t.waiter:
+                 Table.tables_waiters[t.waiter] += 1
+             if t.is_taken:
+                 Table.tables_taken(t.table_num)
              table_name = new_name
         
         data["order"]["table"] = int(globals()[table_name].table_num)

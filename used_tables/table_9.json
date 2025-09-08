@@ -1,0 +1,18 @@
+{
+    "table_num": 9,
+    "timestamp": {
+        "date": {
+            "day": 4,
+            "month": 9,
+            "year": 2025
+        },
+        "time": {
+            "hour": 19,
+            "minutes": 34,
+            "seconds": 14
+        }
+    },
+    "customer": "Yanti Parazi",
+    "waiter": null,
+    "is_taken": true
+}
