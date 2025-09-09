@@ -48,6 +48,10 @@ def pizza_show(url_id: int):
 def ordering_page():
     return render_template('order.html')
 
+@app.route('/home/')
+def home_page():
+    return render_template('index.html')
+
 
 @app.post('/order/place-order')
 def place_order():

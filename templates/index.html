@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Moshe Yavne - The Most Advanced Pizza In The World</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/logo.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Pizza Moshe Logo" class="logo-img">
+                </div>
+                <div class="logo-stack">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                    <div class="logo-tagline">THE MOST ADVANCED PIZZA IN THE WORLD</div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home_page') }}">Home</a></li>
+                <li><a href="#">Menu</a></li>
+                <li><a href="#">Delivery</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="{{ url_for('ordering_page') }}">Order</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="glitch" data-text="PIZZA MOSHE">PIZZA MOSHE</span>
+                <span class="hero-subtitle">YAVNE</span>
+            </h1>
+            <p class="hero-tagline">The Most Advanced Pizza In The World</p>
+            <p class="hero-description">
+                In a world of corporate chains and soulless food, we stand for something different. 
+                Real ingredients. Real people. Real rebellion against the system.
+                <br><br>
+                <span class="tech-highlight">Powered by AI-driven recipe optimization, quantum-tested dough algorithms, and neural network taste profiling.</span>
+            </p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">View Menu</a>
+                <a href="{{ url_for('ordering_page') }}" class="btn btn-accent">Order Now</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="chef-image-container">
+                <img src="{{ url_for('static', filename='assets/20250715_1931_Cyberpunk Pizzeria Chef_remix_01k07em0d8fza86xs4s2sv2vm7.png') }}" alt="Subnet the Chef - Pizza Moshe Yavne" class="chef-image">
+                <img src="{{ url_for('static', filename='assets/20250715_1931_Cyberpunk Pizzeria Chef_remix_01k07em0d8fza86xs4s2sv2vm7.png') }}" alt="" aria-hidden="true" class="chef-image-glitch chef-image-glitch--blue">
+                <img src="{{ url_for('static', filename='assets/20250715_1931_Cyberpunk Pizzeria Chef_remix_01k07em0d8fza86xs4s2sv2vm7.png') }}" alt="" aria-hidden="true" class="chef-image-glitch chef-image-glitch--teal">
+            </div>
+        </div>
+    </section>
+
+    <!-- Anti-Establishment Message -->
+    <section class="message-section">
+        <div class="container">
+            <div class="message-content">
+                <h2>Down With The System</h2>
+                <p>We're not just making pizza - we're fighting corporate food with real ingredients, human connection, and a dash of rebellion. Join the revolution, one slice at a time.</p>
+                <p class="tech-message">Our kitchen runs on cutting-edge automation: robotic precision meets human creativity, with blockchain-tracked ingredient sourcing and IoT-enabled ovens that achieve perfect temperature control to within 0.1°C.</p>
+                <div class="message-visual">
+                    <img src="{{ url_for('static', filename='assets/20250819_2302_Cyberpunk Pizza Chef_remix_01k31ynbxbebf83e0h59t7rt94.png') }}" alt="Cyberpunk Chef in Action" class="message-chef-image">
+                </div>
+                <div class="message-icons">
+                    <div class="icon-item">
+                        <i class="fas fa-users"></i>
+                        <span>For The People</span>
+                    </div>
+                    <div class="icon-item">
+                        <i class="fas fa-leaf"></i>
+                        <span>Real Ingredients</span>
+                    </div>
+                    <div class="icon-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Made With Love</span>
+                    </div>
+                                    <div class="icon-item">
+                    <i class="fas fa-motorcycle"></i>
+                    <span>Fast Delivery</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-microchip"></i>
+                    <span>AI-Powered</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotic Precision</span>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Menu Preview -->
+    <section class="featured-menu-section">
+        <div class="container">
+            <h2 class="section-title">Featured Pizzas</h2>
+            <p class="section-subtitle">A taste of what awaits you</p>
+            
+            <div class="featured-menu-grid">
+                <div class="featured-menu-item">
+                    <div class="menu-item-image">
+                        <div class="image-placeholder"></div>
+                        <div class="menu-badge">Popular</div>
+                    </div>
+                    <div class="menu-item-content">
+                        <h3>Classic Margherita</h3>
+                        <p>Fresh mozzarella, basil, and our secret sauce. Simple. Perfect. Real.</p>
+                        <p class="tech-detail"><i class="fas fa-microchip"></i> AI-optimized cheese distribution algorithm</p>
+                        <div class="price">₪45</div>
+                    </div>
+                </div>
+                
+                <div class="featured-menu-item">
+                    <div class="menu-item-image">
+                        <div class="image-placeholder"></div>
+                        <div class="menu-badge">Spicy</div>
+                    </div>
+                    <div class="menu-item-content">
+                        <h3>Pepperoni Rebellion</h3>
+                        <p>Spicy pepperoni, mozzarella, and a middle finger to bland corporate pizza.</p>
+                        <p class="tech-detail"><i class="fas fa-robot"></i> Robotic pepperoni placement with millimeter precision</p>
+                        <div class="price">₪52</div>
+                    </div>
+                </div>
+                
+                <div class="featured-menu-item">
+                    <div class="menu-item-image">
+                        <div class="image-placeholder"></div>
+                        <div class="menu-badge">Vegan</div>
+                    </div>
+                    <div class="menu-item-content">
+                        <h3>Veggie Liberation</h3>
+                        <p>Fresh vegetables, no artificial preservatives, and maximum flavor.</p>
+                        <p class="tech-detail"><i class="fas fa-satellite"></i> Satellite-monitored freshness tracking system</p>
+                        <div class="price">₪48</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="featured-menu-cta">
+                <a href="#" class="btn btn-secondary">View Full Menu</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section class="quick-actions-section">
+        <div class="container">
+            <h2 class="section-title">Ready to Join the Revolution?</h2>
+            <p class="section-subtitle">Choose your path to pizza freedom</p>
+            
+            <div class="quick-actions-grid">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Explore Our Menu</h3>
+                    <p>Discover our full selection of rebellious pizzas, sides, and drinks</p>
+                    <a href="#" class="btn btn-outline">Browse Menu</a>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Place an Order</h3>
+                    <p>Ready to taste the revolution? Order now for delivery or pickup</p>
+                    <a href="{{ url_for('ordering_page') }}" class="btn btn-outline">Order Now</a>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <h3>Delivery Info</h3>
+                    <p>Learn about our delivery zones, times, and eco-friendly options</p>
+                    <a href="#" class="btn btn-outline">Delivery Details</a>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <h3>About Us</h3>
+                    <p>Learn the story behind Pizza Moshe and our fight against corporate food</p>
+                    <a href="#" class="btn btn-outline">Our Story</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose Pizza Moshe?</h2>
+            <p class="section-subtitle">We're not just another pizza place</p>
+            
+            <div class="reasons-grid">
+                <div class="reason-item">
+                    <div class="reason-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Real Ingredients</h3>
+                    <p>No artificial preservatives, no corporate shortcuts. Just honest, fresh ingredients that actually taste like food.</p>
+                    <p class="tech-detail"><i class="fas fa-dna"></i> DNA-verified ingredient authenticity with blockchain provenance</p>
+                </div>
+                
+                <div class="reason-item">
+                    <div class="reason-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Focused</h3>
+                    <p>We're part of Yavne, not some corporate headquarters. Your satisfaction is our mission, not just our bottom line.</p>
+                </div>
+                
+                <div class="reason-item">
+                    <div class="reason-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Fast & Reliable</h3>
+                    <p>Express delivery in 15-25 minutes, standard delivery in 30-45 minutes. We respect your time and hunger.</p>
+                    <p class="tech-detail"><i class="fas fa-rocket"></i> Machine learning delivery route optimization</p>
+                </div>
+                
+                <div class="reason-item">
+                    <div class="reason-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Eco-Conscious</h3>
+                    <p>Eco-friendly delivery options, sustainable packaging, and a commitment to reducing our environmental impact.</p>
+                    <p class="tech-detail"><i class="fas fa-solar-panel"></i> Solar-powered kitchen with carbon footprint AI monitoring</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Hungry for Change?</h2>
+                <p>Join thousands of satisfied customers who've already tasted the difference. Real pizza. Real people. Real rebellion.</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('ordering_page') }}" class="btn btn-primary btn-large">Order Now</a>
+                    <a href="#" class="btn btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+            <div class="cta-visual">
+                <img src="{{ url_for('static', filename='assets/20250819_2302_Cyberpunk Pizza Chef_remix_01k31ynbx9e67aj10w7kdbaqxv.png') }}" alt="Chef in Cyberpunk Kitchen" class="cta-chef-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                </div>
+                <div class="footer-message">
+                    <p>Fighting corporate food, one slice at a time.</p>
+                    <p>&copy; 2025 Pizza Moshe Yavne. No corporate overlords allowed.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='order.js') }}"></script>
+</body>
+</html>
+
