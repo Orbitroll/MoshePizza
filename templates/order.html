@@ -140,12 +140,11 @@
                                 <select id="pizza_type" name="pizza_type" required>
                                     <option value="">Select pizza type...</option>
                                     <option value="custom">Custom</option>
-                                    <option value="margherita">Margherita</option>
-                                    <option value="pepperoni">Pepperoni</option>
-                                    <option value="veggie">Veggie</option>
-                                    <option value="supreme">Supreme</option>
-                                    <option value="bbq-chicken">BBQ Chicken</option>
-                                    <option value="mediterranean">Mediterranean</option>
+                                    <option value="Anti-Vegan Pizza">Anti-Vegan Pizza</option>
+                                    <option value="Mediterrenean">Mediterrenean</option>
+                                    <option value="Neapolitan">Neapolitan</option>
+                                    <option value="Mexican Bravery">Mexican Bravery</option>
+                                    <option value="Moshe's Favorite">Moshe's Favorite</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -153,9 +152,9 @@
                                 <select id="pizza_size" name="pizza_size" required>
                                     <option value="">Select size...</option>
                                     <option value="small">Small</option>
-                                    <option value="medium">Medium</option>
                                     <option value="large">Large</option>
-                                    <option value="extra-large">Extra Large</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
                                 </select>
                             </div>
                         </div>
@@ -166,13 +165,35 @@
                                     <option value="">Select crust...</option>
                                     <option value="thin">Thin</option>
                                     <option value="thick">Thick</option>
-                                    <option value="stuffed">Stuffed</option>
-                                    <option value="gluten-free">Gluten Free</option>
+                                    <option value="neapolitan">Neapolitan</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="pizza_topping">Topping</label>
-                                <input type="text" id="pizza_topping" name="pizza_topping" placeholder="e.g., onions, mushrooms, pepperoni...">
+                                <label for="toppingsSelect">Toppings</label>
+                                <select id="toppingsSelect">
+                                    <option value="">Select topping...</option>
+                                    <option value="olives">Olives</option>
+                                    <option value="pepperoni">Pepperoni</option>
+                                    <option value="corn">Corn</option>
+                                    <option value="jalapenos">Jalapenos</option>
+                                    <option value="extra cheese">Extra Cheese</option>
+                                    <option value="tomato">Tomato</option>
+                                    <option value="cooked tomatoes">Cooked Tomatoes</option>
+                                    <option value="mushrooms">Mushrooms</option>
+                                    <option value="onions">Onions</option>
+                                    <option value="red onions">Red Onions</option>
+                                    <option value="anchovy">Anchovy</option>
+                                    <option value="broccoli">Broccoli</option>
+                                    <option value="bell pepper">Bell Pepper</option>
+                                    <option value="salami">Salami</option>
+                                    <option value="chicken bits">Chicken Bits</option>
+                                    <option value="tzatziki">Tzatziki</option>
+                                    <option value="black olives">Black Olives</option>
+                                    <option value="basil">Basil</option>
+                                    <option value="chili flakes">Chili Flakes</option>
+                                    <option value="hot sauce">Hot Sauce</option>
+                                </select>
+                                <div id="selectedToppings" class="chips-container"></div>
                             </div>
                         </div>
                     </div>
@@ -249,6 +270,6 @@
     <script>
         window.PLACE_ORDER_URL = "{{ url_for('place_order') }}";
     </script>
-    <script src="{{ url_for('static', filename='order.js') }}"></script>
+    <script src="{{ url_for('static', filename='order.js', v='4') }}"></script>
 </body>
 </html>

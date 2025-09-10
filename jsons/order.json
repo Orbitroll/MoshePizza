@@ -1,31 +1,36 @@
 {
     "order": {
-        "customer_name": "Yanti Parazi",
+        "customer_name": "Eli Kopter",
         "order_type": "dine-in",
-        "phone_number": "0528886741",
-        "table": 19,
+        "phone_number": "0506699774",
+        "table": "14",
         "notes": "",
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "pepperoni",
+                "type": "Mexican_BraveryF",
                 "size": "large",
-                "crust": "thick",
-                "topping": "onions"
+                "crust": "thin",
+                "topping": [
+                    "chili flakes",
+                    "hot sauce",
+                    "jalapenos",
+                    "pepperoni"
+                ]
             }
         }
     },
-    "id": 161047,
+    "id": 592724,
     "timestamp": {
         "date": {
-            "day": 4,
+            "day": 10,
             "month": 9,
             "year": 2025
         },
         "time": {
-            "hour": 19,
-            "minutes": 34,
-            "seconds": 14
+            "hour": 22,
+            "minutes": 13,
+            "seconds": 22
         }
     }
 }

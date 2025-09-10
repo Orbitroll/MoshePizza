@@ -4,6 +4,7 @@ import json
 import os
 from data import orders
 from admins.orders import load_order
+import pizza_types
 
 admin_bp = Blueprint('admin_bp', __name__)
 
@@ -22,7 +23,7 @@ def make_dough():
     return jsonify(recipe), 200
 
 
-@admin_bp.post('/order/pizza')
+@admin_bp.post('/order/pizza/')
 def create_pizza():
     data = load_order() or {}
     pizza = data.get("order", {}).get("items", {}).get("pizza", {})
@@ -37,8 +38,11 @@ def create_pizza():
         topping = [topping]
     elif not isinstance(topping, list):
         return jsonify({"error": "topping must be a list or string"}), 400
-
-    pizza_is = Pizza(size, crust, topping)
+    
+    order = {}
+    order["Pizza type"] = pizza_type
+    pizza_class = getattr(pizza_types, pizza_type)
+    pizza_is = pizza_class(size = size, crust = crust, topping = topping)
     order = pizza_is.to_dict()
     order["Pizza type"] = pizza_type
     order["id"] = order_id
