@@ -8,7 +8,6 @@ GUEST_LOG = LOG_DIR / "guest.log"
 
 
 def _get_logger(name: str, file_path: Path) -> logging.Logger:
-    """Create or retrieve a configured logger."""
     logger = logging.getLogger(name)
     if not logger.handlers:
         logger.setLevel(logging.INFO)
