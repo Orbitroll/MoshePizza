@@ -14,8 +14,8 @@ class Pizza:
     def __str__(self):
        return  f"""Pizza(size={self.size}, price={self.price}, cooktime={self.cooktime}, crust_type={self.crust_type}, toppings={self.toppings}"""
 
-FatAss_Pizza=Pizza(22,30,30,crust_type='thick')
+fatass_Pizza=Pizza(22,30,30,crust_type='thick')
 pizza_for_one=Pizza(8,5,10,crust_type='thin')
-Family_pizza=Pizza(16,20,15,crust_type='thin')
-regular_pizza=Pizza(12,10,15,crust_type='thin')
+party_pizza=Pizza(16,20,15,crust_type='thin')
+family_pizza=Pizza(12,10,15,crust_type='thin')
 ##

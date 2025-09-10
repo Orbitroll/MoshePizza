@@ -19,12 +19,12 @@ inventory_basic_pizza = {
 }
 inventory_toppings = {
     "olives"
-    "papporni"
-    "Corn"
-    "jalepenios"
-    "Extra Chesse"
-    "Tomato"
-    "Mushrooms"
+    "pepperoni"
+    "corn"
+    "jalapenos"
+    "extra chesse"
+    "tomato"
+    "mushrooms"
 }
 
 
