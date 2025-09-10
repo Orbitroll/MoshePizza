@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 LOG_DIR = Path(__file__).resolve().parent
-ADMIN_LOG = LOG_DIR / "admin.log"
+ADMIN_LOG = LOG_DIR / "admin.log" 
 FREQUENT_LOG = LOG_DIR / "frequent.log"
 GUEST_LOG = LOG_DIR / "guest.log"
 
