@@ -7,7 +7,7 @@ FREQUENT_LOG = LOG_DIR / "frequent.log"
 GUEST_LOG = LOG_DIR / "guest.log"
 
 
-def _get_logger(name: str, file_path: Path) -> logging.Logger:
+def _get_logger(name: str, file_path: Path):
     logger = logging.getLogger(name)
     if not logger.handlers:
         logger.setLevel(logging.INFO)
@@ -23,13 +23,13 @@ frequent_logger = _get_logger("frequent", FREQUENT_LOG)
 guest_logger = _get_logger("guest", GUEST_LOG)
 
 
-def log_admin(message: str) -> None:
+def log_admin(message: str):
     admin_logger.info(message)
 
 
-def log_frequent_user(message: str) -> None:
+def log_frequent_user(message: str):
     frequent_logger.info(message)
 
 
-def log_guest(message: str) -> None:
+def log_guest(message: str):
     guest_logger.info(message)
