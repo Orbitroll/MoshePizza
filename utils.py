@@ -48,7 +48,7 @@ def make_pizza():
         print(" Not enough ingredients to make a pizza contact the supplier.")
 
 
-# תזכורת לגבי חוסר מצרכים
+
 def restock(item, amount):
     if item in inventory_basic_pizza:
         inventory_basic_pizza[item] += amount
