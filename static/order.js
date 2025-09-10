@@ -23,17 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateOrderTypeUI(value) {
         const isDelivery = value === 'delivery';
+        const isPickup = value === 'pickup';
+        const isDineIn = value === 'dine-in';
         // Address visibility + required flags
         addressSection.style.display = isDelivery ? 'block' : 'none';
         const addressFields = addressSection.querySelectorAll('input');
         addressFields.forEach(field => field.required = isDelivery);
 
-        // Swap table field with notes field
-        tableGroup.style.display = isDelivery ? 'none' : 'block';
-        notesGroup.style.display = isDelivery ? 'block' : 'none';
-        // Disable whichever is hidden so FormData ignores it
-        tableInput.disabled = isDelivery;
-        notesTextarea.disabled = !isDelivery;
+        // Show table only for dine-in; show notes for delivery or pickup
+        tableGroup.style.display = isDineIn ? 'block' : 'none';
+        notesGroup.style.display = (isDelivery || isPickup) ? 'block' : 'none';
+        // Disable hidden inputs so FormData ignores them
+        tableInput.disabled = !isDineIn;
+        notesTextarea.disabled = !(isDelivery || isPickup);
     }
 
     // Initialize and listen for changes
@@ -257,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 customer_name: orderData.customer_name,
                 order_type: orderData.order_type,
                 phone_number: orderData.phone_number,
+                email: orderData.email,
                 table: isDelivery ? 'irrelevant' : orderData.table,
                 notes: isDelivery ? (orderData.notes || '') : '',
                 address: isDelivery ? {
@@ -311,6 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     customer_name: orderData.customer_name,
                     order_type: orderData.order_type,
                     phone_number: orderData.phone_number,
+                    email: orderData.email,
                     table: isDelivery ? 'Irrelevant' : orderData.table,
                     notes: isDelivery ? (orderData.notes || '') : '',
                     address: isDelivery ? {

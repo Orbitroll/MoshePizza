@@ -1,26 +1,26 @@
 {
     "order": {
-        "customer_name": "Eli Kopter",
+        "customer_name": "Itzik Pinhas",
         "order_type": "dine-in",
-        "phone_number": "0506699774",
+        "phone_number": "0585533441",
+        "email": "itzik@test.com",
         "table": "14",
         "notes": "",
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "Mexican_BraveryF",
+                "type": "Anti_VeganF",
                 "size": "large",
                 "crust": "thin",
                 "topping": [
-                    "chili flakes",
-                    "hot sauce",
-                    "jalapenos",
-                    "pepperoni"
+                    "chicken bits",
+                    "pepperoni",
+                    "salami"
                 ]
             }
         }
     },
-    "id": 592724,
+    "id": 973981,
     "timestamp": {
         "date": {
             "day": 10,
@@ -29,8 +29,8 @@
         },
         "time": {
             "hour": 22,
-            "minutes": 13,
-            "seconds": 22
+            "minutes": 45,
+            "seconds": 18
         }
     }
 }

@@ -2709,3 +2709,8 @@ body {
 .chip-remove:hover {
     color: var(--neon-orange);
 }
+
+/* Full-width form control spanning both columns */
+.form-row .full-width {
+    grid-column: 1 / -1;
+}

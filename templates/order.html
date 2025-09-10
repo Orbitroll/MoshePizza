@@ -61,6 +61,12 @@
                                 <input type="tel" id="phone_number" name="phone_number" required>
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="name@example.com" required>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Order Details -->
@@ -270,6 +276,6 @@
     <script>
         window.PLACE_ORDER_URL = "{{ url_for('place_order') }}";
     </script>
-    <script src="{{ url_for('static', filename='order.js', v='4') }}"></script>
+    <script src="{{ url_for('static', filename='order.js', v='5') }}"></script>
 </body>
 </html>

@@ -44,7 +44,7 @@ def create_pizza():
     pizza_class = getattr(pizza_types, pizza_type)
     pizza_is = pizza_class(size = size, crust = crust, topping = topping)
     order = pizza_is.to_dict()
-    order["Pizza type"] = pizza_type
+    order["pizza type"] = pizza_type
     order["id"] = order_id
     order["time"] = time
     orders.append(order)
