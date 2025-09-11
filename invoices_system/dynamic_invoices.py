@@ -2,6 +2,7 @@ from data import order_storage
 from flask import Flask, Blueprint, request, jsonify, redirect, url_for,render_template
 import json
 import pizza_types
+import os
 
 def load_order():
         if not order_storage.exists():
@@ -20,15 +21,21 @@ def dynamic_chart():
      | NM.| Item| Price| QTY.| TOTAL|
     | --- | --- | --- | --- | ---   
 """
-     for item in order_data["order"]["item"]:
-          i = 1
-          row =f""" 
-          |{i}|{item},{item["type"]}|{item["type"]}| |  
-"""
+     rows = []
+     i = 1
+     for key,item in order_data["order"]["items"].items():
+          pizza_class = getattr(pizza_types,item["type"])()
+          rows.append(f"|{i}|{key},{item['type']},{item['topping']}|{pizza_class.price} NIS|1|{pizza_class.price} NIS|")        
+       
+          i +=1
+     return initial_chart + "\n".join(rows)
 
+order_chart = dynamic_chart()    
 order_date = order_data["timestamp"]["date"]
 order_time = order_data["timestamp"]["time"]
 customer_name = order_data["order"]["customer_name"]
+payment_method = order_data["order"]["payment"]["method"]
+card = order_data["order"]["payment"]["card"]
 order_id = order_data["id"]
 
 
@@ -43,18 +50,14 @@ invoice_md = f"""
 ---
 
 **Date**: { '.'.join(str(number) for number in order_date.values())}  
-**Time**: { ':S'.join(str(number) for number in order_time.values())}  
+**Time**: { ':'.join(str(number) for number in order_time.values())}  
 **Issued to**: {customer_name}  
-**Form of Payment:** **Cash**  
+**Form of Payment:** {payment_method}{(f':{card}') if {payment_method} == 'card' else''}  
 **Order ID**: {order_id}  
   
 **Items**:
 
-| NM.| Item| Price| QTY.| TOTAL|
-| --- | --- | --- | --- | ---
-|1  |Pepperoni Pizza  |80 NIS |1 | 80 NIS
-| 2 |Oreo Milkshake L  |25  NIS  |1 |25 NIS
-
+{order_chart}
 
 **Subtotal**: 105 NIS  
 **Tip (Not Included)**: 15 NIS  
@@ -74,4 +77,10 @@ invoices_bp = Blueprint('invoices_bp', __name__)
 
 @invoices_bp.post('/new-md/')
 def new_md():
-     pass
+    invoices_name = "invoices"
+    os.makedirs(invoices_name, exist_ok=True)
+    file_path = os.path.join(invoices_name, f"invoice_{order_id}.md")
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(invoice_md)
+    return 'markdown created successfully'
+        

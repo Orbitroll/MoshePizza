@@ -204,6 +204,43 @@
                         </div>
                     </div>
 
+                    <!-- Payment & Tip -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Payment & Tip
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="payment_method">Payment Method</label>
+                                <select id="payment_method" name="payment_method" required>
+                                    <option value="">Select payment method...</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="card">Card</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="cardNumberGroup" style="display:none;">
+                                <label for="card_number">Card Number</label>
+                                <input type="text" id="card_number" name="card_number" inputmode="numeric" placeholder="1234 5678 9012 3456">
+                                <small style="color: var(--text-gray);">Only last 4 will be saved</small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tip_choice">Add a Tip?</label>
+                                <select id="tip_choice" name="tip_choice">
+                                    <option value="">Select...</option>
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="tipAmountGroup" style="display:none;">
+                                <label for="tip_amount">Tip Amount</label>
+                                <input type="number" id="tip_amount" name="tip_amount" min="0" step="1" placeholder="e.g., 10">
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary btn-large sticky-submit">
                         <i class="fas fa-rocket"></i>
                         Place Order
@@ -276,6 +313,6 @@
     <script>
         window.PLACE_ORDER_URL = "{{ url_for('place_order') }}";
     </script>
-    <script src="{{ url_for('static', filename='order.js', v='5') }}"></script>
+    <script src="{{ url_for('static', filename='order.js', v='6') }}"></script>
 </body>
 </html>

@@ -14,7 +14,7 @@ app = Flask('Pizza Moshe')
 from admins.admin import admin_bp
 from users.Users import users_bp
 from tables_system.tables_flask import tables_bp
-from invoices.dynamic_invoices import invoices_bp
+from invoices_system.dynamic_invoices import invoices_bp
 
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(users_bp, url_prefix='/users')

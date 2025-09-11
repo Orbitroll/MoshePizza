@@ -4,3 +4,4 @@ used_tables
 orders
 temp_pizzas
 bot/key.py
+invoices

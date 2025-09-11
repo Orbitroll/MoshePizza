@@ -1,27 +1,29 @@
 {
     "order": {
-        "customer_name": "Moshe Peretz",
+        "customer_name": "Yanti Parazi",
         "order_type": "dine-in",
         "phone_number": "0521111364",
-        "email": "moshe@test.com",
-        "table": 19,
+        "email": "yanti@test.com",
+        "table": 14,
         "notes": "",
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "MediterreneanF",
+                "type": "NeapolitanF",
                 "size": "large",
-                "crust": "thin",
+                "crust": "neapolitan",
                 "topping": [
-                    "cooked tomatoes",
-                    "olives",
-                    "red onions",
-                    "tzatziki"
+                    "basil"
                 ]
             }
-        }
+        },
+        "payment": {
+            "method": "cash",
+            "card": ""
+        },
+        "tip": 20
     },
-    "id": 683551,
+    "id": 553163,
     "timestamp": {
         "date": {
             "day": 11,
@@ -29,9 +31,9 @@
             "year": 2025
         },
         "time": {
-            "hour": 3,
-            "minutes": 9,
-            "seconds": 57
+            "hour": 17,
+            "minutes": 30,
+            "seconds": 41
         }
     }
 }

@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const sizeSelect = document.getElementById('pizza_size');
     const toppingsSelect = document.getElementById('toppingsSelect');
     const selectedToppingsEl = document.getElementById('selectedToppings');
+    const paymentMethodSelect = document.getElementById('payment_method');
+    const cardNumberGroup = document.getElementById('cardNumberGroup');
+    const cardNumberInput = document.getElementById('card_number');
+    const tipChoiceSelect = document.getElementById('tip_choice');
+    const tipAmountGroup = document.getElementById('tipAmountGroup');
+    const tipAmountInput = document.getElementById('tip_amount');
     const orderPreview = document.getElementById('orderPreview');
     const jsonOutput = document.getElementById('jsonOutput');
     const editOrderBtn = document.getElementById('editOrder');
@@ -43,6 +49,36 @@ document.addEventListener('DOMContentLoaded', function() {
     orderTypeSelect.addEventListener('change', function() {
         updateOrderTypeUI(this.value);
     });
+
+    // Payment UI toggles
+    function updatePaymentUI() {
+        const method = paymentMethodSelect ? paymentMethodSelect.value : '';
+        const showCard = method === 'card';
+        if (cardNumberGroup) cardNumberGroup.style.display = showCard ? 'block' : 'none';
+        if (cardNumberInput) {
+            cardNumberInput.disabled = !showCard;
+            if (!showCard) cardNumberInput.value = '';
+        }
+    }
+    if (paymentMethodSelect) {
+        updatePaymentUI();
+        paymentMethodSelect.addEventListener('change', updatePaymentUI);
+    }
+
+    // Tip UI toggles
+    function updateTipUI() {
+        const choice = tipChoiceSelect ? tipChoiceSelect.value : '';
+        const showAmt = choice === 'yes';
+        if (tipAmountGroup) tipAmountGroup.style.display = showAmt ? 'block' : 'none';
+        if (tipAmountInput) {
+            tipAmountInput.disabled = !showAmt;
+            if (!showAmt) tipAmountInput.value = '';
+        }
+    }
+    if (tipChoiceSelect) {
+        updateTipUI();
+        tipChoiceSelect.addEventListener('change', updateTipUI);
+    }
 
     // Crust options logic: Neapolitan crust only for Neapolitan pizza
     function setCrustOptions(list) {
@@ -248,6 +284,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const isDelivery = orderData.order_type === 'delivery';
+        const maskedCardPrev = (() => {
+            if ((orderData.payment_method || '') !== 'card') return '';
+            const digits = (orderData.card_number || '').replace(/\D/g, '');
+            const last4 = digits.slice(-4);
+            return last4 ? `**** **** **** ${last4}` : '';
+        })();
+        const tipAmountPrev = (() => {
+            const choice = orderData.tip_choice;
+            if (choice === 'yes') return parseFloat(orderData.tip_amount) || 0;
+            return 0;
+        })();
         const toppingsArrayPrev = Array.isArray(orderData.pizza_topping)
             ? [...orderData.pizza_topping]
             : (orderData.pizza_topping ? [orderData.pizza_topping] : []);
@@ -277,7 +324,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         crust: orderData.pizza_crust,
                         topping: toppingsArrayPrev
                     }
-                }
+                },
+                payment: {
+                    method: orderData.payment_method || '',
+                    card: maskedCardPrev
+                },
+                tip: tipAmountPrev
             }
         };
 
@@ -303,6 +355,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             const isDelivery = orderData.order_type === 'delivery';
+            const maskedCardSave = (() => {
+                if ((orderData.payment_method || '') !== 'card') return '';
+                const digits = (orderData.card_number || '').replace(/\D/g, '');
+                const last4 = digits.slice(-4);
+                return last4 ? `**** **** **** ${last4}` : '';
+            })();
+            const tipAmountSave = (() => {
+                const choice = orderData.tip_choice;
+                if (choice === 'yes') return parseFloat(orderData.tip_amount) || 0;
+                return 0;
+            })();
             const toppingsArraySave = Array.isArray(orderData.pizza_topping)
                 ? [...orderData.pizza_topping]
                 : (orderData.pizza_topping ? [orderData.pizza_topping] : []);
@@ -332,7 +395,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             crust: orderData.pizza_crust,
                             topping: toppingsArraySave
                         }
-                    }
+                    },
+                    payment: {
+                        method: orderData.payment_method || '',
+                        card: maskedCardSave
+                    },
+                    tip: tipAmountSave
                 }
             };
 
