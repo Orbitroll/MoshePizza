@@ -1,36 +1,37 @@
 {
     "order": {
-        "customer_name": "Itzik Pinhas",
+        "customer_name": "Moshe Peretz",
         "order_type": "dine-in",
-        "phone_number": "0585533441",
-        "email": "itzik@test.com",
-        "table": "14",
+        "phone_number": "0521111364",
+        "email": "moshe@test.com",
+        "table": 19,
         "notes": "",
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "Anti_VeganF",
+                "type": "MediterreneanF",
                 "size": "large",
                 "crust": "thin",
                 "topping": [
-                    "chicken bits",
-                    "pepperoni",
-                    "salami"
+                    "cooked tomatoes",
+                    "olives",
+                    "red onions",
+                    "tzatziki"
                 ]
             }
         }
     },
-    "id": 973981,
+    "id": 683551,
     "timestamp": {
         "date": {
-            "day": 10,
+            "day": 11,
             "month": 9,
             "year": 2025
         },
         "time": {
-            "hour": 22,
-            "minutes": 45,
-            "seconds": 18
+            "hour": 3,
+            "minutes": 9,
+            "seconds": 57
         }
     }
 }

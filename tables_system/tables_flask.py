@@ -82,7 +82,7 @@ def new_table():
         file_path = os.path.join(tables_name, f"{table_name}.json")
         with open(file_path, "w") as f:
             json.dump(data_dict, f, indent=4)
-        return 'Table created successfully'
+        return redirect('/admin/order/pizza', code = 307)
 
 
 @tables_bp.get('/order/table-<int:table_id>')

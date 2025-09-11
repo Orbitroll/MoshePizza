@@ -14,10 +14,12 @@ app = Flask('Pizza Moshe')
 from admins.admin import admin_bp
 from users.Users import users_bp
 from tables_system.tables_flask import tables_bp
+from invoices.dynamic_invoices import invoices_bp
 
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(users_bp, url_prefix='/users')
 app.register_blueprint(tables_bp, url_prefix='/tables')
+app.register_blueprint(invoices_bp, url_prefix='/invoices')
 
 def pizza_fetch(url_id: int):
     fetched_path = temp_dir / (f"pizza_{url_id}.json")
@@ -69,8 +71,10 @@ def place_order():
         json.dump(data, f, indent=4)
     logger.log(f"New order placed: id={order_id}, {timestamp}")
     orders.append(data)
-    return 'Order placed successfully'
-
+    if data["order"]["order_type"] == "dine-in":
+        return redirect('/tables/new-table/', code = 307)
+    else:
+        return redirect('/admin/order/pizza', code = 307)
 
 @app.get('/order/<int:url_id>')
 def order_show(url_id: int):
