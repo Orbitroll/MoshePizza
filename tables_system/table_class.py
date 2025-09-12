@@ -1,12 +1,11 @@
 
-from data import takent_json
+from data import takent_json, waiters_json
 import json
 
 
 class Table:
     table_instances = 0
     max_instances = 20
-    tables_waiters = {"Ron":0, "Shlomi":0, "Muhammad":0, "Moshe":0}
     available_waiters = []
     
     def tables_taken(table_int):
@@ -23,11 +22,19 @@ class Table:
         with open(takent_json, "w", encoding="utf-8") as f:
             json.dump(data, f)
 
-    def available_w():
-         Table.available_waiters.clear()
-         for k, v in Table.tables_waiters.items():
-              if v < 5:
-                    Table.available_waiters.append(k)
+    def waiters_add(waiter):
+        with open(waiters_json, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            data[waiter] += 1 
+        with open(waiters_json, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+    
+    def waiters_free(waiter):
+        with open(waiters_json, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            data[waiter] -= 1
+        with open(waiters_json, "w", encoding="utf-8") as f:
+            json.dump(data, f)
                         
     def load_taken():
         if not takent_json.exists():
@@ -37,7 +44,22 @@ class Table:
                 return json.load(f)
         except (json.JSONDecodeError, OSError):
             return None     
+    
+    def load_waiters():
+        if not waiters_json.exists():
+            return None
+        try:
+            with open(waiters_json, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            return None        
 
+    def available_w():
+         waiters_data = Table.load_waiters()
+         Table.available_waiters.clear()
+         for k, v in waiters_data.items():
+              if v < 5:
+                    Table.available_waiters.append(k)
 
     def taken_table(self):
             taken_data = Table.load_taken()
@@ -55,6 +77,7 @@ class Table:
                 Table.table_instances += 1 
 
     def choose_waiter(self):
+         waiters_data = Table.load_waiters()
          Table.available_w()
          
          if Table.available_waiters == []:
@@ -63,7 +86,7 @@ class Table:
          
          else:
             waiter = input('Choose a waiter to serve this table:').strip().title()
-            while waiter not in Table.tables_waiters:
+            while waiter not in waiters_data:
                 Table.available_w()
                 waiter = input(f'Waiter does not exist, choose the following waiters:{",".join(Table.available_waiters)}').strip().title()
             while waiter not in Table.available_waiters:
@@ -72,12 +95,12 @@ class Table:
                 if Table.available_waiters == []:
                     print('No available waiter, talk to Moshe')
                     return
-                if waiter not in Table.tables_waiters or waiter not in Table.available_waiters:
+                if waiter not in waiters_data or waiter not in Table.available_waiters:
                     Table.available_w()
                     print(f'Waiter does not exist or is not available, choose the following waiters:{",".join(Table.available_waiters)}')
                     continue
 
-            Table.tables_waiters[waiter] += 1     
+            Table.waiters_add(waiter)     
             self.waiter = waiter
             
                 
@@ -108,7 +131,7 @@ class Table:
         Table.table_instances -= 1
         self.is_taken = False
         Table.taken_del(self.table_num)
-        Table.tables_waiters[self.waiter] -= 1 
+        Table.waiters_free(self.waiter)
         self.waiter = None
         self.timestamp = None
         self.customer = None

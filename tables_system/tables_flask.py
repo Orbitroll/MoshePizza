@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, request, jsonify, redirect, url_for,render_t
 from tables_system.table_class import Table
 from pathlib import Path
 import os, json
-from data import order_storage, takent_json
+from data import order_storage, takent_json, waiters_json
 import data
 
 
@@ -30,7 +30,15 @@ def load_taken():
                 return json.load(f)
         except (json.JSONDecodeError, OSError):
             return None     
-     
+
+def load_waiters():
+    if not waiters_json.exists():
+        return None
+    try:
+        with open(waiters_json, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None        
 
 tables_bp = Blueprint('tables_bp', __name__)
 
@@ -66,14 +74,13 @@ def new_table():
              t.is_taken = old_table["is_taken"]
 
              Table.table_instances += 1
-             if t.waiter:
-                 Table.tables_waiters[t.waiter] += 1
-             if t.is_taken:
-                 Table.tables_taken(t.table_num)
              table_name = new_name
         
         data["order"]["table"] = int(globals()[table_name].table_num)
         with open(order_storage, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+        file_path = os.path.join('orders', f"order_{data['id']}.json")
+        with open(file_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
         data_dict = globals()[table_name].to_dict()
 

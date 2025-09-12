@@ -5,6 +5,8 @@ import pizza_types
 import os
 import pypandoc
 
+invoices_bp = Blueprint('invoices_bp', __name__)
+
 def load_order():
         if not order_storage.exists():
             return None
@@ -14,7 +16,6 @@ def load_order():
         except (json.JSONDecodeError, OSError):
             return None
 
-order_data = load_order()        
 
 
 def dynamic_chart():
@@ -24,23 +25,30 @@ def dynamic_chart():
 """
      rows = []
      i = 1
-     for key,item in order_data["order"]["items"].items():
+     for key,item in load_order()["order"]["items"].items():
           pizza_class = getattr(pizza_types,item["type"])()
           rows.append(f"|{i}|{key}, {item['type']}:{item['topping']}|{pizza_class.price} NIS|1|{pizza_class.price} NIS|")        
        
           i +=1
      return initial_chart + "\n".join(rows)
 
-order_chart = dynamic_chart()    
-order_date = order_data["timestamp"]["date"]
-order_time = order_data["timestamp"]["time"]
-customer_name = order_data["order"]["customer_name"]
-payment_method = order_data["order"]["payment"]["method"]
-card = order_data["order"]["payment"]["card"]
-order_id = order_data["id"]
 
 
-invoice_md = f"""
+
+@invoices_bp.route('/new-md/', methods= ['POST'], strict_slashes = False)
+def create_md():
+    load_order()
+    order_data = load_order()  
+    order_chart = dynamic_chart()    
+    order_date = order_data["timestamp"]["date"]
+    order_time = order_data["timestamp"]["time"]
+    customer_name = order_data["order"]["customer_name"]
+    payment_method = order_data["order"]["payment"]["method"]
+    card = order_data["order"]["payment"]["card"]
+    order_id = order_data["id"]
+
+
+    invoice_md = f"""
 
 # ![](static/assets/logo_receipt.png)Pizza Moshe Yavne
 
@@ -55,7 +63,7 @@ invoice_md = f"""
 **Issued to**: {customer_name}  
 **Form of Payment:** {payment_method}{(f':{card}') if payment_method == 'card' else''}  
 **Order ID**: {order_id}  
-  
+
 **Items**:
 
 {order_chart}
@@ -63,7 +71,7 @@ invoice_md = f"""
 **Subtotal**: 105 NIS  
 **Tip (Not Included)**: 15 NIS  
 **TOTAL**: **120 NIS**  
-  
+
 ---
 
 **Thank you for visiting us! Another visit from you is another shekel taken from corporations.**
@@ -71,13 +79,6 @@ invoice_md = f"""
 
 """
 
-
-
-
-invoices_bp = Blueprint('invoices_bp', __name__)
-
-@invoices_bp.route('/new-md/', methods= ['POST'], strict_slashes = False)
-def new_md():
     invoices_name = "invoices"
     os.makedirs(invoices_name, exist_ok=True)
     file_path = os.path.join(invoices_name, f"invoice_{order_id}.md")
