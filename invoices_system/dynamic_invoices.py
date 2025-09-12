@@ -3,6 +3,7 @@ from flask import Flask, Blueprint, request, jsonify, redirect, url_for,render_t
 import json
 import pizza_types
 import os
+import pypandoc
 
 def load_order():
         if not order_storage.exists():
@@ -18,14 +19,14 @@ order_data = load_order()
 
 def dynamic_chart():
      initial_chart = """
-     | NM.| Item| Price| QTY.| TOTAL|
-    | --- | --- | --- | --- | ---   
+| NM.| Item| Price| QTY.| TOTAL|
+| --- | --- | --- | --- | ---   
 """
      rows = []
      i = 1
      for key,item in order_data["order"]["items"].items():
           pizza_class = getattr(pizza_types,item["type"])()
-          rows.append(f"|{i}|{key},{item['type']},{item['topping']}|{pizza_class.price} NIS|1|{pizza_class.price} NIS|")        
+          rows.append(f"|{i}|{key}, {item['type']}:{item['topping']}|{pizza_class.price} NIS|1|{pizza_class.price} NIS|")        
        
           i +=1
      return initial_chart + "\n".join(rows)
@@ -52,7 +53,7 @@ invoice_md = f"""
 **Date**: { '.'.join(str(number) for number in order_date.values())}  
 **Time**: { ':'.join(str(number) for number in order_time.values())}  
 **Issued to**: {customer_name}  
-**Form of Payment:** {payment_method}{(f':{card}') if {payment_method} == 'card' else''}  
+**Form of Payment:** {payment_method}{(f':{card}') if payment_method == 'card' else''}  
 **Order ID**: {order_id}  
   
 **Items**:
@@ -75,12 +76,17 @@ invoice_md = f"""
 
 invoices_bp = Blueprint('invoices_bp', __name__)
 
-@invoices_bp.post('/new-md/')
+@invoices_bp.route('/new-md/', methods= ['POST'], strict_slashes = False)
 def new_md():
     invoices_name = "invoices"
     os.makedirs(invoices_name, exist_ok=True)
     file_path = os.path.join(invoices_name, f"invoice_{order_id}.md")
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(invoice_md)
-    return 'markdown created successfully'
+    pdf_path = os.path.join(invoices_name, f"invoice_{order_id}.pdf")
+    pypandoc.convert_file(f"{file_path}",'pdf',outputfile= f"{pdf_path}", extra_args= ['--standalone']),
+
+    return 'invoice created successfully'
+
+
         
