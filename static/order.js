@@ -18,8 +18,179 @@ document.addEventListener('DOMContentLoaded', function() {
     const jsonOutput = document.getElementById('jsonOutput');
     const editOrderBtn = document.getElementById('editOrder');
     const confirmOrderBtn = document.getElementById('confirmOrder');
+    // Pizza preview elements
+    const pizzaLayersEl = document.getElementById('pizzaLayers');
+    const pizzaBaseEl = document.getElementById('pizzaBase');
 
     const PLACE_ORDER_URL = window.PLACE_ORDER_URL;
+    const STATIC_ASSETS_BASE = (window.STATIC_ASSETS_BASE || '').replace(/\\/g, '/');
+
+    // Map toppings -> image filenames available in static/assets
+    const TOPPING_IMAGE_MAP = {
+        'olives': 'olives.png',
+        'pepperoni': 'pepperoni.png',
+        'corn': 'corn.png',
+        'jalapenos': 'jalapenos.png',
+        'extra cheese': 'extra_cheese.png',
+        'tomato': 'tomato.png',
+        'cooked tomatoes': 'tomato.png',
+        'mushrooms': 'mushrooms.png',
+        'onions': 'onions.png',
+        'red onions': 'red_onions.png',
+        'anchovy': 'anchovy.png',
+        'broccoli': 'broccoli.png',
+        'bell pepper': 'bell_peppers.png',
+        'salami': 'salami.png',
+        'chicken bits': 'chicken_bits.png',
+        'tzatziki': 'tzatziki.png',
+        'black olives': 'black_olives.png',
+        'basil': 'basil.png',
+        'chili flakes': 'chili_flakes.png',
+        'hot sauce': 'hot_sauce.png'
+    };
+
+    function getToppingImageUrl(toppingValue) {
+        let file = TOPPING_IMAGE_MAP[toppingValue];
+        if (!file) {
+            const sanitized = toppingValue
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '_')
+                .replace(/^_+|_+$/g, '') + '.png';
+            file = sanitized;
+        }
+        return STATIC_ASSETS_BASE + file;
+    }
+
+    // Deterministic PRNG utilities for piece distribution
+    function seededRandom(seed) {
+        let x = seed || 123456789;
+        x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
+        return ((x >>> 0) % 100000) / 100000;
+    }
+
+    function createPrng(seed) {
+        let state = (seed >>> 0) || 123456789;
+        return function() {
+            state ^= state << 13; state ^= state >>> 17; state ^= state << 5;
+            return (state >>> 0) / 4294967296; // [0,1)
+        };
+    }
+
+    function stringToSeed(str) {
+        let h = 2166136261 >>> 0; // FNV-1a base
+        for (let i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+    }
+
+    function polarToCartesian(r, theta) {
+        const x = r * Math.cos(theta);
+        const y = r * Math.sin(theta);
+        return { x, y };
+    }
+
+    const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5)); // ~2.399963...
+
+    function generateEvenPolarPoints(count, seedBase) {
+        const rng = createPrng(seedBase);
+        const points = [];
+        for (let i = 1; i <= count; i++) {
+            const rNorm = Math.sqrt((i - 0.5) / count) * 0.96; // keep margin inside
+            let theta = i * GOLDEN_ANGLE;
+            theta += (rng() - 0.5) * 0.25; // slight jitter
+            const rJitter = rNorm * (0.94 + 0.12 * rng());
+            const x = rJitter * Math.cos(theta);
+            const y = rJitter * Math.sin(theta);
+            const rot = rng() * 360;
+            points.push({ x, y, rot });
+        }
+        return points;
+    }
+
+    function rebuildPizzaLayersFromSelectedChips() {
+        if (!pizzaLayersEl) return;
+        pizzaLayersEl.innerHTML = '';
+        const chips = selectedToppingsEl ? selectedToppingsEl.querySelectorAll('.chip') : [];
+        chips.forEach((chip, chipIndex) => {
+            const value = chip.dataset.value;
+            const url = getToppingImageUrl(value);
+            if (!url) return; // skip toppings without images
+
+            // Determine number of pieces per topping
+            const basePieces = 14; // default density
+            const densityMap = {
+                'extra cheese': 18,
+                'pepperoni': 16,
+                'olives': 18,
+                'corn': 20,
+                'jalapenos': 14,
+                'tomato': 12,
+                'mushrooms': 18,
+                'onions': 18,
+                'red onions': 18,
+                'anchovy': 10,
+                'broccoli': 14,
+                'bell pepper': 14,
+                'salami': 14,
+                'chicken bits': 14,
+                'tzatziki': 10,
+                'black olives': 18,
+                'basil': 10,
+                'chili flakes': 24,
+                'hot sauce': 10,
+                'cooked tomatoes': 12
+            };
+            const numPieces = densityMap[value] || basePieces;
+
+            const seedBase = stringToSeed(value + ':' + chipIndex);
+            const points = generateEvenPolarPoints(numPieces, seedBase);
+            points.forEach(({ x, y, rot }) => {
+                const piece = document.createElement('img');
+                piece.className = 'pizza-piece';
+                piece.src = url;
+                piece.alt = value + ' piece';
+                piece.decoding = 'async';
+                piece.loading = 'lazy';
+
+                const scaleMap = {
+                    'pepperoni': 0.16,
+                    'olives': 0.12,
+                    'corn': 0.10,
+                    'jalapenos': 0.13,
+                    'extra cheese': 0.20,
+                    'tomato': 0.18,
+                    'mushrooms': 0.16,
+                    'onions': 0.14,
+                    'red onions': 0.14,
+                    'anchovy': 0.20,
+                    'broccoli': 0.18,
+                    'bell pepper': 0.16,
+                    'salami': 0.16,
+                    'chicken bits': 0.16,
+                    'tzatziki': 0.22,
+                    'black olives': 0.12,
+                    'basil': 0.22,
+                    'chili flakes': 0.08,
+                    'hot sauce': 0.22,
+                    'cooked tomatoes': 0.18
+                };
+                const scale = scaleMap[value] || 0.14;
+
+                const pizzaRadiusPct = 34; // fit within inner mask
+                const px = 50 + x * pizzaRadiusPct;
+                const py = 50 + y * pizzaRadiusPct;
+
+                piece.style.width = Math.round(scale * 100) + '%';
+                piece.style.left = px + '%';
+                piece.style.top = py + '%';
+                piece.style.transform = `translate(-50%, -50%) rotate(${rot}deg)`;
+
+                pizzaLayersEl.appendChild(piece);
+            });
+        });
+    }
 
     // Swap Table/Notes and toggle address block based on order type
     const tableGroup = document.getElementById('tableGroup');
@@ -155,9 +326,11 @@ document.addEventListener('DOMContentLoaded', function() {
             chip.querySelector('.chip-remove').addEventListener('click', () => {
                 selectedToppings.delete(value);
                 chip.remove();
+                rebuildPizzaLayersFromSelectedChips();
             });
         }
         selectedToppingsEl.appendChild(chip);
+        rebuildPizzaLayersFromSelectedChips();
     }
 
     function addTopping(value) {
@@ -175,10 +348,14 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedToppings.clear();
         selectedToppingsEl.innerHTML = '';
         if (toppingsSelect) toppingsSelect.value = '';
+        rebuildPizzaLayersFromSelectedChips();
     }
 
     if (toppingsSelect && selectedToppingsEl) {
-        toppingsSelect.addEventListener('change', (e) => addTopping(e.target.value));
+        toppingsSelect.addEventListener('change', (e) => {
+            addTopping(e.target.value);
+            rebuildPizzaLayersFromSelectedChips();
+        });
     }
 
     // Sort toppings dropdown alphabetically (keep placeholder first)
@@ -229,6 +406,7 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedToppings.add(v);
             renderToppingChip(v, labelText, removable);
         });
+        rebuildPizzaLayersFromSelectedChips();
     }
 
     function updatePizzaTypeLocks() {

@@ -277,12 +277,20 @@
                         alt="Cyberpunk Pizza Chef"
                         loading="lazy"
                     />
-                    <img
-                        class="order-image"
-                        src="{{ url_for('static', filename='assets/20250829_1803_Chef with Undercut_remix_01k3v5hbzkfbxvbqqyb4e9kcbw.png') }}"
-                        alt="Chef with Undercut"
-                        loading="lazy"
-                    />
+                    <div class="pizza-preview">
+                        <div class="pizza-canvas" id="pizzaCanvas">
+                            <img
+                                class="pizza-base"
+                                id="pizzaBase"
+                                src="{{ url_for('static', filename='assets/pizza_template.png') }}"
+                                alt="Pizza base"
+                                loading="lazy"
+                            />
+                            <div class="pizza-mask">
+                                <div class="pizza-layers" id="pizzaLayers" aria-hidden="true"></div>
+                            </div>
+                        </div>
+                    </div>
                 </aside>
             </div>
             </div>
@@ -312,7 +320,8 @@
 
     <script>
         window.PLACE_ORDER_URL = "{{ url_for('place_order') }}";
+        window.STATIC_ASSETS_BASE = "{{ url_for('static', filename='assets') }}/";
     </script>
-    <script src="{{ url_for('static', filename='order.js', v='6') }}"></script>
+    <script src="{{ url_for('static', filename='order.js', v='8') }}"></script>
 </body>
 </html>
