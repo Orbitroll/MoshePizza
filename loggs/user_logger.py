@@ -1,35 +1,38 @@
-import logging
-from pathlib import Path
+from data import order_storage
+from data import admins
+from datetime import datetime, timedelta
 
-LOG_DIR = Path(__file__).resolve().parent
-ADMIN_LOG = LOG_DIR / "admin.log" 
-FREQUENT_LOG = LOG_DIR / "frequent.log"
-GUEST_LOG = LOG_DIR / "guest.log"
+class user:
+    def __init__(self, username, password, role) -> None:
+        self.username = username
+        self.password = password
+        self.role = role
+        self.orders = []  # store datetime of each order
 
+    def add_order(self):
+        
+        self.orders.append(datetime.now())
 
-def _get_logger(name: str, file_path: Path):
-    logger = logging.getLogger(name)
-    if not logger.handlers:
-        logger.setLevel(logging.INFO)
-        handler = logging.FileHandler(file_path)
-        formatter = logging.Formatter("%(asctime)s - %(message)s")
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-    return logger
+    def is_frequent(self):
+        
+        now = datetime.now()
+        one_month_ago = now - timedelta(days=30)
+        recent_orders = [o for o in self.orders if o >= one_month_ago]
+        return len(recent_orders) >= 3
 
-
-admin_logger = _get_logger("admin", ADMIN_LOG)
-frequent_logger = _get_logger("frequent", FREQUENT_LOG)
-guest_logger = _get_logger("guest", GUEST_LOG)
-
-
-def log_admin(message: str):
-    admin_logger.info(message)
-
-
-def log_frequent_user(message: str):
-    frequent_logger.info(message)
-
-
-def log_guest(message: str):
-    guest_logger.info(message)
+def login():
+    print('Welcome to Moshe Yavne Pizza the best pizza in Yavne')
+    print('Please log in')
+    print("if you don't have a username press enter to continue as guest")
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    for user in admins:
+        if user.username == username and user.password == password:
+            return user
+    if username == "" and password == "":
+        return user("guest", "guest", "guest")
+    if username  in admins:
+        return user(username, password, "admin")
+    else:
+        return user(username, password, "user")    
+    
