@@ -31,7 +31,6 @@ inventory = {
     }
 }
 
-# Low stock tracker
 low_stock_items = []
 
 
@@ -59,11 +58,11 @@ def use_inventory(category, item, qty=1):
 def print_inventory():
     print(" Updated Inventory:")
     for category, items in inventory.items():
-        print(f"\n{category.capitalize()}:")
+        print(f"{category.capitalize()}:")
         for name, qty in items.items():
-            print(f"  {name}: {qty}")
+            print(f"{name}: {qty}")
 
     if low_stock_items:
         print(" Reorder Reminder: The following items are low in stock:")
         for item in low_stock_items:
-            print(f"  {item}")
+            print(f"{item}")
