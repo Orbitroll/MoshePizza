@@ -1,0 +1,32 @@
+milkshakes = {
+    "Strawberry Milkshake": 12,
+    "Oreo Milkshake": 12,
+    "Banana Milkshake": 12,
+    "Chocolate Milkshake": 12,
+    "Hazelnut Milkshake": 12
+}
+
+
+soft_drinks = {
+    "Cola": {"can": 5, "bottle": 10, "1.5L bottle": 15},
+    "Cola Zero": {"can": 5, "bottle": 10, "1.5L bottle": 15},
+    "Fanta": {"can": 5, "bottle": 10, "1.5L bottle": 15},
+    "Sprite": {"can": 5, "bottle": 10, "1.5L bottle": 15},
+    "XL Energy": {"can": 5},
+    "Tropit": {"pouch": 5},
+    "Water": {"bottle": 5, "1.5L bottle": 10},
+    "Prigat": {
+        "bottle": 10,
+        "1.5L bottle": 15,
+        "types": ["Peach", "Apple", "Orange", "Grape", "Pineapple"]
+    }
+}
+
+toppings = {
+    "olives": 3, "pepperoni": 5, "corn": 2, "jalapenos": 3,
+    "extra cheese": 4, "tomato": 2, "mushrooms": 3, "onions": 2,
+    "red onions": 3, "anchovy": 6, "broccoli": 3, "bell pepper": 3,
+    "salami": 5, "chicken bits": 6, "tzatziki": 4, "black olives": 3,
+    "basil": 2, "chili flakes": 1, "hot sauce": 1
+}
+
