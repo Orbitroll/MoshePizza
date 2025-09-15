@@ -21,9 +21,44 @@ document.addEventListener('DOMContentLoaded', function() {
     // Pizza preview elements
     const pizzaLayersEl = document.getElementById('pizzaLayers');
     const pizzaBaseEl = document.getElementById('pizzaBase');
+    // Drinks & Shakes elements
+    const milkshakeSelect = document.getElementById('milkshakeSelect');
+    const addMilkshakeBtn = document.getElementById('addMilkshakeBtn');
+    const milkshakeQtyInput = document.getElementById('milkshakeQty');
+    const selectedMilkshakesEl = document.getElementById('selectedMilkshakes');
+    const softDrinkSelect = document.getElementById('softDrinkSelect');
+    const softDrinkSizeSelect = document.getElementById('softDrinkSizeSelect');
+    const softDrinkFlavorSelect = document.getElementById('softDrinkFlavorSelect');
+    const softDrinkFlavorGroup = document.getElementById('softDrinkFlavorGroup');
+    const addSoftDrinkBtn = document.getElementById('addSoftDrinkBtn');
+    const softDrinkQtyInput = document.getElementById('softDrinkQty');
+    const selectedSoftDrinksEl = document.getElementById('selectedSoftDrinks');
+    const extrasSubtotalEl = document.getElementById('extrasSubtotal');
 
     const PLACE_ORDER_URL = window.PLACE_ORDER_URL;
     const STATIC_ASSETS_BASE = (window.STATIC_ASSETS_BASE || '').replace(/\\/g, '/');
+    // Inline prices (from prices.json, without toppings)
+    const PRICES = {
+        items: {
+            milkshakes: {
+                "Strawberry Milkshake": 12,
+                "Oreo Milkshake": 12,
+                "Banana Milkshake": 12,
+                "Chocolate Milkshake": 12,
+                "Hazelnut Milkshake": 12
+            },
+            soft_drinks: {
+                "Cola": {"can": 5, "1.5L bottle": 15},
+                "Cola Zero": {"can": 5, "1.5L bottle": 15},
+                "Fanta": {"can": 5, "1.5L bottle": 15},
+                "Sprite": {"can": 5, "1.5L bottle": 15},
+                "XL Energy": {"can": 5},
+                "Tropit": {"pouch": 5},
+                "Water": {"bottle": 5, "1.5L bottle": 10},
+                "Prigat": {"bottle": 10, "1.5L bottle": 15, "types": ["Peach", "Apple", "Orange", "Grape", "Pineapple"]}
+            }
+        }
+    };
 
     // Map toppings -> image filenames available in static/assets
     const TOPPING_IMAGE_MAP = {
@@ -371,6 +406,203 @@ document.addEventListener('DOMContentLoaded', function() {
 
     sortSelectOptions(toppingsSelect);
 
+    // ---------- Drinks & Shakes ----------
+    // Track unique variants (ignore quantity)
+    const selectedMilkshakeKeys = new Set();
+    const selectedSoftDrinkKeys = new Set();
+
+    function variantKey(obj) {
+        const typeValue = obj.type || obj.name || '';
+        const size = obj.size || '';
+        const flavor = obj.flavor || '';
+        return `${obj.category}|${typeValue}|${size}|${flavor}`;
+    }
+
+    function populateMilkshakeSelect() {
+        if (!milkshakeSelect) return;
+        const base = '<option value="">Select milkshake...</option>';
+        const entries = Object.entries((PRICES.items && PRICES.items.milkshakes) || {});
+        const opts = entries
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([name, price]) => `<option value="${name}">${name} — ${price} NIS</option>`)
+            .join('');
+        milkshakeSelect.innerHTML = base + opts;
+    }
+
+    function populateSoftDrinkSelect() {
+        if (!softDrinkSelect) return;
+        const base = '<option value="">Select drink...</option>';
+        const entries = Object.entries((PRICES.items && PRICES.items.soft_drinks) || {});
+        const opts = entries
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([name, _obj]) => `<option value="${name}">${name}</option>`)
+            .join('');
+        softDrinkSelect.innerHTML = base + opts;
+        if (softDrinkSizeSelect) softDrinkSizeSelect.innerHTML = '<option value="">Select size...</option>';
+        if (softDrinkFlavorSelect) softDrinkFlavorSelect.innerHTML = '<option value="">Select flavor...</option>';
+        if (softDrinkFlavorGroup) softDrinkFlavorGroup.style.display = 'none';
+    }
+
+    function populateSoftDrinkDetails() {
+        const name = softDrinkSelect ? softDrinkSelect.value : '';
+        const obj = (PRICES.items && PRICES.items.soft_drinks && PRICES.items.soft_drinks[name]) || null;
+        if (softDrinkSizeSelect) softDrinkSizeSelect.innerHTML = '<option value="">Select size...</option>';
+        if (softDrinkFlavorSelect) softDrinkFlavorSelect.innerHTML = '<option value="">Select flavor...</option>';
+        if (softDrinkFlavorGroup) softDrinkFlavorGroup.style.display = 'none';
+        if (!obj) return;
+        const sizeKeys = Object.keys(obj).filter(k => k !== 'types');
+        const sizeOpts = sizeKeys
+            .map(size => `<option value="${size}">${size} — ${obj[size]} NIS</option>`)
+            .join('');
+        if (softDrinkSizeSelect) softDrinkSizeSelect.innerHTML = '<option value="">Select size...</option>' + sizeOpts;
+        if (Array.isArray(obj.types) && obj.types.length && softDrinkFlavorSelect && softDrinkFlavorGroup) {
+            const flavorOpts = obj.types
+                .sort((a, b) => a.localeCompare(b))
+                .map(t => `<option value="${t}">${t}</option>`)
+                .join('');
+            softDrinkFlavorSelect.innerHTML = '<option value="">Select flavor...</option>' + flavorOpts;
+            softDrinkFlavorGroup.style.display = 'block';
+        }
+    }
+
+    function renderExtraChip(item, container) {
+        if (!container) return;
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        const mainLabel = item.type || item.name; // support legacy 'name'
+        const parts = [mainLabel];
+        if (item.size) parts.push(item.size);
+        if (item.flavor) parts.push(item.flavor);
+        const qty = Math.max(1, Number(item.quantity) || 1);
+        const priceText = `${parts.join(' — ')} (${item.price} NIS)`;
+        const key = variantKey(item);
+        chip.dataset.key = key;
+        chip.innerHTML = `
+            <span class=\"chip-label\">${priceText}</span>
+            <div class=\"chip-qty\">
+                <button type=\"button\" class=\"chip-qty-btn chip-qty-minus\" aria-label=\"Decrease quantity\">−</button>
+                <span class=\"chip-qty-count\">${qty}</span>
+                <button type=\"button\" class=\"chip-qty-btn chip-qty-plus\" aria-label=\"Increase quantity\">+</button>
+            </div>
+            <button type=\"button\" class=\"chip-remove\" aria-label=\"Remove ${priceText}\">×</button>
+            <input type=\"hidden\" name=\"extra_item\" value='${JSON.stringify({ ...item, quantity: qty })}'>
+        `;
+
+        const hidden = chip.querySelector('input[name="extra_item"]');
+        const qtyCount = chip.querySelector('.chip-qty-count');
+        const minusBtn = chip.querySelector('.chip-qty-minus');
+        const plusBtn = chip.querySelector('.chip-qty-plus');
+
+        function setQuantity(newQty) {
+            const finalQty = Math.max(1, parseInt(newQty, 10) || 1);
+            qtyCount.textContent = String(finalQty);
+            try {
+                const cur = JSON.parse(hidden.value);
+                cur.quantity = finalQty;
+                hidden.value = JSON.stringify(cur);
+            } catch (_) {}
+            updateExtrasSubtotal();
+        }
+
+        minusBtn.addEventListener('click', () => setQuantity((parseInt(qtyCount.textContent, 10) || 1) - 1));
+        plusBtn.addEventListener('click', () => setQuantity((parseInt(qtyCount.textContent, 10) || 1) + 1));
+
+        chip.querySelector('.chip-remove').addEventListener('click', () => {
+            const dkey = chip.dataset.key;
+            if (item.category === 'milkshake') selectedMilkshakeKeys.delete(dkey);
+            if (item.category === 'soft_drink') selectedSoftDrinkKeys.delete(dkey);
+            chip.remove();
+            updateExtrasSubtotal();
+        });
+
+        container.appendChild(chip);
+        updateExtrasSubtotal();
+    }
+
+    function addMilkshake() {
+        const name = milkshakeSelect ? milkshakeSelect.value : '';
+        if (!name) return;
+        const price = PRICES.items.milkshakes[name];
+        const quantity = Math.max(1, parseInt(milkshakeQtyInput && milkshakeQtyInput.value, 10) || 1);
+        const payload = { category: 'milkshake', type: name, price, quantity };
+        const key = variantKey(payload);
+        const existing = selectedMilkshakesEl ? selectedMilkshakesEl.querySelector(`.chip[data-key="${CSS.escape(key)}"]`) : null;
+        if (existing) {
+            const qtySpan = existing.querySelector('.chip-qty-count');
+            const hidden = existing.querySelector('input[name="extra_item"]');
+            const curQty = Math.max(1, parseInt(qtySpan.textContent, 10) || 1);
+            const newQty = curQty + quantity;
+            qtySpan.textContent = String(newQty);
+            try { const obj = JSON.parse(hidden.value); obj.quantity = newQty; hidden.value = JSON.stringify(obj); } catch(_){}
+            updateExtrasSubtotal();
+        } else {
+            selectedMilkshakeKeys.add(key);
+            renderExtraChip(payload, selectedMilkshakesEl);
+        }
+        milkshakeSelect.value = '';
+        if (milkshakeQtyInput) milkshakeQtyInput.value = '1';
+    }
+
+    function addSoftDrink() {
+        const name = softDrinkSelect ? softDrinkSelect.value : '';
+        const size = softDrinkSizeSelect ? softDrinkSizeSelect.value : '';
+        const flavor = softDrinkFlavorSelect ? softDrinkFlavorSelect.value : '';
+        if (!name || !size) return;
+        const obj = PRICES.items.soft_drinks[name] || {};
+        const price = obj[size];
+        const quantity = Math.max(1, parseInt(softDrinkQtyInput && softDrinkQtyInput.value, 10) || 1);
+        const payload = { category: 'soft_drink', type: name, size, price, quantity };
+        if (Array.isArray(obj.types) && obj.types.length && flavor) payload.flavor = flavor;
+        const key = variantKey(payload);
+        const existing = selectedSoftDrinksEl ? selectedSoftDrinksEl.querySelector(`.chip[data-key="${CSS.escape(key)}"]`) : null;
+        if (existing) {
+            const qtySpan = existing.querySelector('.chip-qty-count');
+            const hidden = existing.querySelector('input[name="extra_item"]');
+            const curQty = Math.max(1, parseInt(qtySpan.textContent, 10) || 1);
+            const newQty = curQty + quantity;
+            qtySpan.textContent = String(newQty);
+            try { const obj2 = JSON.parse(hidden.value); obj2.quantity = newQty; hidden.value = JSON.stringify(obj2); } catch(_){}
+            updateExtrasSubtotal();
+        } else {
+            selectedSoftDrinkKeys.add(key);
+            renderExtraChip(payload, selectedSoftDrinksEl);
+        }
+        if (softDrinkQtyInput) softDrinkQtyInput.value = '1';
+    }
+
+    // init
+    populateMilkshakeSelect();
+    populateSoftDrinkSelect();
+    if (softDrinkSelect) softDrinkSelect.addEventListener('change', populateSoftDrinkDetails);
+    if (addMilkshakeBtn) addMilkshakeBtn.addEventListener('click', addMilkshake);
+    if (addSoftDrinkBtn) addSoftDrinkBtn.addEventListener('click', addSoftDrink);
+
+    // Extras subtotal helpers
+    function updateExtrasSubtotal() {
+        if (!extrasSubtotalEl) return;
+        const inputs = Array.from(document.querySelectorAll('input[name="extra_item"]'));
+        let total = 0;
+        for (const i of inputs) {
+            try {
+                const obj = JSON.parse(i.value);
+                const p = Number(obj.price) || 0;
+                const q = Math.max(1, Number(obj.quantity) || 1);
+                total += p * q;
+            } catch (_) {}
+        }
+        extrasSubtotalEl.textContent = `${total} NIS`;
+    }
+
+    function clearExtras() {
+        selectedMilkshakeKeys.clear();
+        selectedSoftDrinkKeys.clear();
+        if (selectedMilkshakesEl) selectedMilkshakesEl.innerHTML = '';
+        if (selectedSoftDrinksEl) selectedSoftDrinksEl.innerHTML = '';
+        updateExtrasSubtotal();
+    }
+
+    updateExtrasSubtotal();
+
     // Auto-lock toppings for predefined types
     const PRESET_TOPPINGS = {
         "Anti-Vegan Pizza": ["pepperoni", "salami", "chicken bits"],
@@ -479,6 +711,31 @@ document.addEventListener('DOMContentLoaded', function() {
         toppingsArrayPrev.sort((a, b) => a.localeCompare(b));
 
         const pizzaTypeForJsonPrev = mapPizzaTypeToClassName(orderData.pizza_type, orderData.pizza_size);
+        // Extras for preview: aggregate and flatten as separate item keys
+        const extraInputsPrev = Array.from(document.querySelectorAll('input[name="extra_item"]'));
+        const extrasParsedPrev = extraInputsPrev.map(i => { try { return JSON.parse(i.value); } catch(e){ return null; } }).filter(Boolean);
+        const extrasAggPrev = new Map();
+        for (const it of extrasParsedPrev) {
+            const typeValue = it.type || it.name;
+            const keyId = [it.category, typeValue, it.size || '', it.flavor || ''].join('|');
+            const unit = Number(it.price) || 0;
+            const qty = Math.max(1, Number(it.quantity) || 1);
+            if (!extrasAggPrev.has(keyId)) {
+                extrasAggPrev.set(keyId, { category: it.category, type: typeValue, size: it.size, flavor: it.flavor, price: unit, quantity: qty });
+            } else {
+                extrasAggPrev.get(keyId).quantity += qty;
+            }
+        }
+        const extraItemsObjPrev = {};
+        for (const [, v] of extrasAggPrev) {
+            if (v.category === 'milkshake') {
+                (extraItemsObjPrev.milkshake ||= []).push({ type: v.type, price: v.price, quantity: v.quantity });
+            } else if (v.category === 'soft_drink') {
+                const val = { type: v.type, size: v.size, price: v.price, quantity: v.quantity };
+                if (v.flavor) val.flavor = v.flavor;
+                (extraItemsObjPrev.soft_drink ||= []).push(val);
+            }
+        }
         const orderJson = {
             order: {
                 customer_name: orderData.customer_name,
@@ -501,7 +758,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         size: orderData.pizza_size,
                         crust: orderData.pizza_crust,
                         topping: toppingsArrayPrev
-                    }
+                    },
+                    ...extraItemsObjPrev
                 },
                 payment: {
                     method: orderData.payment_method || '',
@@ -550,6 +808,39 @@ document.addEventListener('DOMContentLoaded', function() {
             toppingsArraySave.sort((a, b) => a.localeCompare(b));
 
             const pizzaTypeForJsonSave = mapPizzaTypeToClassName(orderData.pizza_type, orderData.pizza_size);
+            // Build items including extras
+            const extraInputsSave = Array.from(document.querySelectorAll('input[name="extra_item"]'));
+            const extrasParsedSave = extraInputsSave.map(i => { try { return JSON.parse(i.value); } catch(e){ return null; } }).filter(Boolean);
+            const itemsObj = {
+                pizza: {
+                    type: pizzaTypeForJsonSave,
+                    size: orderData.pizza_size,
+                    crust: orderData.pizza_crust,
+                    topping: toppingsArraySave
+                }
+            };
+            // aggregate extras and group under singular keys
+            const extrasAggSave = new Map();
+            for (const it of extrasParsedSave) {
+                const typeValue = it.type || it.name;
+                const keyId = [it.category, typeValue, it.size || '', it.flavor || ''].join('|');
+                const unit = Number(it.price) || 0;
+                const qty = Math.max(1, Number(it.quantity) || 1);
+                if (!extrasAggSave.has(keyId)) {
+                    extrasAggSave.set(keyId, { category: it.category, type: typeValue, size: it.size, flavor: it.flavor, price: unit, quantity: qty });
+                } else {
+                    extrasAggSave.get(keyId).quantity += qty;
+                }
+            }
+            for (const [, v] of extrasAggSave) {
+                if (v.category === 'milkshake') {
+                    (itemsObj.milkshake ||= []).push({ type: v.type, price: v.price, quantity: v.quantity });
+                } else if (v.category === 'soft_drink') {
+                    const val = { type: v.type, size: v.size, price: v.price, quantity: v.quantity };
+                    if (v.flavor) val.flavor = v.flavor;
+                    (itemsObj.soft_drink ||= []).push(val);
+                }
+            }
             const orderJson = {
                 order: {
                     customer_name: orderData.customer_name,
@@ -566,14 +857,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         floor: orderData.floor,
                         apartment: parseInt(orderData.apartment) || 0
                     } : 'Irrelevant',
-                    items: {
-                        pizza: {
-                            type: pizzaTypeForJsonSave,
-                            size: orderData.pizza_size,
-                            crust: orderData.pizza_crust,
-                            topping: toppingsArraySave
-                        }
-                    },
+                    items: itemsObj,
                     payment: {
                         method: orderData.payment_method || '',
                         card: maskedCardSave
@@ -592,11 +876,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 showSuccessMessage();
                 orderForm.reset();
                 clearToppings();
+                clearExtras();
                 orderPreview.style.display = 'none';
                 orderForm.style.display = 'block';
                 addressSection.style.display = 'none';
                 updateOrderTypeUI(orderTypeSelect.value || '');
                 updateCrustOptions();
+                updateExtrasSubtotal();
             } else {
                 throw new Error('Failed to save order');
             }

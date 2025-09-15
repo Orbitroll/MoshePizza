@@ -204,6 +204,66 @@
                         </div>
                     </div>
 
+                    <!-- Drinks & Shakes -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">
+                            <i class="fas fa-glass-whiskey"></i>
+                            Drinks & Shakes
+                        </h3>
+                        <div class="form-row">
+                            <!-- Milkshakes -->
+                            <div class="form-group">
+                                <label for="milkshakeSelect">Milkshakes</label>
+                                <select id="milkshakeSelect">
+                                    <option value="">Select milkshake...</option>
+                                </select>
+                                <div class="form-row" style="margin-top:8px; gap: 8px; align-items: end;">
+                                    <div class="form-group" style="max-width: 140px;">
+                                        <label for="milkshakeQty">Quantity</label>
+                                        <input id="milkshakeQty" type="number" min="1" step="1" value="1">
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" id="addMilkshakeBtn">Add Milkshake</button>
+                                </div>
+                                <div id="selectedMilkshakes" class="chips-container" style="margin-top:8px;"></div>
+                            </div>
+
+                            <!-- Soft Drinks -->
+                            <div class="form-group">
+                                <label for="softDrinkSelect">Soft Drinks</label>
+                                <select id="softDrinkSelect">
+                                    <option value="">Select drink...</option>
+                                </select>
+                                <div class="form-row" style="margin-top:8px; gap: 8px; align-items: end;">
+                                    <div class="form-group">
+                                        <label for="softDrinkSizeSelect">Size/Package</label>
+                                        <select id="softDrinkSizeSelect">
+                                            <option value="">Select size...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="softDrinkFlavorGroup" style="display:none;">
+                                        <label for="softDrinkFlavorSelect">Flavor</label>
+                                        <select id="softDrinkFlavorSelect">
+                                            <option value="">Select flavor...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="max-width: 140px;">
+                                        <label for="softDrinkQty">Quantity</label>
+                                        <input id="softDrinkQty" type="number" min="1" step="1" value="1">
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" id="addSoftDrinkBtn">Add Drink</button>
+                                </div>
+                                <div id="selectedSoftDrinks" class="chips-container" style="margin-top:8px;"></div>
+                            </div>
+                        </div>
+                        <!-- Extras Subtotal -->
+                        <div class="order-summary" style="margin-top: 12px;">
+                            <div class="summary-line" style="display:flex; justify-content: space-between; align-items: center;">
+                                <span class="summary-label">Extras Subtotal</span>
+                                <span class="summary-value" id="extrasSubtotal">0 NIS</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Payment & Tip -->
                     <div class="form-section">
                         <h3 class="form-section-title">

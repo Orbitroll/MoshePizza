@@ -1,41 +1,53 @@
 {
     "order": {
-        "customer_name": "ba lulu",
+        "customer_name": "Yanti Parazi",
         "order_type": "pickup",
-        "phone_number": "0526669832",
-        "email": "labubu@gmail.com",
+        "phone_number": "0556687357",
+        "email": "yanti@gmail.com",
         "notes": "",
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "Mexican_BraveryP",
+                "type": "NeapolitanP",
                 "size": "small",
-                "crust": "thin",
+                "crust": "neapolitan",
                 "topping": [
-                    "chili flakes",
-                    "hot sauce",
-                    "jalapenos",
-                    "pepperoni"
+                    "basil"
                 ]
-            }
+            },
+            "milkshake": [
+                {
+                    "type": "Chocolate Milkshake",
+                    "price": 12,
+                    "quantity": 2
+                }
+            ],
+            "soft_drink": [
+                {
+                    "type": "Cola",
+                    "size": "can",
+                    "price": 5,
+                    "quantity": 4
+                }
+            ]
         },
         "payment": {
             "method": "card",
             "card": "**** **** **** 5691"
         },
-        "tip": 0
+        "tip": 15
     },
-    "id": 838819,
+    "id": 336453,
     "timestamp": {
         "date": {
-            "day": 12,
+            "day": 15,
             "month": 9,
             "year": 2025
         },
         "time": {
-            "hour": 22,
-            "minutes": 15,
-            "seconds": 15
+            "hour": 15,
+            "minutes": 56,
+            "seconds": 7
         }
     }
 }

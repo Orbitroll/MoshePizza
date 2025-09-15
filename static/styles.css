@@ -2790,7 +2790,48 @@ body {
     color: var(--neon-orange);
 }
 
+/* Quantity controls inside chips */
+.chip-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 4px;
+}
+.chip-qty-btn {
+    background: rgba(0, 191, 255, 0.15);
+    border: 1px solid var(--neon-blue);
+    color: var(--text-white);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+}
+.chip-qty-btn:hover {
+    background: rgba(0, 191, 255, 0.25);
+}
+.chip-qty-count {
+    min-width: 14px;
+    text-align: center;
+}
+
 /* Full-width form control spanning both columns */
 .form-row .full-width {
     grid-column: 1 / -1;
+}
+/* Extras Subtotal Summary */
+.order-summary {
+  padding: 12px;
+  border: 1px solid rgba(0, 191, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.4);
+}
+.order-summary .summary-label {
+  color: var(--text-gray);
+}
+.order-summary .summary-value {
+  font-weight: 700;
+  color: var(--teal-accent);
 }
