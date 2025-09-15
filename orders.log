@@ -35,3 +35,27 @@
 [2025-09-15 15:28:59] New order placed: id=982003, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 15, 'minutes': 21, 'seconds': 34}}
 [2025-09-15 15:35:59] New order placed: id=271928, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 15, 'minutes': 34, 'seconds': 8}}
 [2025-09-15 15:57:48] New order placed: id=336453, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 15, 'minutes': 56, 'seconds': 7}}
+[2025-09-15 20:05:11] New order placed: id=878017, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 4, 'seconds': 3}}
+[2025-09-15 20:05:11] DB save failed for order_id=878017: 'list' object has no attribute 'get'
+[2025-09-15 20:10:53] New order placed: id=912069, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 10, 'seconds': 15}}
+[2025-09-15 20:10:53] DB save failed for order_id=912069: 'list' object has no attribute 'get'
+[2025-09-15 20:12:18] New order placed: id=342323, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 10, 'seconds': 15}}
+[2025-09-15 20:12:18] Invoice saved to DB: db_id=1, order_id=342323, total=0.0
+[2025-09-15 20:15:29] New order placed: id=497537, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 14, 'seconds': 42}}
+[2025-09-15 20:15:29] DB save failed for order_id=497537: 'list' object has no attribute 'get'
+[2025-09-15 20:16:13] New order placed: id=263109, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 14, 'seconds': 42}}
+[2025-09-15 20:16:13] DB save failed for order_id=263109: 'list' object has no attribute 'get'
+[2025-09-15 20:21:26] New order placed: id=946807, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 20, 'seconds': 47}}
+[2025-09-15 20:21:26] DB save failed for order_id=946807: dictionary update sequence element #0 has length 3; 2 is required
+[2025-09-15 20:21:57] New order placed: id=435449, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 20, 'seconds': 47}}
+[2025-09-15 20:21:57] DB save failed for order_id=435449: dictionary update sequence element #0 has length 4; 2 is required
+[2025-09-15 20:26:49] New order placed: id=899069, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 26, 'seconds': 7}}
+[2025-09-15 20:26:49] DB save failed for order_id=899069: dictionary update sequence element #0 has length 3; 2 is required
+[2025-09-15 20:28:35] New order placed: id=239157, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 27, 'seconds': 56}}
+[2025-09-15 20:28:35] DB save failed for order_id=239157: dictionary update sequence element #0 has length 4; 2 is required
+[2025-09-15 20:35:01] New order placed: id=499266, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 33, 'seconds': 15}}
+[2025-09-15 20:35:01] DB save failed for order_id=499266: dictionary update sequence element #0 has length 4; 2 is required
+[2025-09-15 20:42:51] New order placed: id=450249, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 41, 'seconds': 59}}
+[2025-09-15 20:42:51] DB save failed for order_id=450249: name 'TYPE_ALIASES' is not defined
+[2025-09-15 20:50:33] New order placed: id=676840, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 49, 'seconds': 16}}
+[2025-09-15 20:50:33] DB save failed for order_id=676840: name 'TYPE_ALIASES' is not defined

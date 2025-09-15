@@ -1,43 +1,38 @@
 {
     "order": {
-        "customer_name": "Yanti Parazi",
+        "customer_name": "‪shlomi abud‬‏",
         "order_type": "pickup",
-        "phone_number": "0556687357",
-        "email": "yanti@gmail.com",
+        "phone_number": "0584453100",
+        "email": "orbitroll@gmail.com",
         "notes": "",
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "NeapolitanP",
-                "size": "small",
-                "crust": "neapolitan",
+                "type": "Anti_VeganF",
+                "size": "large",
+                "crust": "thin",
                 "topping": [
-                    "basil"
+                    "chicken bits",
+                    "pepperoni",
+                    "salami"
                 ]
             },
-            "milkshake": [
-                {
-                    "type": "Chocolate Milkshake",
-                    "price": 12,
-                    "quantity": 2
-                }
-            ],
             "soft_drink": [
                 {
-                    "type": "Cola",
-                    "size": "can",
-                    "price": 5,
-                    "quantity": 4
+                    "type": "Cola Zero",
+                    "size": "1.5L bottle",
+                    "price": 15,
+                    "quantity": 1
                 }
             ]
         },
         "payment": {
-            "method": "card",
-            "card": "**** **** **** 5691"
+            "method": "cash",
+            "card": ""
         },
-        "tip": 15
+        "tip": 0
     },
-    "id": 336453,
+    "id": 676840,
     "timestamp": {
         "date": {
             "day": 15,
@@ -45,9 +40,9 @@
             "year": 2025
         },
         "time": {
-            "hour": 15,
-            "minutes": 56,
-            "seconds": 7
+            "hour": 20,
+            "minutes": 49,
+            "seconds": 16
         }
     }
 }
