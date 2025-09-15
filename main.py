@@ -52,12 +52,12 @@ try:
 except Exception:
     current_id = None
 
-import pizza_types 
+import pizza_types as pizza_types
 
 def _price_from_type(ptype: str) -> float | None:
     if not ptype:
         return None
-    ptype = TYPE_ALIASES.get(ptype, ptype)
+    ptype = pizza_types.TYPE_ALIASES.get(ptype, ptype)
     cls = getattr(pizza_types, ptype, None)
     if cls is None:
         return None
