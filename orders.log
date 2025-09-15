@@ -59,3 +59,7 @@
 [2025-09-15 20:42:51] DB save failed for order_id=450249: name 'TYPE_ALIASES' is not defined
 [2025-09-15 20:50:33] New order placed: id=676840, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 20, 'minutes': 49, 'seconds': 16}}
 [2025-09-15 20:50:33] DB save failed for order_id=676840: name 'TYPE_ALIASES' is not defined
+[2025-09-15 21:16:43] New order placed: id=977214, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 21, 'minutes': 16, 'seconds': 3}}
+[2025-09-15 21:16:43] Invoice saved to DB: db_id=1, order_id=977214, total=27.0
+[2025-09-15 21:17:56] New order placed: id=102585, {'date': {'day': 15, 'month': 9, 'year': 2025}, 'time': {'hour': 21, 'minutes': 16, 'seconds': 3}}
+[2025-09-15 21:17:56] Invoice saved to DB: db_id=2, order_id=102585, total=15.0

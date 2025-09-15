@@ -1,11 +1,19 @@
 {
     "order": {
-        "customer_name": "‪shlomi abud‬‏",
-        "order_type": "pickup",
+        "customer_name": "Shlomi Shalem shmuel",
+        "order_type": "delivery",
         "phone_number": "0584453100",
-        "email": "orbitroll@gmail.com",
+        "email": "shlomi.shalem.shmuel@gmail.com",
+        "table": "Irrelevant",
         "notes": "",
-        "address": "Irrelevant",
+        "address": {
+            "city": "Mevaseret",
+            "street": "Hafarsek 15 1",
+            "building number": 1,
+            "entrance": "1",
+            "floor": "1",
+            "apartment": 1
+        },
         "items": {
             "pizza": {
                 "type": "Anti_VeganF",
@@ -32,7 +40,7 @@
         },
         "tip": 0
     },
-    "id": 676840,
+    "id": 102585,
     "timestamp": {
         "date": {
             "day": 15,
@@ -40,9 +48,9 @@
             "year": 2025
         },
         "time": {
-            "hour": 20,
-            "minutes": 49,
-            "seconds": 16
+            "hour": 21,
+            "minutes": 16,
+            "seconds": 3
         }
     }
 }

@@ -54,10 +54,24 @@ except Exception:
 
 import pizza_types as pizza_types
 
+TYPE_ALIASES = {
+    "Anti-VeganF": "Anti_VeganF",
+    "Anti-VeganP": "Anti_VeganP",
+    "MediterreneanF": "MediterreneanF",
+    "MediterreneanP": "MediterreneanP",
+    "NeapolitanF": "NeapolitanF",
+    "NeapolitanP": "NeapolitanP",
+    "Mexican_BraveryF": "Mexican_BraveryF",
+    "Mexican_BraveryP": "Mexican_BraveryP",
+    "Moshes_FavoriteF": "Moshes_FavoriteF",
+    "Moshes_FavoriteP": "Moshes_FavoriteP",
+    "Custom": "Custom",
+}
+
 def _price_from_type(ptype: str) -> float | None:
     if not ptype:
         return None
-    ptype = pizza_types.TYPE_ALIASES.get(ptype, ptype)
+    ptype = TYPE_ALIASES.get(ptype, ptype)
     cls = getattr(pizza_types, ptype, None)
     if cls is None:
         return None
