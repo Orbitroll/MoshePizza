@@ -96,6 +96,21 @@ document.addEventListener('DOMContentLoaded', function() {
         return STATIC_ASSETS_BASE + file;
     }
 
+    function extraItemKey(meta) {
+        const parts = [];
+        if (meta.type) parts.push(meta.type);
+        if (meta.size) parts.push(meta.size);
+        if (meta.flavor) parts.push(meta.flavor);
+        return parts.filter(Boolean).join(' - ');
+    }
+
+    function extraItemPayload(meta) {
+        const payload = { type: meta.type, price: meta.price, quantity: meta.quantity };
+        if (meta.size) payload.size = meta.size;
+        if (meta.flavor) payload.flavor = meta.flavor;
+        return payload;
+    }
+
     // Deterministic PRNG utilities for piece distribution
     function seededRandom(seed) {
         let x = seed || 123456789;
@@ -728,14 +743,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         const extraItemsObjPrev = {};
         for (const [, v] of extrasAggPrev) {
-            if (v.category === 'milkshake') {
-                (extraItemsObjPrev.milkshake ||= []).push({ type: v.type, price: v.price, quantity: v.quantity });
-            } else if (v.category === 'soft_drink') {
-                const val = { type: v.type, size: v.size, price: v.price, quantity: v.quantity };
-                if (v.flavor) val.flavor = v.flavor;
-                (extraItemsObjPrev.soft_drink ||= []).push(val);
+            const payload = extraItemPayload(v);
+            if (v.category === 'milkshake' && !extraItemsObjPrev.milkshake) {
+                extraItemsObjPrev.milkshake = payload;
+            } else if (v.category === 'soft_drink' && !extraItemsObjPrev.soft_drink) {
+                extraItemsObjPrev.soft_drink = payload;
             }
         }
+
         const orderJson = {
             order: {
                 customer_name: orderData.customer_name,
@@ -833,12 +848,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             for (const [, v] of extrasAggSave) {
-                if (v.category === 'milkshake') {
-                    (itemsObj.milkshake ||= []).push({ type: v.type, price: v.price, quantity: v.quantity });
-                } else if (v.category === 'soft_drink') {
-                    const val = { type: v.type, size: v.size, price: v.price, quantity: v.quantity };
-                    if (v.flavor) val.flavor = v.flavor;
-                    (itemsObj.soft_drink ||= []).push(val);
+                const payload = extraItemPayload(v);
+                if (v.category === 'milkshake' && !itemsObj.milkshake) {
+                    itemsObj.milkshake = payload;
+                } else if (v.category === 'soft_drink' && !itemsObj.soft_drink) {
+                    itemsObj.soft_drink = payload;
                 }
             }
             const orderJson = {
@@ -916,3 +930,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => errorDiv.remove(), 5000);
     }
 });
+
+
+
+
+
+

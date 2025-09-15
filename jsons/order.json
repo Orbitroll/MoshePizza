@@ -8,28 +8,29 @@
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "NeapolitanP",
-                "size": "small",
-                "crust": "neapolitan",
+                "type": "Moshes_FavoriteF",
+                "size": "large",
+                "crust": "thin",
                 "topping": [
-                    "basil"
+                    "black olives",
+                    "broccoli",
+                    "corn",
+                    "extra cheese",
+                    "pepperoni",
+                    "red onions"
                 ]
             },
-            "milkshake": [
-                {
-                    "type": "Chocolate Milkshake",
-                    "price": 12,
-                    "quantity": 2
-                }
-            ],
-            "soft_drink": [
-                {
-                    "type": "Cola",
-                    "size": "can",
-                    "price": 5,
-                    "quantity": 4
-                }
-            ]
+            "milkshake": {
+                "type": "Chocolate Milkshake",
+                "price": 12,
+                "quantity": 1
+            },
+            "soft_drink": {
+                "type": "Sprite",
+                "price": 5,
+                "quantity": 1,
+                "size": "can"
+            }
         },
         "payment": {
             "method": "card",
@@ -37,17 +38,17 @@
         },
         "tip": 15
     },
-    "id": 336453,
+    "id": 735809,
     "timestamp": {
         "date": {
-            "day": 15,
+            "day": 16,
             "month": 9,
             "year": 2025
         },
         "time": {
-            "hour": 15,
-            "minutes": 56,
-            "seconds": 7
+            "hour": 1,
+            "minutes": 35,
+            "seconds": 35
         }
     }
 }

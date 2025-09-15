@@ -1,5 +1,4 @@
-{
-    "items":{
+items= {
         "milkshakes":{
             "Strawberry Milkshake": 12,
             "Oreo Milkshake": 12,
@@ -33,4 +32,3 @@
         }
 
     }
-}

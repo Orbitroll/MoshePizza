@@ -4,8 +4,14 @@ import json
 import pizza_types
 import os
 import pypandoc
+from prices import items
 
 invoices_bp = Blueprint('invoices_bp', __name__)
+
+milkshakes = items['milkshakes']
+soft_drinks = items['soft_drinks']
+toppings = items['toppings']
+
 
 def load_order():
         if not order_storage.exists():
@@ -18,19 +24,31 @@ def load_order():
 
 
 
-def dynamic_chart():
+def dynamic_chart(chart):
      initial_chart = """
-| NM.| Item| Price| QTY.| TOTAL|
-| --- | --- | --- | --- | ---   
+| NM.| Item|Details| Price| QTY.| TOTAL|
+| --- | --- | --- | --- | --- | ---  
 """
      rows = []
      i = 1
-     for key,item in load_order()["order"]["items"].items():
-          pizza_class = getattr(pizza_types,item["type"])()
-          rows.append(f"|{i}|{key}, {item['type']}:{item['topping']}|{pizza_class.price} NIS|1|{pizza_class.price} NIS|")        
+     subtotal = 0
+     toppings_price = 0
+     for key,item in load_order()["order"]["items"].items():     
+          if "topping" in item:
+               for toppings, price in items['toppings'].items():
+                    for order_topping in item['topping']:
+                        if order_topping == toppings:
+                            toppings_price += price
+                         
+          pizza_class = getattr(pizza_types,item["type"])() if key == 'pizza' else None
+          rows.append(f"|{i}|{key.replace('_', ' ').title()}, {item['type'].replace('_', ' ').title()}|{('<br> ,'.join(item['topping']).title()) if hasattr(pizza_types, item['type']) else ''}|{pizza_class.price + toppings_price if hasattr(pizza_types, item['type']) else item['price']} NIS|{1 if hasattr(pizza_types, item['type']) else item['quantity']}|{pizza_class.price + toppings_price if hasattr(pizza_types, item['type'])  else item['price']* item['quantity']}  NIS|")        
        
           i +=1
-     return initial_chart + "\n".join(rows)
+          subtotal += (pizza_class.price + toppings_price)  if hasattr(pizza_types, item['type'])  else (item['price']* item['quantity'])
+     if chart:
+        return initial_chart + "\n".join(rows)
+     else:
+          return subtotal
 
 
 
@@ -39,15 +57,15 @@ def dynamic_chart():
 def create_md():
     load_order()
     order_data = load_order()  
-    order_chart = dynamic_chart()    
+    order_chart = dynamic_chart(True)    
     order_date = order_data["timestamp"]["date"]
     order_time = order_data["timestamp"]["time"]
     customer_name = order_data["order"]["customer_name"]
     payment_method = order_data["order"]["payment"]["method"]
     card = order_data["order"]["payment"]["card"]
     order_id = order_data["id"]
-
-
+    tip = order_data["order"]["tip"]
+    subtotal = dynamic_chart(False)
     invoice_md = f"""
 
 # ![](static/assets/logo_receipt.png)Pizza Moshe Yavne
@@ -68,9 +86,9 @@ def create_md():
 
 {order_chart}
 
-**Subtotal**: 105 NIS  
-**Tip (Not Included)**: 15 NIS  
-**TOTAL**: **120 NIS**  
+**Subtotal**: {subtotal} NIS  
+**Tip (Not Included)**: {tip} NIS  
+**TOTAL**: **{subtotal + tip} NIS**  
 
 ---
 
