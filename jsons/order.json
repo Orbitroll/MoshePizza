@@ -1,38 +1,22 @@
 {
     "order": {
         "customer_name": "Shlomi Shalem shmuel",
-        "order_type": "delivery",
+        "order_type": "pickup",
         "phone_number": "0584453100",
         "email": "shlomi.shalem.shmuel@gmail.com",
-        "table": "Irrelevant",
         "notes": "",
-        "address": {
-            "city": "Mevaseret",
-            "street": "Hafarsek 15 1",
-            "building number": 1,
-            "entrance": "1",
-            "floor": "1",
-            "apartment": 1
-        },
+        "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "Anti_VeganF",
-                "size": "large",
+                "type": "Anti_VeganP",
+                "size": "small",
                 "crust": "thin",
                 "topping": [
                     "chicken bits",
                     "pepperoni",
                     "salami"
                 ]
-            },
-            "soft_drink": [
-                {
-                    "type": "Cola Zero",
-                    "size": "1.5L bottle",
-                    "price": 15,
-                    "quantity": 1
-                }
-            ]
+            }
         },
         "payment": {
             "method": "cash",
@@ -40,7 +24,7 @@
         },
         "tip": 0
     },
-    "id": 102585,
+    "id": 131439,
     "timestamp": {
         "date": {
             "day": 16,
@@ -48,9 +32,9 @@
             "year": 2025
         },
         "time": {
-            "hour": 21,
-            "minutes": 16,
-            "seconds": 3
+            "hour": 8,
+            "minutes": 40,
+            "seconds": 39
         }
     }
 }
