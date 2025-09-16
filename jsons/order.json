@@ -8,26 +8,24 @@
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "MediterreneanF",
+                "type": "NeapolitanF",
                 "size": "large",
-                "crust": "thin",
+                "crust": "neapolitan",
                 "topping": [
-                    "cooked tomatoes",
-                    "olives",
-                    "red onions",
-                    "tzatziki"
+                    "basil"
                 ]
             },
             "milkshake": {
                 "type": "Chocolate Milkshake",
                 "price": 12,
-                "quantity": 1
+                "quantity": 2
             },
             "soft_drink": {
-                "type": "Fanta",
-                "price": 5,
+                "type": "Prigat",
+                "price": 10,
                 "quantity": 2,
-                "size": "can"
+                "size": "bottle",
+                "flavor": "Orange"
             }
         },
         "payment": {
@@ -36,7 +34,7 @@
         },
         "tip": 15
     },
-    "id": 635747,
+    "id": 578329,
     "timestamp": {
         "date": {
             "day": 16,
@@ -44,9 +42,9 @@
             "year": 2025
         },
         "time": {
-            "hour": 17,
-            "minutes": 28,
-            "seconds": 30
+            "hour": 18,
+            "minutes": 55,
+            "seconds": 5
         }
     }
 }

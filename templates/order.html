@@ -42,6 +42,35 @@
             <p class="section-subtitle">Join the resistance. One pizza at a time.</p>
 
             <div class="order-content">
+                <!-- Left Visual Section -->
+                <aside class="order-visuals">
+                    <!-- Pizza Visual Preview -->
+                    <div class="pizza-visual-section">
+                        <div class="pizza-preview">
+                            <div class="pizza-canvas" id="pizzaCanvas">
+                                <img
+                                    class="pizza-base"
+                                    id="pizzaBase"
+                                    src="{{ url_for('static', filename='assets/pizza_template.png') }}"
+                                    alt="Pizza base"
+                                    loading="lazy"
+                                />
+                                <div class="pizza-layers" id="pizzaLayers" aria-hidden="true"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cyberpunk Chef Image -->
+                    <div class="chef-image-section">
+                        <img
+                            class="order-image"
+                            src="{{ url_for('static', filename='assets/20250819_2302_Cyberpunk Pizza Chef_remix_01k31ynbx9e67aj10w7kdbaqxv.png') }}"
+                            alt="Cyberpunk Pizza Chef"
+                            loading="lazy"
+                        />
+                    </div>
+                </aside>
+
                 <div class="order-form">
                     <form id="orderForm" action="{{ url_for('place_order') }}" method="POST">
                     <!-- Customer Information -->
@@ -271,14 +300,6 @@
                                 <div id="selectedSoftDrinks" class="chips-container"></div>
                             </div>
                         </div>
-
-                        <!-- Extras Subtotal -->
-                        <div class="extras-subtotal">
-                            <div class="subtotal-line">
-                                <span class="subtotal-label">Extras Subtotal</span>
-                                <span class="subtotal-value" id="extrasSubtotal">0 NIS</span>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Payment & Tip -->
@@ -346,26 +367,80 @@
                 </div>
                 </div>
 
-                <!-- Right-side Art -->
-                <aside class="order-art">
-                    <img
-                        class="order-image"
-                        src="{{ url_for('static', filename='assets/20250819_2302_Cyberpunk Pizza Chef_remix_01k31ynbx9e67aj10w7kdbaqxv.png') }}"
-                        alt="Cyberpunk Pizza Chef"
-                        loading="lazy"
-                    />
-                    <div class="pizza-preview">
-                        <div class="pizza-canvas" id="pizzaCanvas">
-                            <img
-                                class="pizza-base"
-                                id="pizzaBase"
-                                src="{{ url_for('static', filename='assets/pizza_template.png') }}"
-                                alt="Pizza base"
-                                loading="lazy"
-                            />
-                            <div class="pizza-mask">
-                                <div class="pizza-layers" id="pizzaLayers" aria-hidden="true"></div>
+                <!-- Right-side Order Summary -->
+                <aside class="order-summary-sidebar" id="orderSummary">
+                    <div class="summary-header">
+                        <h4 class="summary-title">
+                            <i class="fas fa-receipt"></i>
+                            Your Order
+                        </h4>
+                        <div class="summary-status">
+                            <span class="status-indicator building">Building...</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-content">
+                        <!-- Empty Order Message -->
+                        <div class="empty-order" id="emptyOrder">
+                            <div class="empty-icon">
+                                <i class="fas fa-shopping-cart"></i>
                             </div>
+                            <div class="empty-text">
+                                <p>Your order is empty</p>
+                                <small>Start by selecting a pizza!</small>
+                            </div>
+                        </div>
+
+                        <!-- Pizza Section -->
+                        <div class="summary-section" id="pizzaSection" style="display: none;">
+                            <h5 class="section-title">
+                                <i class="fas fa-pizza-slice"></i>
+                                Pizza
+                            </h5>
+                            <div class="summary-item" id="pizzaItem" style="display: none;">
+                                <!-- Pizza details will be populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Extras Section -->
+                        <div class="summary-section" id="extrasSection" style="display: none;">
+                            <h5 class="section-title">
+                                <i class="fas fa-glass-whiskey"></i>
+                                Extras
+                            </h5>
+                            <div class="extras-list" id="extrasList">
+                                <!-- Dynamic extras will be added here -->
+                            </div>
+                        </div>
+
+                        <!-- Delivery Section -->
+                        <div class="summary-section" id="deliverySection" style="display: none;">
+                            <h5 class="section-title">
+                                <i class="fas fa-truck"></i>
+                                Delivery
+                            </h5>
+                            <div class="summary-item" id="deliveryItem" style="display: none;">
+                                <!-- Delivery details will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Footer -->
+                    <div class="summary-footer">
+                        <div class="subtotal-line">
+                            <span class="subtotal-label">Subtotal</span>
+                            <span class="subtotal-amount" id="orderSubtotal">0 NIS</span>
+                        </div>
+                        <div class="total-line">
+                            <span class="total-label">Total</span>
+                            <span class="total-amount" id="orderTotal">
+                                <span class="amount">0</span>
+                                <span class="currency">NIS</span>
+                            </span>
+                        </div>
+                        <div class="estimated-time" id="estimatedTime" style="display: none;">
+                            <i class="fas fa-clock"></i>
+                            Est. delivery: 25-35 min
                         </div>
                     </div>
                 </aside>
