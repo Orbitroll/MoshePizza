@@ -2821,7 +2821,147 @@ body {
 .form-row .full-width {
     grid-column: 1 / -1;
 }
-/* Extras Subtotal Summary */
+
+/* Drinks & Shakes Section */
+.drinks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 16px;
+}
+
+.drink-category {
+    background: rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(0, 191, 255, 0.15);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.drink-category:hover {
+    border-color: rgba(0, 191, 255, 0.3);
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.drink-category-title {
+    color: var(--neon-orange);
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.drink-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.drink-actions {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.quantity-group {
+    min-width: 80px;
+    margin-bottom: 0 !important;
+}
+
+.quantity-input {
+    text-align: center;
+    padding: 8px 6px !important;
+    font-weight: 600;
+}
+
+.add-drink-btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.add-drink-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 191, 255, 0.3);
+}
+
+.add-drink-btn i {
+    font-size: 0.9em;
+}
+
+/* Extras Subtotal */
+.extras-subtotal {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid rgba(0, 191, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.4);
+}
+
+.subtotal-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subtotal-label {
+    color: var(--text-gray);
+    font-weight: 600;
+}
+
+.subtotal-value {
+    color: var(--neon-blue);
+    font-weight: 700;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1em;
+}
+
+/* Responsive design for drinks section */
+@media (max-width: 768px) {
+    .drinks-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .drink-category {
+        padding: 16px;
+    }
+    
+    .drink-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .quantity-group {
+        min-width: unset;
+    }
+    
+    .add-drink-btn {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .drink-category-title {
+        font-size: 1em;
+    }
+    
+    .extras-subtotal {
+        padding: 12px;
+    }
+}
+
+/* Legacy Extras Subtotal Summary - keeping for compatibility */
 .order-summary {
   padding: 12px;
   border: 1px solid rgba(0, 191, 255, 0.2);
