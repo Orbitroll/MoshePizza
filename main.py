@@ -13,7 +13,7 @@ from DataBase.models import Invoice
 logger = Logger("orders.log")
 
 app = Flask('Pizza Moshe')
-DB_PATH = os.path.join(app.root_path , "DataBase", "moshepizza.db")
+DB_PATH = os.path.join(app.root_path , "DataBase", "invoice.db")
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
