@@ -1,44 +1,46 @@
 {
     "order": {
-        "customer_name": "Yanti Parazi",
-        "order_type": "pickup",
-        "phone_number": "0556687357",
-        "email": "yanti@gmail.com",
+        "customer_name": "Shlomi Shalem shmuel",
+        "order_type": "delivery",
+        "phone_number": "0584453100",
+        "email": "shlomi.shalem.shmuel@gmail.com",
+        "table": "Irrelevant",
         "notes": "",
-        "address": "Irrelevant",
+        "address": {
+            "city": "Mevaseret",
+            "street": "Hafarsek 15 1",
+            "building number": 1,
+            "entrance": "1",
+            "floor": "1",
+            "apartment": 1
+        },
         "items": {
             "pizza": {
-                "type": "Moshes_FavoriteF",
+                "type": "Anti_VeganF",
                 "size": "large",
                 "crust": "thin",
                 "topping": [
-                    "black olives",
-                    "broccoli",
-                    "corn",
-                    "extra cheese",
+                    "chicken bits",
                     "pepperoni",
-                    "red onions"
+                    "salami"
                 ]
             },
-            "milkshake": {
-                "type": "Chocolate Milkshake",
-                "price": 12,
-                "quantity": 1
-            },
-            "soft_drink": {
-                "type": "Sprite",
-                "price": 5,
-                "quantity": 1,
-                "size": "can"
-            }
+            "soft_drink": [
+                {
+                    "type": "Cola Zero",
+                    "size": "1.5L bottle",
+                    "price": 15,
+                    "quantity": 1
+                }
+            ]
         },
         "payment": {
-            "method": "card",
-            "card": "**** **** **** 5691"
+            "method": "cash",
+            "card": ""
         },
-        "tip": 15
+        "tip": 0
     },
-    "id": 735809,
+    "id": 102585,
     "timestamp": {
         "date": {
             "day": 16,
@@ -46,9 +48,9 @@
             "year": 2025
         },
         "time": {
-            "hour": 1,
-            "minutes": 35,
-            "seconds": 35
+            "hour": 21,
+            "minutes": 16,
+            "seconds": 3
         }
     }
 }
