@@ -1,30 +1,42 @@
 {
     "order": {
-        "customer_name": "Shlomi Shalem shmuel",
+        "customer_name": "Yanti Parazi",
         "order_type": "pickup",
-        "phone_number": "0584453100",
-        "email": "shlomi.shalem.shmuel@gmail.com",
+        "phone_number": "0506699712",
+        "email": "yanti@gmail.com",
         "notes": "",
         "address": "Irrelevant",
         "items": {
             "pizza": {
-                "type": "Anti_VeganP",
-                "size": "small",
+                "type": "MediterreneanF",
+                "size": "large",
                 "crust": "thin",
                 "topping": [
-                    "chicken bits",
-                    "pepperoni",
-                    "salami"
+                    "cooked tomatoes",
+                    "olives",
+                    "red onions",
+                    "tzatziki"
                 ]
+            },
+            "milkshake": {
+                "type": "Chocolate Milkshake",
+                "price": 12,
+                "quantity": 1
+            },
+            "soft_drink": {
+                "type": "Fanta",
+                "price": 5,
+                "quantity": 2,
+                "size": "can"
             }
         },
         "payment": {
             "method": "cash",
             "card": ""
         },
-        "tip": 0
+        "tip": 15
     },
-    "id": 131439,
+    "id": 635747,
     "timestamp": {
         "date": {
             "day": 16,
@@ -32,9 +44,9 @@
             "year": 2025
         },
         "time": {
-            "hour": 8,
-            "minutes": 40,
-            "seconds": 39
+            "hour": 17,
+            "minutes": 28,
+            "seconds": 30
         }
     }
 }
