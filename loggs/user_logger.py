@@ -16,7 +16,7 @@ class User:
         if self.is_frequent():
             discount = price * 0.10
             final_price = price - discount
-            print(f"Hi {self.username}, Thanks for always choosing us! You got a discount of {discount:.2f}₪.")
+            print(f"Hi {self.username}, Thanks for choosing us again! You got a discount of {discount:.2f}₪.")
             return final_price
         else:
             return price
