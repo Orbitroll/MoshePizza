@@ -117,7 +117,7 @@ def create_md():
     yag.send(to=f"{customer_email}",subject= f"Invoice for Order {order_id} from Pizza Moshe Yavne", contents = f"Thank you for visiting us {customer_name}! \n We hope the pizza tasted like corpo bankruptcy...",attachments=str(invoice_pdf))
 
     
-    return 'invoice created and sent successfully'
+    return 'invoice created and sent successfully', 200
 
 
         

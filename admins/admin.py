@@ -55,7 +55,7 @@ def create_pizza():
     with open(file_path, "w") as f:
         json.dump(order, f, indent=4)
 
-    return jsonify(order), 201
+    return redirect('/invoices/new-md', code=307)
 
 @admin_bp.route('/')
 def admin():
