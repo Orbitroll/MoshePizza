@@ -1,10 +1,14 @@
-from data import order_storage
+from data import order_storage, invoice_path
 from flask import Flask, Blueprint, request, jsonify, redirect, url_for,render_template
+from prices import items
+from pathlib import Path
+from invoices_system.app_pass import secret
 import json
 import pizza_types
 import os
 import pypandoc
-from prices import items
+import yagmail
+
 
 invoices_bp = Blueprint('invoices_bp', __name__)
 
@@ -65,6 +69,7 @@ def create_md():
     card = order_data["order"]["payment"]["card"]
     order_id = order_data["id"]
     tip = order_data["order"]["tip"]
+    customer_email = order_data["order"]["email"]
     subtotal = dynamic_chart(False)
     invoice_md = f"""
 
@@ -104,8 +109,15 @@ def create_md():
         f.write(invoice_md)
     pdf_path = os.path.join(invoices_name, f"invoice_{order_id}.pdf")
     pypandoc.convert_file(f"{file_path}",'pdf',outputfile= f"{pdf_path}", extra_args= ['--standalone']),
+    
+    
+    
+    invoice_pdf = invoice_path / f"invoice_{order_id}.pdf"
+    yag = yagmail.SMTP("pizzamosheyavne@gmail.com", secret)
+    yag.send(to=f"{customer_email}",subject= f"Invoice for Order {order_id} from Pizza Moshe Yavne", contents = f"Thank you for visiting us {customer_name}! \n We hope the pizza tasted like corpo bankruptcy...",attachments=str(invoice_pdf))
 
-    return 'invoice created successfully'
+    
+    return 'invoice created and sent successfully'
 
 
         
