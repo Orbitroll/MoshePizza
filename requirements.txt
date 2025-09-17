@@ -1,0 +1,12 @@
+# Minimal dependencies inferred from the codebase
+
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+requests
+pypandoc
+yagmail
+discord.py
+
+# Note: For PDF generation via pypandoc, a Pandoc binary
+# (and a LaTeX engine for PDF output) must be installed on the system.
