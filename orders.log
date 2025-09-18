@@ -69,23 +69,7 @@
 [2025-09-16 17:31:17] Invoice saved to DB: db_id=1, order_id=635747, total=37.0
 [2025-09-16 18:56:27] New order placed: id=578329, {'date': {'day': 16, 'month': 9, 'year': 2025}, 'time': {'hour': 18, 'minutes': 55, 'seconds': 5}}
 [2025-09-16 18:56:27] Invoice saved to DB: db_id=2, order_id=578329, total=59.0
-[2025-09-17 22:50:48] New order placed: id=749674, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 22, 'minutes': 49, 'seconds': 51}}
-[2025-09-17 22:50:49] Invoice saved to DB: db_id=3, order_id=749674, total=17.0
-[2025-09-17 22:55:25] New order placed: id=626682, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 22, 'minutes': 55, 'seconds': 23}}
-[2025-09-17 22:55:25] Invoice saved to DB: db_id=4, order_id=626682, total=17.0
-[2025-09-17 23:02:41] New order placed: id=434644, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 2, 'seconds': 39}}
-[2025-09-17 23:02:41] Invoice saved to DB: db_id=5, order_id=434644, total=17.0
-[2025-09-17 23:06:04] New order placed: id=709598, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 5, 'seconds': 1}}
-[2025-09-17 23:06:04] Invoice saved to DB: db_id=6, order_id=709598, total=22.0
-[2025-09-17 23:08:06] New order placed: id=809007, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 7, 'seconds': 34}}
-[2025-09-17 23:08:06] Invoice saved to DB: db_id=7, order_id=809007, total=27.0
-[2025-09-17 23:09:46] New order placed: id=566758, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 7, 'seconds': 34}}
-[2025-09-17 23:09:46] Invoice saved to DB: db_id=8, order_id=566758, total=0.0
-[2025-09-17 23:13:02] New order placed: id=882237, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 7, 'seconds': 34}}
-[2025-09-17 23:13:02] Invoice saved to DB: db_id=9, order_id=882237, total=0.0
-[2025-09-17 23:13:35] New order placed: id=930687, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 13, 'seconds': 33}}
-[2025-09-17 23:13:35] Invoice saved to DB: db_id=10, order_id=930687, total=0.0
-[2025-09-17 23:14:23] New order placed: id=693064, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 14, 'seconds': 21}}
-[2025-09-17 23:14:23] Invoice saved to DB: db_id=11, order_id=693064, total=0.0
-[2025-09-17 23:15:17] New order placed: id=541541, {'date': {'day': 17, 'month': 9, 'year': 2025}, 'time': {'hour': 23, 'minutes': 14, 'seconds': 21}}
-[2025-09-17 23:15:17] Invoice saved to DB: db_id=12, order_id=541541, total=12.0
+[2025-09-18 18:35:31] New order placed: id=209668, {'date': {'day': 18, 'month': 9, 'year': 2025}, 'time': {'hour': 18, 'minutes': 34, 'seconds': 8}}
+[2025-09-18 18:35:31] Invoice saved to DB: db_id=3, order_id=209668, total=27.0
+[2025-09-18 18:40:02] New order placed: id=275824, {'date': {'day': 18, 'month': 9, 'year': 2025}, 'time': {'hour': 18, 'minutes': 40, 'seconds': 0}}
+[2025-09-18 18:40:02] Invoice saved to DB: db_id=4, order_id=275824, total=27.0
