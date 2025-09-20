@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Pizza Moshe Yavne</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/logo.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Pizza Moshe Logo" class="logo-img">
+                </div>
+                <div class="logo-stack">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                    <div class="logo-tagline">THE MOST ADVANCED PIZZA IN THE WORLD</div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home_page') }}">Home</a></li>
+                <li><a href="{{ url_for('menu_page') }}">Menu</a></li>
+                <li><a href="{{ url_for('about_page') }}">About</a></li>
+                <li><a href="{{ url_for('ordering_page') }}">Order</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Our Story</h2>
+                    <p>In the neon-lit streets of Yavne, where corporate food chains dominate every corner, Pizza Moshe stands as a beacon of hope. Founded by a group of culinary rebels who refused to bow to the processed food industry, we've been serving real pizza to real people since day one.</p>
+                    <p>Our secret? We actually care about what goes into your food. No artificial preservatives, no corporate shortcuts, just honest ingredients and the skill of chefs who remember what real cooking tastes like.</p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <div class="stat-number">15</div>
+                            <div class="stat-label">Years of Rebellion</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">10,000+</div>
+                            <div class="stat-label">Happy Customers</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">Corporate Masters</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">15</div>
+                            <div class="stat-label">Cyberpunk Riders</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <img src="{{ url_for('static', filename='assets/20250819_2302_Cyberpunk Pizza Chef_remix_01k31ynbx9e67aj10w7kdbaqxv.png') }}" alt="Chef in Cyberpunk Kitchen" class="about-chef-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                </div>
+                <div class="footer-message">
+                    <p>Fighting corporate food, one slice at a time.</p>
+                    <p>&copy; 2025 Pizza Moshe Yavne. No corporate overlords allowed.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+</body>
+</html>

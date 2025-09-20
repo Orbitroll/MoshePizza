@@ -27,8 +27,8 @@
             </div>
             <ul class="nav-links">
                 <li><a href="{{ url_for('home_page') }}">Home</a></li>
-                <li><a href="#">Menu</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="{{ url_for('menu_page') }}">Menu</a></li>
+                <li><a href="{{ url_for('about_page') }}">About</a></li>
                 <li><a href="{{ url_for('ordering_page') }}">Order</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
@@ -526,4 +526,3 @@
     <script src="{{ url_for('static', filename='order.js', v='8') }}"></script>
 </body>
 </html>
-

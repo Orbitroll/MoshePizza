@@ -27,8 +27,8 @@
             </div>
             <ul class="nav-links">
                 <li><a href="{{ url_for('home_page') }}">Home</a></li>
-                <li><a href="#">Menu</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="{{ url_for('menu_page') }}">Menu</a></li>
+                <li><a href="{{ url_for('about_page') }}">About</a></li>
                 <li><a href="{{ url_for('ordering_page') }}">Order</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
@@ -50,7 +50,7 @@
                 <span class="tech-highlight">Powered by AI-driven recipe optimization, quantum-tested dough algorithms, and neural network taste profiling.</span>
             </p>
             <div class="hero-buttons">
-                <a href="#" class="btn btn-primary">View Menu</a>
+                <a href="{{ url_for('menu_page') }}" class="btn btn-primary">View Menu</a>
                 <a href="{{ url_for('ordering_page') }}" class="btn btn-accent">Order Now</a>
             </div>
         </div>
@@ -116,9 +116,9 @@
                         <div class="menu-badge">Popular</div>
                     </div>
                     <div class="menu-item-content">
-                        <h3>Classic Margherita</h3>
-                        <p>Fresh mozzarella, basil, and our secret sauce. Simple. Perfect. Real.</p>
-                        <p class="tech-detail"><i class="fas fa-microchip"></i> AI-optimized cheese distribution algorithm</p>
+                        <h3>Anti-Vegan Pizza</h3>
+                        <p>Super carnivore! For the meat lovers who want it all.</p>
+                        <p class="tech-detail"><i class="fas fa-microchip"></i> AI-optimized protein balance</p>
                         <div class="price">₪45</div>
                     </div>
                 </div>
@@ -126,12 +126,12 @@
                 <div class="featured-menu-item">
                     <div class="menu-item-image">
                         <div class="image-placeholder"></div>
-                        <div class="menu-badge">Spicy</div>
+                        <div class="menu-badge">Mediterranean</div>
                     </div>
                     <div class="menu-item-content">
-                        <h3>Pepperoni Rebellion</h3>
-                        <p>Spicy pepperoni, mozzarella, and a middle finger to bland corporate pizza.</p>
-                        <p class="tech-detail"><i class="fas fa-robot"></i> Robotic pepperoni placement with millimeter precision</p>
+                        <h3>Mediterranean</h3>
+                        <p>Fresh Mediterranean flavors that transport you to the coast.</p>
+                        <p class="tech-detail"><i class="fas fa-robot"></i> Robotic drizzle for perfect tzatziki lines</p>
                         <div class="price">₪52</div>
                     </div>
                 </div>
@@ -139,19 +139,19 @@
                 <div class="featured-menu-item">
                     <div class="menu-item-image">
                         <div class="image-placeholder"></div>
-                        <div class="menu-badge">Vegan</div>
+                        <div class="menu-badge">Classic</div>
                     </div>
                     <div class="menu-item-content">
-                        <h3>Veggie Liberation</h3>
-                        <p>Fresh vegetables, no artificial preservatives, and maximum flavor.</p>
-                        <p class="tech-detail"><i class="fas fa-satellite"></i> Satellite-monitored freshness tracking system</p>
+                        <h3>Neapolitan</h3>
+                        <p>Traditional Italian style with the perfect basil touch.</p>
+                        <p class="tech-detail"><i class="fas fa-satellite"></i> Satellite-calibrated oven temperature control</p>
                         <div class="price">₪48</div>
                     </div>
                 </div>
             </div>
             
             <div class="featured-menu-cta">
-                <a href="#" class="btn btn-secondary">View Full Menu</a>
+                <a href="{{ url_for('menu_page') }}" class="btn btn-secondary">View Full Menu</a>
             </div>
         </div>
     </section>
@@ -169,7 +169,7 @@
                     </div>
                     <h3>Explore Our Menu</h3>
                     <p>Discover our full selection of rebellious pizzas, sides, and drinks</p>
-                    <a href="#" class="btn btn-outline">Browse Menu</a>
+                    <a href="{{ url_for('menu_page') }}" class="btn btn-outline">Browse Menu</a>
                 </div>
                 
                 <div class="action-card">
@@ -188,7 +188,7 @@
                     </div>
                     <h3>About Us</h3>
                     <p>Learn the story behind Pizza Moshe and our fight against corporate food</p>
-                    <a href="#" class="btn btn-outline">Our Story</a>
+                    <a href="{{ url_for('about_page') }}" class="btn btn-outline">Our Story</a>
                 </div>
             </div>
         </div>

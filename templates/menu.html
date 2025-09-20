@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Pizza Moshe Yavne</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/logo.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Pizza Moshe Logo" class="logo-img">
+                </div>
+                <div class="logo-stack">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                    <div class="logo-tagline">THE MOST ADVANCED PIZZA IN THE WORLD</div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home_page') }}">Home</a></li>
+                <li><a href="{{ url_for('menu_page') }}">Menu</a></li>
+                <li><a href="{{ url_for('about_page') }}">About</a></li>
+                <li><a href="{{ url_for('ordering_page') }}">Order</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Menu Section -->
+    <section class="menu-section">
+        <div class="container">
+            <h2 class="section-title">The Menu</h2>
+            <p class="section-subtitle">No corporate recipes. Just good food.</p>
+            
+            <!-- Menu Categories -->
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="pizzas">Pizzas</button>
+                <button class="category-btn" data-category="drinks">Drinks</button>
+            </div>
+            
+            <!-- Pizzas Category -->
+            <div class="menu-category active" id="pizzas">
+                <div class="menu-grid">
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                            <div class="menu-badge">Popular</div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Anti-Vegan Pizza</h3>
+                            <p>Super carnivore! For the meat lovers who want it all.</p>
+                            <div class="menu-item-details">
+                                <span class="ingredients">Pepperoni, Salami, Chicken Bits</span>
+                                <span class="spice-level">🌶️🌶️ Medium</span>
+                            </div>
+                            <div class="price">Personal: ₪35 | Family: ₪55</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                            <div class="menu-badge">Mediterranean</div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Mediterranean</h3>
+                            <p>Fresh Mediterranean flavors that transport you to the coast.</p>
+                            <div class="menu-item-details">
+                                <span class="ingredients">Tzatziki, Olives, Cooked Tomatoes, Red Onions</span>
+                                <span class="spice-level">🌶️ Mild</span>
+                            </div>
+                            <div class="price">Personal: ₪32 | Family: ₪48</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                            <div class="menu-badge">Classic</div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Neapolitan</h3>
+                            <p>Traditional Italian style with the perfect basil touch.</p>
+                            <div class="menu-item-details">
+                                <span class="ingredients">Fresh Basil, Neapolitan Crust</span>
+                                <span class="spice-level">🌶️ Mild</span>
+                            </div>
+                            <div class="price">Personal: ₪28 | Family: ₪42</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                            <div class="menu-badge">Spicy</div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Mexican Bravery</h3>
+                            <p>UBER spicy! Only for the brave souls who can handle the heat.</p>
+                            <div class="menu-item-details">
+                                <span class="ingredients">Jalapeños, Pepperoni, Chili Flakes, Hot Sauce</span>
+                                <span class="spice-level">🌶️🌶️🌶️🌶️ UBER HOT</span>
+                            </div>
+                            <div class="price">Personal: ₪38 | Family: ₪58</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                            <div class="menu-badge">Chef's Favorite</div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Moshe's Favorite</h3>
+                            <p>The chef's personal creation. A perfect combination of flavors.</p>
+                            <div class="menu-item-details">
+                                <span class="ingredients">Red Onions, Broccoli, Pepperoni, Extra Cheese, Black Olives, Corn</span>
+                                <span class="spice-level">🌶️🌶️ Medium</span>
+                            </div>
+                            <div class="price">Personal: ₪40 | Family: ₪62</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                            <div class="menu-badge">Build Your Own</div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Custom Pizza</h3>
+                            <p>Create your perfect pizza with our fresh ingredients and toppings.</p>
+                            <div class="menu-item-details">
+                                <span class="ingredients">Your choice of size, crust, and toppings</span>
+                                <span class="spice-level">🌶️ Your Choice</span>
+                            </div>
+                            <div class="price">Starting from ₪25 + toppings</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Drinks Category -->
+            <div class="menu-category" id="drinks">
+                <div class="menu-grid">
+                    <!-- Milkshakes -->
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                            <div class="menu-badge">Popular</div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Strawberry Milkshake</h3>
+                            <p>Creamy strawberry milkshake made with real strawberries.</p>
+                            <div class="price">₪12</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Oreo Milkshake</h3>
+                            <p>Rich and creamy milkshake with crushed Oreo cookies.</p>
+                            <div class="price">₪12</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Banana Milkshake</h3>
+                            <p>Smooth banana milkshake with fresh banana flavor.</p>
+                            <div class="price">₪12</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Chocolate Milkshake</h3>
+                            <p>Classic chocolate milkshake for the chocolate lovers.</p>
+                            <div class="price">₪12</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Hazelnut Milkshake</h3>
+                            <p>Creamy hazelnut milkshake with a nutty twist.</p>
+                            <div class="price">₪12</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Soft Drinks -->
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Cola</h3>
+                            <p>Classic cola refreshment.</p>
+                            <div class="price">Can: ₪5 | 1.5L: ₪15</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Cola Zero</h3>
+                            <p>Zero-calorie cola option.</p>
+                            <div class="price">Can: ₪5 | 1.5L: ₪15</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Fanta</h3>
+                            <p>Refreshing orange soda.</p>
+                            <div class="price">Can: ₪5 | 1.5L: ₪15</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Sprite</h3>
+                            <p>Crisp lemon-lime soda.</p>
+                            <div class="price">Can: ₪5 | 1.5L: ₪15</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>XL Energy</h3>
+                            <p>Energy drink to fuel your rebellion.</p>
+                            <div class="price">₪5</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Tropit</h3>
+                            <p>Refreshing fruit drink in a pouch.</p>
+                            <div class="price">₪5</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Water</h3>
+                            <p>Pure refreshing water.</p>
+                            <div class="price">Bottle: ₪5 | 1.5L: ₪10</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="menu-item-content">
+                            <h3>Prigat Juice</h3>
+                            <p>Natural fruit juices - Peach, Apple, Orange, Grape, Pineapple.</p>
+                            <div class="price">Bottle: ₪10 | 1.5L: ₪15</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                </div>
+                <div class="footer-message">
+                    <p>Fighting corporate food, one slice at a time.</p>
+                    <p>&copy; 2025 Pizza Moshe Yavne. No corporate overlords allowed.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Make category buttons match navigation font styling */
+        .category-btn {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+        }
+        
+        /* Match background color to order and index pages */
+        .menu-section {
+            background: var(--cyber-gray);
+        }
+    </style>
+    
+    <script>
+        // Menu category switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const menuCategories = document.querySelectorAll('.menu-category');
+            
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetCategory = this.dataset.category;
+                    
+                    // Remove active class from all buttons and categories
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    menuCategories.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding category
+                    this.classList.add('active');
+                    document.getElementById(targetCategory).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

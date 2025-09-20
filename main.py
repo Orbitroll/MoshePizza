@@ -154,6 +154,14 @@ def ordering_page():
 def home_page():
     return render_template('index.html')
 
+@app.route('/menu/')
+def menu_page():
+    return render_template('menu.html')
+
+@app.route('/about/')
+def about_page():
+    return render_template('about.html')
+
 
 @app.post('/order/place-order')
 def place_order():

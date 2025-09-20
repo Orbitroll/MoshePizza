@@ -93,7 +93,7 @@ body::after {
     height: 100%;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
     pointer-events: none;
-    z-index: 1;
+    z-index: 9997;
 }
 
 /* Header */
@@ -1124,8 +1124,23 @@ body {
 /* About Section */
 .about-section {
     padding: 80px 0;
-    background: var(--darker-blue);
+    /* Match hero gradient background for consistency */
+    background: linear-gradient(135deg, var(--darker-blue) 0%, var(--cyber-gray) 100%);
     border-top: 2px solid var(--neon-orange);
+}
+
+/* Add subtle radial glow overlay like hero */
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 191, 255, 0.08) 0%, transparent 50%);
+    pointer-events: none;
 }
 
 .about-content {
