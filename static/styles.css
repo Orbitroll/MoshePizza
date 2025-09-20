@@ -1197,9 +1197,9 @@ body {
 
 .about-chef-image {
     width: 100%;
-    max-width: 400px;
-    height: 500px;
-    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
     border-radius: 15px;
     border: 3px solid var(--teal-accent);
     box-shadow: 0 0 30px rgba(32, 178, 170, 0.6);
@@ -1773,7 +1773,8 @@ body {
     }
     
     .about-chef-image {
-        height: 400px;
+        height: auto;
+        max-width: 100%;
     }
     
     .delivery-chef-image {
@@ -1819,7 +1820,8 @@ body {
     }
     
     .about-chef-image {
-        height: 300px;
+        height: auto;
+        max-width: 100%;
     }
     
     .delivery-chef-image {
