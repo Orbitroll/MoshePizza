@@ -1,27 +1,35 @@
 {
     "order": {
         "customer_name": "Yanti Parazi",
-        "order_type": "dine-in",
-        "phone_number": "0556687357",
+        "order_type": "pickup",
+        "phone_number": "0506699712",
         "email": "yanti@gmail.com",
-        "table": 16,
         "notes": "",
         "address": "Irrelevant",
         "items": {
-            "pizza": {
-                "type": "Anti_VeganP",
+            "pizza_1": {
+                "type": "MediterreneanP",
                 "size": "small",
                 "crust": "thin",
                 "topping": [
-                    "chicken bits",
-                    "pepperoni",
-                    "salami"
+                    "olives",
+                    "red onions",
+                    "tomato",
+                    "tzatziki"
                 ]
             },
-            "milkshake": {
-                "type": "Hazelnut Milkshake",
-                "price": 12,
-                "quantity": 1
+            "pizza_2": {
+                "type": "Moshes_FavoriteP",
+                "size": "small",
+                "crust": "thin",
+                "topping": [
+                    "black olives",
+                    "broccoli",
+                    "corn",
+                    "extra cheese",
+                    "pepperoni",
+                    "red onions"
+                ]
             }
         },
         "payment": {
@@ -30,17 +38,17 @@
         },
         "tip": 0
     },
-    "id": 541541,
+    "id": 432631,
     "timestamp": {
         "date": {
-            "day": 17,
+            "day": 20,
             "month": 9,
             "year": 2025
         },
         "time": {
-            "hour": 23,
-            "minutes": 14,
-            "seconds": 21
+            "hour": 19,
+            "minutes": 12,
+            "seconds": 35
         }
     }
 }

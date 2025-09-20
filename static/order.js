@@ -3,11 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderForm = document.getElementById('orderForm');
     const addressSection = document.getElementById('addressSection');
     const orderTypeSelect = document.getElementById('order_type');
-    const pizzaTypeSelect = document.getElementById('pizza_type');
-    const crustSelect = document.getElementById('pizza_crust');
-    const sizeSelect = document.getElementById('pizza_size');
-    const toppingsSelect = document.getElementById('toppingsSelect');
-    const selectedToppingsEl = document.getElementById('selectedToppings');
     const paymentMethodSelect = document.getElementById('payment_method');
     const cardNumberGroup = document.getElementById('cardNumberGroup');
     const cardNumberInput = document.getElementById('card_number');
@@ -21,6 +16,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Pizza preview elements
     const pizzaLayersEl = document.getElementById('pizzaLayers');
     const pizzaBaseEl = document.getElementById('pizzaBase');
+    
+    // New Pizza Builder Elements
+    const addPizzaBtn = document.getElementById('addPizzaBtn');
+    const currentPizzaForm = document.getElementById('currentPizzaForm');
+    const pizzaNumber = document.getElementById('pizzaNumber');
+    const currentPizzaTypeSelect = document.getElementById('current_pizza_type');
+    const currentPizzaSizeSelect = document.getElementById('current_pizza_size');
+    const currentPizzaCrustSelect = document.getElementById('current_pizza_crust');
+    const currentToppingsSelect = document.getElementById('currentToppingsSelect');
+    const currentSelectedToppingsEl = document.getElementById('currentSelectedToppings');
+    const savePizzaBtn = document.getElementById('savePizzaBtn');
+    const cancelPizzaBtn = document.getElementById('cancelPizzaBtn');
+    const emptyPizzasMessage = document.getElementById('emptyPizzasMessage');
+    const pizzasList = document.getElementById('pizzasList');
     // Drinks & Shakes elements
     const milkshakeSelect = document.getElementById('milkshakeSelect');
     const addMilkshakeBtn = document.getElementById('addMilkshakeBtn');
@@ -37,8 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Order Summary Sidebar elements
     const orderSummary = document.getElementById('orderSummary');
     const emptyOrder = document.getElementById('emptyOrder');
-    const pizzaSection = document.getElementById('pizzaSection');
-    const pizzaItem = document.getElementById('pizzaItem');
+    const pizzasSection = document.getElementById('pizzasSection');
+    const pizzaCount = document.getElementById('pizzaCount');
+    const pizzasSummaryList = document.getElementById('pizzasSummaryList');
     const extrasSection = document.getElementById('extrasSection');
     const extrasList = document.getElementById('extrasList');
     const deliverySection = document.getElementById('deliverySection');
@@ -46,6 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderSubtotal = document.getElementById('orderSubtotal');
     const orderTotal = document.getElementById('orderTotal');
     const estimatedTime = document.getElementById('estimatedTime');
+    
+    // Pizza Management State
+    const addedPizzas = [];
+    let currentPizzaIndex = 0;
+    let isEditingPizza = false;
+    let editingPizzaIndex = -1;
+    const currentToppings = new Set();
 
     const PLACE_ORDER_URL = window.PLACE_ORDER_URL;
     const STATIC_ASSETS_BASE = (window.STATIC_ASSETS_BASE || '').replace(/\\/g, '/');
@@ -74,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 "extra cheese": 5, "tomato": 2, "mushrooms": 3, "onions": 3,
                 "red onions": 3, "anchovy": 6, "broccoli": 3, "bell pepper": 3,
                 "salami": 5, "chicken bits": 6, "tzatziki": 4, "black olives": 3,
-                "basil": 2, "chili flakes": 1, "hot sauce": 1, "cooked tomatoes": 2
+                "basil": 2, "chili flakes": 1, "hot sauce": 1
             }
         },
         pizza_base: 0, // Pizza base price (to be determined later)
@@ -90,7 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
         'jalapenos': 'jalapenos.png',
         'extra cheese': 'extra_cheese.png',
         'tomato': 'tomato.png',
-        'cooked tomatoes': 'tomato.png',
         'mushrooms': 'mushrooms.png',
         'onions': 'onions.png',
         'red onions': 'red_onions.png',
@@ -157,6 +173,323 @@ document.addEventListener('DOMContentLoaded', function() {
         return h >>> 0;
     }
 
+    // ============ PIZZA BUILDER FUNCTIONS ============
+    
+    function showPizzaBuilder() {
+        if (currentPizzaForm) {
+            currentPizzaForm.style.display = 'block';
+            updatePizzaNumber();
+            clearCurrentPizzaForm();
+            updateCurrentCrustOptions();
+            updateCurrentSizeOptions();
+            sortSelectOptions(currentToppingsSelect);
+            updateCurrentPizzaPreview(); // Ensure preview is updated when form is shown
+        }
+    }
+    
+    function hidePizzaBuilder() {
+        if (currentPizzaForm) {
+            currentPizzaForm.style.display = 'none';
+            clearCurrentPizzaForm();
+            isEditingPizza = false;
+            editingPizzaIndex = -1;
+        }
+    }
+    
+    function updatePizzaNumber() {
+        if (pizzaNumber) {
+            const number = isEditingPizza ? editingPizzaIndex + 1 : addedPizzas.length + 1;
+            pizzaNumber.textContent = `Pizza #${number}`;
+        }
+    }
+    
+    function clearCurrentPizzaForm() {
+        if (currentPizzaTypeSelect) currentPizzaTypeSelect.value = '';
+        if (currentPizzaSizeSelect) currentPizzaSizeSelect.value = '';
+        if (currentPizzaCrustSelect) currentPizzaCrustSelect.value = '';
+        if (currentToppingsSelect) currentToppingsSelect.value = '';
+        clearCurrentToppings();
+    }
+    
+    function clearCurrentToppings() {
+        currentToppings.clear();
+        if (currentSelectedToppingsEl) {
+            currentSelectedToppingsEl.innerHTML = '';
+        }
+        updateCurrentPizzaPreview(); // Update preview when toppings are cleared
+    }
+    
+    function addCurrentTopping(value) {
+        if (!value || currentToppings.has(value)) return;
+        currentToppings.add(value);
+        
+        const opt = Array.from(currentToppingsSelect.options).find(o => o.value === value);
+        const labelText = opt ? opt.textContent : value;
+        
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.dataset.value = value;
+        chip.innerHTML = `
+            <span class="chip-label">${labelText}</span>
+            <button type="button" class="chip-remove" aria-label="Remove ${labelText}">×</button>
+        `;
+        
+        chip.querySelector('.chip-remove').addEventListener('click', () => {
+            currentToppings.delete(value);
+            chip.remove();
+            updateCurrentPizzaPreview(); // Update preview when topping is removed
+        });
+        
+        if (currentSelectedToppingsEl) {
+            currentSelectedToppingsEl.appendChild(chip);
+        }
+        
+        if (currentToppingsSelect) {
+            currentToppingsSelect.value = '';
+        }
+        
+        updateCurrentPizzaPreview(); // Update preview when topping is added
+    }
+    
+    function getCurrentPizzaData() {
+        const type = currentPizzaTypeSelect ? currentPizzaTypeSelect.value : '';
+        const size = currentPizzaSizeSelect ? currentPizzaSizeSelect.value : '';
+        const crust = currentPizzaCrustSelect ? currentPizzaCrustSelect.value : '';
+        const toppings = Array.from(currentToppings).sort();
+        
+        if (!type || !size || !crust) {
+            return null;
+        }
+        
+        return { type, size, crust, toppings };
+    }
+    
+    function savePizza() {
+        const pizzaData = getCurrentPizzaData();
+        if (!pizzaData) {
+            alert('Please fill in all pizza details (type, size, and crust).');
+            return;
+        }
+        
+        if (isEditingPizza && editingPizzaIndex >= 0) {
+            // Update existing pizza
+            addedPizzas[editingPizzaIndex] = pizzaData;
+        } else {
+            // Add new pizza
+            addedPizzas.push(pizzaData);
+        }
+        
+        hidePizzaBuilder();
+        updatePizzasList();
+        updateOrderSummary();
+    }
+    
+    function removePizza(index) {
+        if (index >= 0 && index < addedPizzas.length) {
+            addedPizzas.splice(index, 1);
+            updatePizzasList();
+            updateOrderSummary();
+        }
+    }
+    
+    function editPizza(index) {
+        if (index >= 0 && index < addedPizzas.length) {
+            const pizza = addedPizzas[index];
+            isEditingPizza = true;
+            editingPizzaIndex = index;
+            
+            // Populate form with pizza data
+            if (currentPizzaTypeSelect) currentPizzaTypeSelect.value = pizza.type;
+            if (currentPizzaSizeSelect) currentPizzaSizeSelect.value = pizza.size;
+            if (currentPizzaCrustSelect) currentPizzaCrustSelect.value = pizza.crust;
+            
+            // Update options based on selected type
+            updateCurrentCrustOptions();
+            updateCurrentSizeOptions();
+            
+            // Set crust and size again after options update
+            if (currentPizzaCrustSelect) currentPizzaCrustSelect.value = pizza.crust;
+            if (currentPizzaSizeSelect) currentPizzaSizeSelect.value = pizza.size;
+            
+            // Add toppings
+            clearCurrentToppings();
+            pizza.toppings.forEach(topping => {
+                addCurrentTopping(topping);
+            });
+            
+            showPizzaBuilder();
+            updateCurrentPizzaPreview(); // Ensure preview shows the edited pizza
+        }
+    }
+    
+    function updatePizzasList() {
+        if (!pizzasList || !emptyPizzasMessage) return;
+        
+        if (addedPizzas.length === 0) {
+            emptyPizzasMessage.style.display = 'block';
+            pizzasList.innerHTML = '';
+            return;
+        }
+        
+        emptyPizzasMessage.style.display = 'none';
+        pizzasList.innerHTML = '';
+        
+        addedPizzas.forEach((pizza, index) => {
+            const card = createPizzaCard(pizza, index);
+            pizzasList.appendChild(card);
+        });
+    }
+    
+    function createPizzaCard(pizza, index) {
+        const card = document.createElement('div');
+        card.className = 'pizza-card';
+        card.innerHTML = `
+            <div class="pizza-card-header">
+                <div class="pizza-card-title">
+                    <i class="fas fa-pizza-slice"></i>
+                    ${pizza.type === 'custom' ? 'Custom Pizza' : pizza.type}
+                    <span class="pizza-card-number">Pizza #${index + 1}</span>
+                </div>
+                <div class="pizza-card-actions">
+                    <button type="button" class="pizza-card-edit" data-index="${index}">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </button>
+                    <button type="button" class="pizza-card-remove" data-index="${index}">
+                        <i class="fas fa-trash"></i>
+                        Remove
+                    </button>
+                </div>
+            </div>
+            <div class="pizza-card-details">
+                <div class="pizza-detail-item">
+                    <div class="pizza-detail-label">Type</div>
+                    <div class="pizza-detail-value">${pizza.type === 'custom' ? 'Custom' : pizza.type}</div>
+                </div>
+                <div class="pizza-detail-item">
+                    <div class="pizza-detail-label">Size</div>
+                    <div class="pizza-detail-value">${pizza.size}</div>
+                </div>
+                <div class="pizza-detail-item">
+                    <div class="pizza-detail-label">Crust</div>
+                    <div class="pizza-detail-value">${pizza.crust}</div>
+                </div>
+            </div>
+            ${pizza.toppings.length > 0 ? `
+                <div class="pizza-toppings">
+                    <div class="pizza-toppings-label">
+                        <i class="fas fa-plus"></i>
+                        Toppings (${pizza.toppings.length})
+                    </div>
+                    <div class="pizza-toppings-grid">
+                        ${pizza.toppings.map(topping => `
+                            <span class="pizza-topping-chip">${topping}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+        `;
+        
+        // Add event listeners
+        const editBtn = card.querySelector('.pizza-card-edit');
+        const removeBtn = card.querySelector('.pizza-card-remove');
+        
+        if (editBtn) {
+            editBtn.addEventListener('click', () => editPizza(index));
+        }
+        
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to remove this pizza?')) {
+                    removePizza(index);
+                }
+            });
+        }
+        
+        return card;
+    }
+    
+    // Current Pizza Crust and Size Options
+    function updateCurrentCrustOptions() {
+        const type = currentPizzaTypeSelect ? currentPizzaTypeSelect.value : '';
+        
+        function setCurrentCrustOptions(list) {
+            const label = '<option value="">Select crust...</option>';
+            const opts = list.map(v => `<option value="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</option>`).join('');
+            const current = currentPizzaCrustSelect.value;
+            currentPizzaCrustSelect.innerHTML = label + opts;
+            currentPizzaCrustSelect.value = list.includes(current) ? current : list[0] || '';
+            currentPizzaCrustSelect.disabled = false;
+        }
+        
+        if (type === 'Neapolitan') {
+            setCurrentCrustOptions(['neapolitan']);
+        } else if (type === 'custom') {
+            setCurrentCrustOptions(['thin', 'thick']);
+        } else if (type) {
+            // Non-custom predefined pizzas use thin crust
+            setCurrentCrustOptions(['thin']);
+        } else {
+            setCurrentCrustOptions(['thin', 'thick']);
+        }
+    }
+    
+    function updateCurrentSizeOptions() {
+        const type = currentPizzaTypeSelect ? currentPizzaTypeSelect.value : '';
+        
+        function setCurrentSizeOptions(list) {
+            const labelFor = (v) => {
+                if (v === 'small') return 'Small';
+                if (v === 'large') return 'Large';
+                if (v === 'XL' || v === 'XXL') return v;
+                return v.charAt(0).toUpperCase() + v.slice(1);
+            };
+            const label = '<option value="">Select size...</option>';
+            const opts = list.map(v => `<option value="${v}">${labelFor(v)}</option>`).join('');
+            const current = currentPizzaSizeSelect.value;
+            currentPizzaSizeSelect.innerHTML = label + opts;
+            currentPizzaSizeSelect.value = list.includes(current) ? current : list[0] || '';
+        }
+        
+        if (type && type !== 'custom') {
+            setCurrentSizeOptions(['small', 'large']);
+        } else {
+            setCurrentSizeOptions(['small', 'large', 'XL', 'XXL']);
+        }
+    }
+    
+    function updateCurrentPizzaTypeLocks() {
+        const type = currentPizzaTypeSelect ? currentPizzaTypeSelect.value : '';
+        updateCurrentCrustOptions();
+        
+        if (!currentToppingsSelect) return;
+        
+        // Auto-lock toppings for predefined types
+        const PRESET_TOPPINGS = {
+            "Anti-Vegan Pizza": ["pepperoni", "salami", "chicken bits"],
+            "Mediterrenean": ["tzatziki", "olives", "tomato", "red onions"],
+            "Neapolitan": ["basil"],
+            "Mexican Bravery": ["jalapenos", "pepperoni", "chili flakes", "hot sauce"],
+            "Moshe's Favorite": ["red onions", "broccoli", "pepperoni", "extra cheese", "black olives", "corn"]
+        };
+        
+        if (type && type !== 'custom' && PRESET_TOPPINGS[type]) {
+            clearCurrentToppings();
+            const sortedList = [...PRESET_TOPPINGS[type]].sort((a, b) => a.localeCompare(b));
+            sortedList.forEach(v => {
+                addCurrentTopping(v);
+            });
+            currentToppingsSelect.disabled = true;
+        } else {
+            // custom or empty selection
+            if (!isEditingPizza) {
+                clearCurrentToppings();
+            }
+            currentToppingsSelect.disabled = false;
+        }
+        updateCurrentPizzaPreview(); // Update preview when pizza type changes
+    }
+
     function polarToCartesian(r, theta) {
         const x = r * Math.cos(theta);
         const y = r * Math.sin(theta);
@@ -181,13 +514,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return points;
     }
 
-    function rebuildPizzaLayersFromSelectedChips() {
+    function updateCurrentPizzaPreview() {
         if (!pizzaLayersEl) {
             console.warn('Pizza layers element not found');
             return;
         }
         pizzaLayersEl.innerHTML = '';
-        const chips = selectedToppingsEl ? selectedToppingsEl.querySelectorAll('.chip') : [];
+        if (!currentSelectedToppingsEl) {
+            return;
+        }
+        const chips = currentSelectedToppingsEl.querySelectorAll('.chip');
         chips.forEach((chip, chipIndex) => {
             const value = chip.dataset.value;
             const url = getToppingImageUrl(value);
@@ -215,8 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'black olives': 8,
                 'basil': 6,
                 'chili flakes': 12,
-                'hot sauce': 5,
-                'cooked tomatoes': 6
+                'hot sauce': 5
             };
             const numPieces = densityMap[value] || basePieces;
 
@@ -249,8 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'black olives': 0.10,
                     'basil': 0.18,
                     'chili flakes': 0.07,
-                    'hot sauce': 0.18,
-                    'cooked tomatoes': 0.15
+                    'hot sauce': 0.18
                 };
                 const scale = scaleMap[value] || 0.12;
 
@@ -268,7 +602,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
     // Swap Table/Notes and toggle address block based on order type
     const tableGroup = document.getElementById('tableGroup');
     const notesGroup = document.getElementById('notesGroup');
@@ -329,121 +662,51 @@ document.addEventListener('DOMContentLoaded', function() {
         tipChoiceSelect.addEventListener('change', updateTipUI);
     }
 
-    // Crust options logic: Neapolitan crust only for Neapolitan pizza
-    function setCrustOptions(list) {
-        const label = '<option value="">Select crust...</option>';
-        const opts = list.map(v => `<option value="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</option>`).join('');
-        const current = crustSelect.value;
-        crustSelect.innerHTML = label + opts;
-        crustSelect.value = list.includes(current) ? current : list[0] || '';
-        crustSelect.disabled = false;
+    // ============ PIZZA BUILDER EVENT LISTENERS ============
+    
+    // Add Pizza Button
+    if (addPizzaBtn) {
+        addPizzaBtn.addEventListener('click', showPizzaBuilder);
     }
-
-    function updateCrustOptions() {
-        const type = pizzaTypeSelect ? pizzaTypeSelect.value : '';
-        if (type === 'Neapolitan') {
-            setCrustOptions(['neapolitan']);
-        } else if (type === 'custom') {
-            setCrustOptions(['thin', 'thick']);
-        } else if (type) {
-            // Non-custom predefined pizzas use thin crust
-            setCrustOptions(['thin']);
-        } else {
-            setCrustOptions(['thin', 'thick']);
-        }
+    
+    // Save Pizza Button
+    if (savePizzaBtn) {
+        savePizzaBtn.addEventListener('click', savePizza);
     }
-
-    if (pizzaTypeSelect && crustSelect) {
-        updateCrustOptions();
-        pizzaTypeSelect.addEventListener('change', function() {
-            updateCrustOptions();
-            updateOrderSummary(); // Update sidebar when pizza type changes
+    
+    // Cancel Pizza Button
+    if (cancelPizzaBtn) {
+        cancelPizzaBtn.addEventListener('click', hidePizzaBuilder);
+    }
+    
+    // Current Pizza Type Changes
+    if (currentPizzaTypeSelect) {
+        currentPizzaTypeSelect.addEventListener('change', function() {
+            updateCurrentPizzaTypeLocks();
+            updateCurrentSizeOptions();
         });
     }
-
-    // Size options logic: presets restricted to Small/Large
-    function setSizeOptions(list) {
-        const labelFor = (v) => {
-            if (v === 'small') return 'Small';
-            if (v === 'large') return 'Large';
-            if (v === 'XL' || v === 'XXL') return v;
-            return v.charAt(0).toUpperCase() + v.slice(1);
-        };
-        const label = '<option value="">Select size...</option>';
-        const opts = list.map(v => `<option value="${v}">${labelFor(v)}</option>`).join('');
-        const current = sizeSelect.value;
-        sizeSelect.innerHTML = label + opts;
-        sizeSelect.value = list.includes(current) ? current : list[0] || '';
-    }
-
-    function updateSizeOptions() {
-        const type = pizzaTypeSelect ? pizzaTypeSelect.value : '';
-        if (type && type !== 'custom') {
-            setSizeOptions(['small', 'large']);
-        } else {
-            setSizeOptions(['small', 'large', 'XL', 'XXL']);
-        }
-    }
-
-    if (pizzaTypeSelect && sizeSelect) {
-        updateSizeOptions();
-        pizzaTypeSelect.addEventListener('change', updateSizeOptions);
-        
-        // Add event listeners for size and crust changes
-        sizeSelect.addEventListener('change', updateOrderSummary);
-        crustSelect.addEventListener('change', updateOrderSummary);
-    }
-
-    // Toppings dropdown -> chips with removable hidden inputs
-    const selectedToppings = new Set();
-
-    function renderToppingChip(value, labelText, removable = true) {
-        const chip = document.createElement('span');
-        chip.className = 'chip';
-        chip.dataset.value = value;
-        const removeBtn = removable ? `<button type="button" class="chip-remove" aria-label="Remove ${labelText}">×</button>` : '';
-        chip.innerHTML = `
-            <span class="chip-label">${labelText}</span>
-            ${removeBtn}
-            <input type="hidden" name="pizza_topping" value="${value}">
-        `;
-        if (removable) {
-            chip.querySelector('.chip-remove').addEventListener('click', () => {
-                selectedToppings.delete(value);
-                chip.remove();
-                rebuildPizzaLayersFromSelectedChips();
-                updateOrderSummary(); // Update sidebar when topping removed
-            });
-        }
-        selectedToppingsEl.appendChild(chip);
-        rebuildPizzaLayersFromSelectedChips();
-        updateOrderSummary(); // Update sidebar when topping added
-    }
-
-    function addTopping(value) {
-        if (!value) return;
-        if (selectedToppings.has(value)) return;
-        selectedToppings.add(value);
-        // Find the label text from the select option
-        const opt = Array.from(toppingsSelect.options).find(o => o.value === value);
-        const labelText = opt ? opt.textContent : value;
-        renderToppingChip(value, labelText, true);
-        toppingsSelect.value = '';
-    }
-
-    function clearToppings() {
-        selectedToppings.clear();
-        selectedToppingsEl.innerHTML = '';
-        if (toppingsSelect) toppingsSelect.value = '';
-        rebuildPizzaLayersFromSelectedChips();
-        updateOrderSummary(); // Update sidebar when toppings cleared
-    }
-
-    if (toppingsSelect && selectedToppingsEl) {
-        toppingsSelect.addEventListener('change', (e) => {
-            addTopping(e.target.value);
-            // rebuildPizzaLayersFromSelectedChips() and updateOrderSummary() are called in addTopping
+    
+    // Current Pizza Size Changes
+    if (currentPizzaSizeSelect) {
+        currentPizzaSizeSelect.addEventListener('change', function() {
+            // Size change doesn't need special handling for now
         });
+    }
+    
+    // Current Pizza Crust Changes
+    if (currentPizzaCrustSelect) {
+        currentPizzaCrustSelect.addEventListener('change', function() {
+            // Crust change doesn't need special handling for now
+        });
+    }
+    
+    // Current Toppings Selection
+    if (currentToppingsSelect) {
+        currentToppingsSelect.addEventListener('change', function(e) {
+            addCurrentTopping(e.target.value);
+        });
+        sortSelectOptions(currentToppingsSelect);
     }
 
     // Sort toppings dropdown alphabetically (keep placeholder first)
@@ -456,8 +719,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (placeholder) selectEl.appendChild(placeholder);
         sorted.forEach(o => selectEl.appendChild(o));
     }
-
-    sortSelectOptions(toppingsSelect);
 
     // ---------- Drinks & Shakes ----------
     // Track unique variants (ignore quantity)
@@ -634,8 +895,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateOrderSummary() {
         if (!orderSummary) return;
         
-        // Calculate pizza and toppings total
-        const { pizzaTotal, hasPizza } = calculatePizzaTotal();
+        // Calculate pizzas total
+        const { pizzasTotal, hasPizzas } = calculatePizzasTotal();
         
         // Calculate extras total
         const inputs = Array.from(document.querySelectorAll('input[name="extra_item"]'));
@@ -658,56 +919,59 @@ document.addEventListener('DOMContentLoaded', function() {
         const deliveryFee = isDelivery ? PRICES.delivery_fee : 0;
         
         // Calculate totals
-        const subtotal = pizzaTotal + extrasTotal;
+        const subtotal = pizzasTotal + extrasTotal;
         const total = subtotal + deliveryFee;
         
         // Show/hide sections based on content
-        const hasItems = hasPizza || hasExtras;
+        const hasItems = hasPizzas || hasExtras;
         updateEmptyState(hasItems);
-        updatePizzaSection(hasPizza);
+        updatePizzasSection(hasPizzas);
         updateExtrasSection(hasExtras);
         updateDeliverySection(isDelivery);
         updateTotals(subtotal, total);
         updateStatusIndicator(hasItems);
     }
     
-    function calculatePizzaTotal() {
-        const pizzaType = pizzaTypeSelect ? pizzaTypeSelect.value : '';
-        const pizzaSize = sizeSelect ? sizeSelect.value : '';
-        const pizzaCrust = crustSelect ? crustSelect.value : '';
-        
-        if (!pizzaType || !pizzaSize || !pizzaCrust) {
-            return { pizzaTotal: 0, hasPizza: false };
+    function calculatePizzasTotal() {
+        if (addedPizzas.length === 0) {
+            return { pizzasTotal: 0, hasPizzas: false };
         }
         
-        // Calculate toppings cost
-        const toppingChips = selectedToppingsEl ? selectedToppingsEl.querySelectorAll('.chip') : [];
-        let toppingsTotal = 0;
-        const toppingsList = [];
+        let totalCost = 0;
+        const pizzasData = [];
         
-        for (const chip of toppingChips) {
-            const toppingValue = chip.dataset.value;
-            const toppingPrice = PRICES.items.toppings[toppingValue] || 0;
-            toppingsTotal += toppingPrice;
-            toppingsList.push({
-                name: toppingValue,
-                price: toppingPrice
+        for (const pizza of addedPizzas) {
+            // Calculate toppings cost for this pizza
+            let toppingsTotal = 0;
+            const toppingsList = [];
+            
+            for (const topping of pizza.toppings) {
+                const toppingPrice = PRICES.items.toppings[topping] || 0;
+                toppingsTotal += toppingPrice;
+                toppingsList.push({
+                    name: topping,
+                    price: toppingPrice
+                });
+            }
+            
+            // Pizza base cost (currently 0)
+            const basePrice = PRICES.pizza_base;
+            const pizzaTotal = basePrice + toppingsTotal;
+            totalCost += pizzaTotal;
+            
+            pizzasData.push({
+                pizza,
+                basePrice,
+                toppingsTotal,
+                toppingsList,
+                pizzaTotal
             });
         }
         
-        // Pizza base cost (currently 0)
-        const basePrice = PRICES.pizza_base;
-        const pizzaTotal = basePrice + toppingsTotal;
-        
         return {
-            pizzaTotal,
-            hasPizza: true,
-            basePrice,
-            toppingsTotal,
-            toppingsList,
-            pizzaType,
-            pizzaSize,
-            pizzaCrust
+            pizzasTotal: totalCost,
+            hasPizzas: true,
+            pizzasData
         };
     }
     
@@ -716,29 +980,47 @@ document.addEventListener('DOMContentLoaded', function() {
         emptyOrder.style.display = hasItems ? 'none' : 'block';
     }
     
-    function updatePizzaSection(hasPizza) {
-        if (!pizzaSection || !pizzaItem) return;
+    function updatePizzasSection(hasPizzas) {
+        if (!pizzasSection || !pizzasSummaryList || !pizzaCount) return;
         
-        pizzaSection.style.display = hasPizza ? 'block' : 'none';
+        pizzasSection.style.display = hasPizzas ? 'block' : 'none';
         
-        if (hasPizza) {
-            const { basePrice, toppingsTotal, toppingsList, pizzaType, pizzaSize, pizzaCrust, pizzaTotal } = calculatePizzaTotal();
+        if (hasPizzas) {
+            const { pizzasData } = calculatePizzasTotal();
             
-            pizzaItem.style.display = 'block';
-            pizzaItem.innerHTML = `
-                <div class="item-details">
-                    <div class="item-name">${pizzaType === 'custom' ? 'Custom Pizza' : pizzaType}</div>
-                    <div class="item-specs">
-                        <span class="spec-size">${pizzaSize.charAt(0).toUpperCase() + pizzaSize.slice(1)}</span>
-                        <span class="spec-crust">${pizzaCrust.charAt(0).toUpperCase() + pizzaCrust.slice(1)} Crust</span>
+            // Update pizza count
+            pizzaCount.textContent = `(${addedPizzas.length})`;
+            
+            // Clear and populate pizzas list
+            pizzasSummaryList.innerHTML = '';
+            
+            pizzasData.forEach((pizzaData, index) => {
+                const pizza = pizzaData.pizza;
+                const pizzaItem = document.createElement('div');
+                pizzaItem.className = 'pizza-summary-item';
+                
+                pizzaItem.innerHTML = `
+                    <div class="pizza-summary-header">
+                        <div class="pizza-summary-name">${pizza.type === 'custom' ? 'Custom Pizza' : pizza.type}</div>
+                        <div class="pizza-summary-number">Pizza #${index + 1}</div>
                     </div>
-                    ${toppingsList.length > 0 ? createToppingsBreakdown(toppingsList, basePrice) : ''}
-                </div>
-                <div class="item-price">
-                    <span class="price-amount">${pizzaTotal}</span>
-                    <span class="price-currency">NIS</span>
-                </div>
-            `;
+                    <div class="pizza-summary-specs">
+                        <span class="pizza-summary-spec">${pizza.size}</span>
+                        <span class="pizza-summary-spec">${pizza.crust} crust</span>
+                    </div>
+                    ${pizza.toppings.length > 0 ? `
+                        <div class="pizza-summary-toppings">
+                            <strong>Toppings:</strong> ${pizza.toppings.join(', ')}
+                        </div>
+                    ` : ''}
+                    <div class="item-price">
+                        <span class="price-amount">${pizzaData.pizzaTotal}</span>
+                        <span class="price-currency">NIS</span>
+                    </div>
+                `;
+                
+                pizzasSummaryList.appendChild(pizzaItem);
+            });
         }
     }
     
@@ -873,18 +1155,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updateOrderSummary();
     }
 
-    // Initialize the order summary and pizza visual
+    // Initialize the order summary and pizza list
     updateOrderSummary();
-    rebuildPizzaLayersFromSelectedChips();
-
-    // Auto-lock toppings for predefined types
-    const PRESET_TOPPINGS = {
-        "Anti-Vegan Pizza": ["pepperoni", "salami", "chicken bits"],
-        "Mediterrenean": ["tzatziki", "olives", "cooked tomatoes", "red onions"],
-        "Neapolitan": ["basil"],
-        "Mexican Bravery": ["jalapenos", "pepperoni", "chili flakes", "hot sauce"],
-        "Moshe's Favorite": ["red onions", "broccoli", "pepperoni", "extra cheese", "black olives", "corn"]
-    };
+    updatePizzasList();
 
     // Map UI pizza type + size -> class name for JSON
     function mapPizzaTypeToClassName(uiType, sizeValue) {
@@ -901,38 +1174,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!entry) return uiType; // fallback
         // default to small if size is missing/unexpected
         return entry[sizeKey] || entry.small;
-    }
-
-    function prefillToppings(list, removable = false) {
-        clearToppings();
-        const sortedList = [...list].sort((a, b) => a.localeCompare(b));
-        sortedList.forEach(v => {
-            const opt = Array.from(toppingsSelect.options).find(o => o.value === v);
-            const labelText = opt ? opt.textContent : v;
-            selectedToppings.add(v);
-            renderToppingChip(v, labelText, removable);
-        });
-        rebuildPizzaLayersFromSelectedChips();
-        updateOrderSummary(); // Update sidebar when preset toppings loaded
-    }
-
-    function updatePizzaTypeLocks() {
-        const type = pizzaTypeSelect ? pizzaTypeSelect.value : '';
-        updateCrustOptions();
-        if (!toppingsSelect) return;
-        if (type && type !== 'custom' && PRESET_TOPPINGS[type]) {
-            prefillToppings(PRESET_TOPPINGS[type], false);
-            toppingsSelect.disabled = true;
-        } else {
-            // custom or empty selection
-            clearToppings();
-            toppingsSelect.disabled = false;
-        }
-    }
-
-    if (pizzaTypeSelect) {
-        updatePizzaTypeLocks();
-        pizzaTypeSelect.addEventListener('change', updatePizzaTypeLocks);
     }
 
     // Handle form submission
@@ -954,6 +1195,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Generate order preview
     function generateOrderPreview() {
+        // Check if at least one pizza is added
+        if (addedPizzas.length === 0) {
+            alert('Please add at least one pizza to your order before proceeding.');
+            return;
+        }
+        
         const formData = new FormData(orderForm);
         const orderData = {};
         for (let [key, value] of formData.entries()) {
@@ -980,16 +1227,27 @@ document.addEventListener('DOMContentLoaded', function() {
             if (choice === 'yes') return parseFloat(orderData.tip_amount) || 0;
             return 0;
         })();
-        const toppingsArrayPrev = Array.isArray(orderData.pizza_topping)
-            ? [...orderData.pizza_topping]
-            : (orderData.pizza_topping ? [orderData.pizza_topping] : []);
-        toppingsArrayPrev.sort((a, b) => a.localeCompare(b));
 
-        const pizzaTypeForJsonPrev = mapPizzaTypeToClassName(orderData.pizza_type, orderData.pizza_size);
-        // Extras for preview: aggregate and flatten as separate item keys
+        // Build items object with separate pizza entries
+        const itemsObj = {};
+        
+        // Add each pizza as a separate item
+        addedPizzas.forEach((pizza, index) => {
+            const pizzaTypeForJson = mapPizzaTypeToClassName(pizza.type, pizza.size);
+            const pizzaKey = addedPizzas.length === 1 ? 'pizza' : `pizza_${index + 1}`;
+            itemsObj[pizzaKey] = {
+                type: pizzaTypeForJson,
+                size: pizza.size,
+                crust: pizza.crust,
+                topping: [...pizza.toppings].sort()
+            };
+        });
+        
+        // Add extras
         const extraInputsPrev = Array.from(document.querySelectorAll('input[name="extra_item"]'));
         const extrasParsedPrev = extraInputsPrev.map(i => { try { return JSON.parse(i.value); } catch(e){ return null; } }).filter(Boolean);
         const extrasAggPrev = new Map();
+        
         for (const it of extrasParsedPrev) {
             const typeValue = it.type || it.name;
             const keyId = [it.category, typeValue, it.size || '', it.flavor || ''].join('|');
@@ -1001,14 +1259,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 extrasAggPrev.get(keyId).quantity += qty;
             }
         }
-        const extraItemsObjPrev = {};
+        
+        // Track counts for unique keys
+        const categoryCounters = {};
+        
         for (const [, v] of extrasAggPrev) {
             const payload = extraItemPayload(v);
-            if (v.category === 'milkshake' && !extraItemsObjPrev.milkshake) {
-                extraItemsObjPrev.milkshake = payload;
-            } else if (v.category === 'soft_drink' && !extraItemsObjPrev.soft_drink) {
-                extraItemsObjPrev.soft_drink = payload;
+            const category = v.category;
+            
+            // Initialize counter for this category if not exists
+            if (!categoryCounters[category]) {
+                categoryCounters[category] = 0;
             }
+            
+            // Create unique key for each extra item
+            categoryCounters[category]++;
+            const extraKey = categoryCounters[category] === 1 ? category : `${category}_${categoryCounters[category]}`;
+            
+            itemsObj[extraKey] = payload;
         }
 
         const orderJson = {
@@ -1027,15 +1295,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     floor: orderData.floor,
                     apartment: parseInt(orderData.apartment) || 0
                 } : 'irrelevant',
-                items: {
-                    pizza: {
-                        type: pizzaTypeForJsonPrev,
-                        size: orderData.pizza_size,
-                        crust: orderData.pizza_crust,
-                        topping: toppingsArrayPrev
-                    },
-                    ...extraItemsObjPrev
-                },
+                items: itemsObj,
                 payment: {
                     method: orderData.payment_method || '',
                     card: maskedCardPrev
@@ -1065,6 +1325,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     orderData[key] = value;
                 }
             }
+            
             const isDelivery = orderData.order_type === 'delivery';
             const maskedCardSave = (() => {
                 if ((orderData.payment_method || '') !== 'card') return '';
@@ -1077,25 +1338,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (choice === 'yes') return parseFloat(orderData.tip_amount) || 0;
                 return 0;
             })();
-            const toppingsArraySave = Array.isArray(orderData.pizza_topping)
-                ? [...orderData.pizza_topping]
-                : (orderData.pizza_topping ? [orderData.pizza_topping] : []);
-            toppingsArraySave.sort((a, b) => a.localeCompare(b));
 
-            const pizzaTypeForJsonSave = mapPizzaTypeToClassName(orderData.pizza_type, orderData.pizza_size);
-            // Build items including extras
+            // Build items object with separate pizza entries
+            const itemsObj = {};
+            
+            // Add each pizza as a separate item
+            addedPizzas.forEach((pizza, index) => {
+                const pizzaTypeForJson = mapPizzaTypeToClassName(pizza.type, pizza.size);
+                const pizzaKey = addedPizzas.length === 1 ? 'pizza' : `pizza_${index + 1}`;
+                itemsObj[pizzaKey] = {
+                    type: pizzaTypeForJson,
+                    size: pizza.size,
+                    crust: pizza.crust,
+                    topping: [...pizza.toppings].sort()
+                };
+            });
+            
+            // Add extras
             const extraInputsSave = Array.from(document.querySelectorAll('input[name="extra_item"]'));
             const extrasParsedSave = extraInputsSave.map(i => { try { return JSON.parse(i.value); } catch(e){ return null; } }).filter(Boolean);
-            const itemsObj = {
-                pizza: {
-                    type: pizzaTypeForJsonSave,
-                    size: orderData.pizza_size,
-                    crust: orderData.pizza_crust,
-                    topping: toppingsArraySave
-                }
-            };
-            // aggregate extras and group under singular keys
             const extrasAggSave = new Map();
+            
             for (const it of extrasParsedSave) {
                 const typeValue = it.type || it.name;
                 const keyId = [it.category, typeValue, it.size || '', it.flavor || ''].join('|');
@@ -1107,14 +1370,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     extrasAggSave.get(keyId).quantity += qty;
                 }
             }
+            
+            // Track counts for unique keys
+            const categoryCountersSave = {};
+            
             for (const [, v] of extrasAggSave) {
                 const payload = extraItemPayload(v);
-                if (v.category === 'milkshake' && !itemsObj.milkshake) {
-                    itemsObj.milkshake = payload;
-                } else if (v.category === 'soft_drink' && !itemsObj.soft_drink) {
-                    itemsObj.soft_drink = payload;
+                const category = v.category;
+                
+                // Initialize counter for this category if not exists
+                if (!categoryCountersSave[category]) {
+                    categoryCountersSave[category] = 0;
                 }
+                
+                // Create unique key for each extra item
+                categoryCountersSave[category]++;
+                const extraKey = categoryCountersSave[category] === 1 ? category : `${category}_${categoryCountersSave[category]}`;
+                
+                itemsObj[extraKey] = payload;
             }
+
             const orderJson = {
                 order: {
                     customer_name: orderData.customer_name,
@@ -1149,13 +1424,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 showSuccessMessage();
                 orderForm.reset();
-                clearToppings();
+                addedPizzas.length = 0; // Clear pizzas array
                 clearExtras();
                 orderPreview.style.display = 'none';
                 orderForm.style.display = 'block';
                 addressSection.style.display = 'none';
                 updateOrderTypeUI(orderTypeSelect.value || '');
-                updateCrustOptions();
+                updatePizzasList();
                 updateOrderSummary();
             } else {
                 throw new Error('Failed to save order');
@@ -1190,6 +1465,11 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => errorDiv.remove(), 5000);
     }
 });
+
+
+
+
+
 
 
 

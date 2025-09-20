@@ -37,18 +37,20 @@ def dynamic_chart(chart):
      i = 1
      subtotal = 0
      toppings_price = 0
+
      for key,item in load_order()["order"]["items"].items():     
           if "topping" in item:
                for toppings, price in items['toppings'].items():
                     for order_topping in item['topping']:
                         if order_topping == toppings:
                             toppings_price += price
-                         
-          pizza_class = getattr(pizza_types,item["type"])() if key == 'pizza' else None
+
+          pizza_class = getattr(pizza_types,item["type"])() if 'pizza' in key else None
           rows.append(f"|{i}|{key.replace('_', ' ').title()}, {item['type'].replace('_', ' ').title()}|{('<br> ,'.join(item['topping']).title()) if hasattr(pizza_types, item['type']) else ''}|{pizza_class.price + toppings_price if hasattr(pizza_types, item['type']) else item['price']} NIS|{1 if hasattr(pizza_types, item['type']) else item['quantity']}|{pizza_class.price + toppings_price if hasattr(pizza_types, item['type'])  else item['price']* item['quantity']}  NIS|")        
-       
+
           i +=1
           subtotal += (pizza_class.price + toppings_price)  if hasattr(pizza_types, item['type'])  else (item['price']* item['quantity'])
+          toppings_price = 0
      if chart:
         return initial_chart + "\n".join(rows)
      else:

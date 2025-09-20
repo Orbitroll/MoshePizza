@@ -25,14 +25,14 @@ class Anti_VeganP(Pizza):
         self.price = price
   
 class MediterreneanF(Pizza):
-    def __init__(self, size = "large", crust = "thin", topping = ["tzatziki", "olives", "cooked tomatoes", "red onions"], price = 0):
+    def __init__(self, size = "large", crust = "thin", topping = ["tzatziki", "olives", "tomato", "red onions"], price = 0):
         self.size = size
         self.crust = crust
         self.topping = topping
         self.price = price
 
 class MediterreneanP(Pizza):
-    def __init__(self, size = "small", crust = "thin", topping = ["tzatziki", "olives", "cooked tomatoes", "red onions"], price = 0 ):
+    def __init__(self, size = "small", crust = "thin", topping = ["tzatziki", "olives", "tomato", "red onions"], price = 0 ):
         self.size = size
         self.crust = crust
         self.topping = topping

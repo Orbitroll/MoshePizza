@@ -162,72 +162,120 @@
                         </div>
                     </div>
 
-                    <!-- Pizza Details -->
+                    <!-- Pizza Builder -->
                     <div class="form-section">
                         <h3 class="form-section-title">
                             <i class="fas fa-pizza-slice"></i>
-                            Pizza Details
+                            Pizza Builder
                         </h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="pizza_type">Pizza Type</label>
-                                <select id="pizza_type" name="pizza_type" required>
-                                    <option value="">Select pizza type...</option>
-                                    <option value="custom">Custom</option>
-                                    <option value="Anti-Vegan Pizza">Anti-Vegan Pizza</option>
-                                    <option value="Mediterrenean">Mediterrenean</option>
-                                    <option value="Neapolitan">Neapolitan</option>
-                                    <option value="Mexican Bravery">Mexican Bravery</option>
-                                    <option value="Moshe's Favorite">Moshe's Favorite</option>
-                                </select>
+                        
+                        <!-- Pizza Builder Controls -->
+                        <div class="pizza-builder-controls">
+                            <div class="builder-header">
+                                <h4 class="builder-title">Add Your Pizzas</h4>
+                                <button type="button" id="addPizzaBtn" class="btn btn-secondary add-pizza-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Add Pizza
+                                </button>
                             </div>
-                            <div class="form-group">
-                                <label for="pizza_size">Size</label>
-                                <select id="pizza_size" name="pizza_size" required>
-                                    <option value="">Select size...</option>
-                                    <option value="small">Small</option>
-                                    <option value="large">Large</option>
-                                    <option value="XL">XL</option>
-                                    <option value="XXL">XXL</option>
-                                </select>
+                            
+                            <!-- Current Pizza Form -->
+                            <div class="current-pizza-form" id="currentPizzaForm" style="display: none;">
+                                <div class="pizza-form-header">
+                                    <h5 class="pizza-form-title">
+                                        <i class="fas fa-pizza-slice"></i>
+                                        Build Your Pizza
+                                    </h5>
+                                    <span class="pizza-number" id="pizzaNumber">Pizza #1</span>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="current_pizza_type">Pizza Type</label>
+                                        <select id="current_pizza_type" name="current_pizza_type">
+                                            <option value="">Select pizza type...</option>
+                                            <option value="custom">Custom</option>
+                                            <option value="Anti-Vegan Pizza">Anti-Vegan Pizza</option>
+                                            <option value="Mediterrenean">Mediterrenean</option>
+                                            <option value="Neapolitan">Neapolitan</option>
+                                            <option value="Mexican Bravery">Mexican Bravery</option>
+                                            <option value="Moshe's Favorite">Moshe's Favorite</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="current_pizza_size">Size</label>
+                                        <select id="current_pizza_size" name="current_pizza_size">
+                                            <option value="">Select size...</option>
+                                            <option value="small">Small</option>
+                                            <option value="large">Large</option>
+                                            <option value="XL">XL</option>
+                                            <option value="XXL">XXL</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="current_pizza_crust">Crust</label>
+                                        <select id="current_pizza_crust" name="current_pizza_crust">
+                                            <option value="">Select crust...</option>
+                                            <option value="thin">Thin</option>
+                                            <option value="thick">Thick</option>
+                                            <option value="neapolitan">Neapolitan</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="currentToppingsSelect">Toppings</label>
+                                        <select id="currentToppingsSelect">
+                                            <option value="">Select topping...</option>
+                                            <option value="olives">Olives</option>
+                                            <option value="pepperoni">Pepperoni</option>
+                                            <option value="corn">Corn</option>
+                                            <option value="jalapenos">Jalapenos</option>
+                                            <option value="extra cheese">Extra Cheese</option>
+                                            <option value="tomato">Tomato</option>
+                                            <option value="mushrooms">Mushrooms</option>
+                                            <option value="onions">Onions</option>
+                                            <option value="red onions">Red Onions</option>
+                                            <option value="anchovy">Anchovy</option>
+                                            <option value="broccoli">Broccoli</option>
+                                            <option value="bell pepper">Bell Pepper</option>
+                                            <option value="salami">Salami</option>
+                                            <option value="chicken bits">Chicken Bits</option>
+                                            <option value="tzatziki">Tzatziki</option>
+                                            <option value="black olives">Black Olives</option>
+                                            <option value="basil">Basil</option>
+                                            <option value="chili flakes">Chili Flakes</option>
+                                            <option value="hot sauce">Hot Sauce</option>
+                                        </select>
+                                        <div id="currentSelectedToppings" class="chips-container"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="pizza-form-actions">
+                                    <button type="button" id="savePizzaBtn" class="btn btn-primary save-pizza-btn">
+                                        <i class="fas fa-check"></i>
+                                        Add This Pizza
+                                    </button>
+                                    <button type="button" id="cancelPizzaBtn" class="btn btn-secondary cancel-pizza-btn">
+                                        <i class="fas fa-times"></i>
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="pizza_crust">Crust</label>
-                                <select id="pizza_crust" name="pizza_crust" required>
-                                    <option value="">Select crust...</option>
-                                    <option value="thin">Thin</option>
-                                    <option value="thick">Thick</option>
-                                    <option value="neapolitan">Neapolitan</option>
-                                </select>
+                        
+                        <!-- Added Pizzas List -->
+                        <div class="added-pizzas-container" id="addedPizzasContainer">
+                            <div class="empty-pizzas-message" id="emptyPizzasMessage">
+                                <div class="empty-icon">
+                                    <i class="fas fa-pizza-slice"></i>
+                                </div>
+                                <p>No pizzas added yet</p>
+                                <small>Click "Add Pizza" to start building your order!</small>
                             </div>
-                            <div class="form-group">
-                                <label for="toppingsSelect">Toppings</label>
-                                <select id="toppingsSelect">
-                                    <option value="">Select topping...</option>
-                                    <option value="olives">Olives</option>
-                                    <option value="pepperoni">Pepperoni</option>
-                                    <option value="corn">Corn</option>
-                                    <option value="jalapenos">Jalapenos</option>
-                                    <option value="extra cheese">Extra Cheese</option>
-                                    <option value="tomato">Tomato</option>
-                                    <option value="cooked tomatoes">Cooked Tomatoes</option>
-                                    <option value="mushrooms">Mushrooms</option>
-                                    <option value="onions">Onions</option>
-                                    <option value="red onions">Red Onions</option>
-                                    <option value="anchovy">Anchovy</option>
-                                    <option value="broccoli">Broccoli</option>
-                                    <option value="bell pepper">Bell Pepper</option>
-                                    <option value="salami">Salami</option>
-                                    <option value="chicken bits">Chicken Bits</option>
-                                    <option value="tzatziki">Tzatziki</option>
-                                    <option value="black olives">Black Olives</option>
-                                    <option value="basil">Basil</option>
-                                    <option value="chili flakes">Chili Flakes</option>
-                                    <option value="hot sauce">Hot Sauce</option>
-                                </select>
-                                <div id="selectedToppings" class="chips-container"></div>
+                            <div class="pizzas-list" id="pizzasList">
+                                <!-- Added pizzas will appear here -->
                             </div>
                         </div>
                     </div>
@@ -391,14 +439,15 @@
                             </div>
                         </div>
 
-                        <!-- Pizza Section -->
-                        <div class="summary-section" id="pizzaSection" style="display: none;">
+                        <!-- Pizzas Section -->
+                        <div class="summary-section" id="pizzasSection" style="display: none;">
                             <h5 class="section-title">
                                 <i class="fas fa-pizza-slice"></i>
-                                Pizza
+                                Pizzas
+                                <span class="pizza-count" id="pizzaCount">(0)</span>
                             </h5>
-                            <div class="summary-item" id="pizzaItem" style="display: none;">
-                                <!-- Pizza details will be populated dynamically -->
+                            <div class="pizzas-summary-list" id="pizzasSummaryList">
+                                <!-- Pizza items will be populated dynamically -->
                             </div>
                         </div>
 
@@ -477,3 +526,4 @@
     <script src="{{ url_for('static', filename='order.js', v='8') }}"></script>
 </body>
 </html>
+
