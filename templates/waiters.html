@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiters - Pizza Moshe Yavne</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/logo.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Pizza Moshe Logo" class="logo-img">
+                </div>
+                <div class="logo-stack">
+                    <div class="logo-text">PIZZA MOSHE</div>
+                    <div class="logo-subtitle">YAVNE</div>
+                    <div class="logo-tagline">THE MOST ADVANCED PIZZA IN THE WORLD</div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home_page') }}">Home</a></li>
+                <li><a href="{{ url_for('menu_page') }}">Menu</a></li>
+                <li><a href="{{ url_for('about_page') }}">About</a></li>
+                <li><a href="{{ url_for('ordering_page') }}">Order</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="waiters-main">
+        <section class="waiters-section order-section">
+            <div class="container">
+                <h2 class="section-title">Waiters Dashboard</h2>
+                <p class="section-subtitle">Tap a table to view details or clear it</p>
+
+                <div class="waiters-toolbar">
+                    <div class="status-legend">
+                        <span class="legend-item"><span class="legend-dot free"></span> Free</span>
+                        <span class="legend-item"><span class="legend-dot taken"></span> Occupied</span>
+                    </div>
+                    <div class="refresh-indicator" id="refreshIndicator" aria-live="polite"></div>
+                </div>
+
+                <div id="tablesGrid" class="waiters-grid" aria-label="Tables grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for table details -->
+    <div id="tableModal" class="table-modal" aria-hidden="true" role="dialog" aria-labelledby="tableModalTitle">
+        <div class="table-modal-backdrop" data-close-modal></div>
+        <div class="table-modal-content">
+            <div class="table-modal-header">
+                <h3 id="tableModalTitle"><i class="fas fa-utensils"></i> Table Details</h3>
+                <button class="modal-close" id="modalCloseBtn" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="table-modal-body" id="tableDetails">
+                <div class="detail-row"><span class="detail-label">Table:</span> <span id="detailTableNum">—</span></div>
+                <div class="detail-row"><span class="detail-label">Status:</span> <span id="detailStatus">—</span></div>
+                <div class="detail-row"><span class="detail-label">Customer:</span> <span id="detailCustomer">—</span></div>
+                <div class="detail-row"><span class="detail-label">Waiter:</span> <span id="detailWaiter">—</span></div>
+                <div class="detail-row"><span class="detail-label">Timestamp:</span> <span id="detailTimestamp">—</span></div>
+            </div>
+            <div class="table-modal-footer">
+                <button id="clearTableBtn" class="btn btn-success" style="display:none">
+                    <i class="fas fa-broom"></i> Clear Table
+                </button>
+                <button class="btn btn-secondary" id="closeFooterBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="{{ url_for('static', filename='waiters.js') }}"></script>
+</body>
+</html>

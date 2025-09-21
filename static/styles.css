@@ -96,6 +96,112 @@ body::after {
     z-index: 9997;
 }
 
+/* ==========================
+   Waiters Dashboard Styles
+   ========================== */
+.waiters-main { padding-top: 0; }
+
+.waiters-section {
+    padding: 120px 0 80px 0;
+    background: var(--cyber-gray); /* match other content sections */
+    overflow: visible;
+}
+
+.waiters-section .section-title { text-align: center; }
+.waiters-section .section-subtitle { text-align: center; color: var(--text-gray); margin-bottom: 20px; }
+
+.waiters-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0 20px 0;
+}
+.status-legend { display: flex; gap: 16px; align-items: center; }
+.legend-item { display: inline-flex; align-items: center; gap: 8px; color: var(--text-gray); font-weight: 600; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(0,0,0,0.4); }
+.legend-dot.free { background: var(--server-green); box-shadow: 0 0 10px rgba(16,185,129,0.7); }
+.legend-dot.taken { background: var(--neon-orange); box-shadow: 0 0 10px rgba(255,107,53,0.7); }
+.refresh-indicator { color: var(--text-gray); font-size: 0.9rem; min-height: 1em; }
+
+.waiters-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(180px, 1fr));
+    gap: 16px;
+}
+@media (max-width: 1200px) {
+    .waiters-grid { grid-template-columns: repeat(4, minmax(160px, 1fr)); }
+}
+@media (max-width: 900px) {
+    .waiters-grid { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
+}
+@media (max-width: 600px) {
+    .waiters-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+}
+
+.table-card {
+    background: linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9));
+    border: 2px solid rgba(203,213,225,0.15);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    color: var(--text-white);
+    text-align: left;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.table-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    border-color: rgba(203,213,225,0.35);
+}
+.table-card.free { box-shadow: 0 0 18px rgba(16,185,129,0.25); }
+.table-card.taken { box-shadow: 0 0 18px rgba(255,107,53,0.25); }
+
+.table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.table-number { font-family: 'Orbitron', monospace; font-weight: 800; letter-spacing: 1px; }
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid rgba(203,213,225,0.25);
+}
+.table-card.free .status-badge { background: rgba(16,185,129,0.12); color: var(--server-green); border-color: rgba(16,185,129,0.5); }
+.table-card.taken .status-badge { background: rgba(255,107,53,0.12); color: var(--neon-orange); border-color: rgba(255,107,53,0.5); }
+
+.table-mini-details { color: var(--text-gray); font-size: 0.9rem; min-height: 1.4em; }
+
+/* Modal */
+.table-modal { position: fixed; inset: 0; display: none; z-index: 1500; }
+.table-modal.open { display: block; }
+.table-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); }
+.table-modal-content {
+    position: relative;
+    width: min(560px, 92vw);
+    margin: 10vh auto 0 auto;
+    background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,41,59,0.98));
+    border: 2px solid rgba(203,213,225,0.2);
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.table-modal-header {
+    display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid rgba(203,213,225,0.18);
+}
+.table-modal-header h3 { font-family: 'Orbitron', monospace; color: var(--neon-blue); text-shadow: 0 0 6px rgba(0,191,255,0.6); }
+.modal-close { background: transparent; border: none; color: var(--text-gray); font-size: 1.2rem; cursor: pointer; }
+.modal-close:hover { color: var(--text-white); }
+
+.table-modal-body { padding: 16px 18px; }
+.detail-row { margin: 8px 0; color: var(--text-gray); }
+.detail-label { color: var(--text-white); font-weight: 700; margin-right: 6px; }
+
+.table-modal-footer { display: flex; gap: 10px; justify-content: flex-end; padding: 16px 18px; border-top: 1px solid rgba(203,213,225,0.18); }
+
+
 /* Header */
 .header {
     position: fixed;
@@ -598,6 +704,7 @@ body::after {
 
 /* Ensure first section on any page has enough top padding for fixed header */
 .menu-section:first-of-type,
+.waiters-section:first-of-type,
 .delivery-section:first-of-type,
 .about-section:first-of-type,
 .order-section:first-of-type,
@@ -612,6 +719,7 @@ body {
 
 /* Ensure sections have proper positioning context */
 .menu-section,
+.waiters-section,
 .delivery-section,
 .about-section,
 .order-section,

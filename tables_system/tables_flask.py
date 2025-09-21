@@ -42,6 +42,10 @@ def load_waiters():
 
 tables_bp = Blueprint('tables_bp', __name__)
 
+@tables_bp.get('/waiters/')
+def waiters_page():
+    return render_template('waiters.html')
+
 
 @tables_bp.post('/new-table/')
 def new_table():
@@ -104,4 +108,7 @@ def free_tables():
 
 @tables_bp.get('/table-<int:table_num>')
 def table_show(table_num):
-    pass
+    table_name =  f"table_{table_num}"
+    file_path = os.path.join("used_tables", f"{table_name}.json")
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)

@@ -158,7 +158,7 @@ class Table:
         
     
     def clear_table(self):
-        if self or f"table_{self}" in globals():
+        if self in globals() or f"table_{self}" in globals():
             Table.clear_tableinst()
             self.is_taken = False
             Table.taken_del(self.table_num)
