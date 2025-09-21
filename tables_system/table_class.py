@@ -1,13 +1,43 @@
 
-from data import takent_json, waiters_json
+from data import takent_json, waiters_json, tableinst_json
 import json
-
+import re
+import os
 
 class Table:
-    table_instances = 0
     max_instances = 20
     available_waiters = []
+
+    def load_table(table):
+            table_name =  f"table_{table}"
+            file_path = os.path.join("used_tables", f"{table_name}.json")
+            with open(file_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+
+    def add_tableinst():
+        with open(tableinst_json, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            if data[0] < 20:
+                data[0] += 1
+            else:
+                raise OverflowError("All the tables are taken, talk to Moshe")
+            with open(tableinst_json, "w", encoding="utf-8") as f:
+                json.dump(data, f)
     
+    def clear_tableinst():
+        with open(tableinst_json, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            data[0] -= 1
+            with open(tableinst_json, "w", encoding="utf-8") as f:
+                json.dump(data, f)
+    
+    def display_tableinst():
+        with open(tableinst_json, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data[0]
+
+    table_instances = display_tableinst()
+
     def tables_taken(table_int):
         with open(takent_json, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -74,7 +104,7 @@ class Table:
             else:
                 self.is_taken = True
                 Table.tables_taken(self.table_num) 
-                Table.table_instances += 1 
+                Table.add_tableinst()
 
     def choose_waiter(self):
          waiters_data = Table.load_waiters()
@@ -128,32 +158,42 @@ class Table:
         
     
     def clear_table(self):
-        Table.table_instances -= 1
-        self.is_taken = False
-        Table.taken_del(self.table_num)
-        Table.waiters_free(self.waiter)
-        self.waiter = None
-        self.timestamp = None
-        self.customer = None
-        
+        if self or f"table_{self}" in globals():
+            Table.clear_tableinst()
+            self.is_taken = False
+            Table.taken_del(self.table_num)
+            Table.waiters_free(self.waiter)
+            self.waiter = None
+            self.timestamp = None
+            self.customer = None
+        else:
+            s = f"{self}"
+            match = re.search(r"\d+", s)
+            if match:
+                num = int(match.group())
+            data = Table.load_table(num)
+            Table.clear_tableinst()
+            Table.taken_del(num)
+            Table.waiters_free(data['waiter'])
 
-        
+
 
     def to_dict(self):
             return {
                 "table_num": self.table_num,
                 "timestamp": self.timestamp,
                 "customer":self.customer,
-                "waiter":self.waiter,
-                "is_taken":self.is_taken
+                "waiter":self.waiter,            
             }
 
     def display_free():
         free_tables = []
+        taken = Table.load_taken()
         for i in range(1,21):
-            if i not in Table.tables_taken:
+            if i not in taken:
                 free_tables.append(i)               
-        print('tables', *free_tables, 'are free')
+        return free_tables
+
 
     
 

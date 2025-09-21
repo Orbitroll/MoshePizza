@@ -1,34 +1,22 @@
 {
     "order": {
         "customer_name": "Yanti Parazi",
-        "order_type": "pickup",
+        "order_type": "dine-in",
         "phone_number": "0506699712",
         "email": "yanti@gmail.com",
+        "table": 20,
         "notes": "",
         "address": "Irrelevant",
         "items": {
-            "pizza_1": {
-                "type": "MediterreneanP",
+            "pizza": {
+                "type": "Mexican_BraveryP",
                 "size": "small",
                 "crust": "thin",
                 "topping": [
-                    "olives",
-                    "red onions",
-                    "tomato",
-                    "tzatziki"
-                ]
-            },
-            "pizza_2": {
-                "type": "Moshes_FavoriteP",
-                "size": "small",
-                "crust": "thin",
-                "topping": [
-                    "black olives",
-                    "broccoli",
-                    "corn",
-                    "extra cheese",
-                    "pepperoni",
-                    "red onions"
+                    "chili flakes",
+                    "hot sauce",
+                    "jalapenos",
+                    "pepperoni"
                 ]
             }
         },
@@ -38,17 +26,17 @@
         },
         "tip": 0
     },
-    "id": 432631,
+    "id": 138650,
     "timestamp": {
         "date": {
-            "day": 20,
+            "day": 21,
             "month": 9,
             "year": 2025
         },
         "time": {
-            "hour": 19,
-            "minutes": 12,
-            "seconds": 35
+            "hour": 18,
+            "minutes": 59,
+            "seconds": 46
         }
     }
 }

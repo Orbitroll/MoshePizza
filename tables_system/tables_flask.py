@@ -73,7 +73,7 @@ def new_table():
              t.waiter = old_table["waiter"]
              t.is_taken = old_table["is_taken"]
 
-             Table.table_instances += 1
+             Table.add_tableinst()
              table_name = new_name
         
         data["order"]["table"] = int(globals()[table_name].table_num)
@@ -92,6 +92,16 @@ def new_table():
         return redirect('/admin/order/pizza', code = 307)
 
 
-@tables_bp.get('/order/table-<int:table_id>')
-def table_show(table_id):
+@tables_bp.delete('/delete-table/<int:table_name>')
+def table_delete(table_name):
+        Table.clear_table(table_name)
+        return 'Table cleared successfully'
+     
+@tables_bp.get('/free-tables')
+def free_tables():
+        free_data = Table.display_free()
+        return jsonify({"free_tables": free_data})
+
+@tables_bp.get('/table-<int:table_num>')
+def table_show(table_num):
     pass
