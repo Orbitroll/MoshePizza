@@ -1,8 +1,8 @@
 # MoshePizza
 
-Flask application for ordering pizzas, managing dine‑in tables, and generating/sending invoices. It ships with a modern UI (Jinja2 templates + static assets), admin utilities, and a SQLite database for recorded invoices.
+Flask application for ordering pizzas, managing dine-in tables, and generating/sending invoices. It ships with a modern UI (Jinja2 templates + static assets), admin utilities, and a SQLite database for recorded invoices.
 
-Status: Work‑in‑progress. This README reflects the current working codepaths and how to run them locally.
+Status: Work-in-progress. This README reflects the current working codepaths and how to run them locally.
 
 ---
 
@@ -10,12 +10,13 @@ Status: Work‑in‑progress. This README reflects the current working codepaths
 
 - Flask app entry `main.py` with blueprints: `admins`, `users`, `tables_system`, `invoices_system`.
 - Order flow with UI pages: `/home/`, `/menu/`, `/about/`, `/order/`.
+- Waiters dashboard UI page: `/tables/waiters/` (live status + clear tables).
 - Order API: persists the last order to `jsons/order.json` and copies to `orders/order_<id>.json`.
 - Invoice persistence: saves computed invoice rows to SQLite (`DataBase/invoice.db`).
 - Invoice generation: builds Markdown + PDF via Pandoc and emails the PDF using Gmail (yagmail).
-- Tables management: allocate/clear tables for dine‑in and track waiter load with JSON state.
-- Admin tools: weather‑aware dough recipe and pizza build flow.
-- Logging: append‑only file `orders.log` plus debug endpoints for DB stats.
+- Tables management: allocate/clear tables for dine-in and track waiter load with JSON state.
+- Admin tools: weather-aware dough recipe and pizza build flow.
+- Logging: append-only file `orders.log` plus debug endpoints for DB stats.
 
 ---
 
@@ -94,6 +95,7 @@ The app listens on `http://127.0.0.1:5000` by default.
 
 - Pages
   - `GET /home/`, `GET /menu/`, `GET /about/`, `GET /order/`
+  - `GET /tables/waiters/` — Waiters dashboard UI
 
 - Orders
   - `POST /order/place-order` — Accepts JSON from the Order UI, writes to `jsons/order.json` and `orders/order_<id>.json`, logs to `orders.log`, and creates an `Invoice` DB row with computed totals.
@@ -105,14 +107,15 @@ The app listens on `http://127.0.0.1:5000` by default.
   - `GET /invoices/db` — Return latest 20 invoice rows from SQLite (id, totals, timestamps).
   - `POST /invoices/new-md/` — Build Markdown invoice and convert to PDF (Pandoc), then email it to the order’s email address via Gmail.
 
-- Tables (dine‑in)
+- Tables (dine-in)
   - `POST /tables/new-table/` — Allocate a table for the last order if `order_type == "dine-in"`; assigns a waiter, persists JSON under `used_tables/`.
   - `GET /tables/free-tables` — List currently free table numbers.
   - `GET /tables/table-<num>` — Return table JSON details for a specific table.
   - `DELETE /tables/delete-table/<num>` — Clear a table and free the waiter.
+  - UI: `GET /tables/waiters/` — Dashboard to monitor and clear tables.
 
 - Admin
-  - `GET /admin/Kitchen_bon` — Weather‑aware dough recipe suggestion.
+  - `GET /admin/Kitchen_bon` — Weather-aware dough recipe suggestion.
   - `POST /admin/order/pizza/` — Build pizzas from the last order and then redirect to invoice generation.
 
 - Debug
@@ -129,7 +132,7 @@ The app listens on `http://127.0.0.1:5000` by default.
   secret = "<your-gmail-app-password>"
   ```
 - For production, load secrets from environment variables and do not commit them.
-- The sender address is currently hard‑coded in `invoices_system/dynamic_invoices.py` (`pizzamosheyavne@gmail.com`). Update to your address if needed.
+- The sender address is currently hard-coded in `invoices_system/dynamic_invoices.py` (`pizzamosheyavne@gmail.com`). Update to your address if needed.
 
 ---
 
@@ -183,3 +186,4 @@ The app listens on `http://127.0.0.1:5000` by default.
 ## License
 
 No explicit license provided. Treat as private/internal unless a license is added.
+
