@@ -1,3 +1,4 @@
+import prices
 from datetime import datetime, timedelta
 
 admin_users = ["Moshe", "Shlomi", "Mohammed", "Ron"]

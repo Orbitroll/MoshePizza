@@ -3,16 +3,16 @@ import data
 import json
 import random
 import os
+from loggs.login import login 
 from clock import timestamp
 from data import  orders, order_storage, temp_dir
 from admins.orders import load_order ,order_fetch
 from loggs.logger import Logger
 from DataBase import db
 from DataBase.models import Invoice
-from fastapi import FastAPI
-from pydantic import BaseModel
 from inventory import inventory
 from supplies import supplier_stock
+
 logger = Logger("orders.log")
 
 app = Flask('Pizza Moshe')
@@ -278,3 +278,66 @@ def debug_counts():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+def find_category(item_name: str):
+    for category, items in inventory.items():
+        if item_name in items:
+            return category
+    return None
+
+
+def auto_restock(category: str, item: str, batch_size: int = 20):
+    current_qty = inventory[category][item]
+    supplier_qty = supplier_stock[category].get(item, 0)
+
+    threshold = 5
+    if current_qty <= threshold and supplier_qty > 0:
+        restock_amount = min(batch_size, supplier_qty)
+        inventory[category][item] += restock_amount
+        supplier_stock[category][item] -= restock_amount
+        return f"Auto-restocked {restock_amount} {item}."
+    return None
+
+
+@app.route("/inventory", methods=["GET"])
+def get_inventory():
+    return {"inventory": inventory}
+
+
+@app.route("/supplies", methods=["GET"])
+def get_supplier_stock():
+    return {"supplier_stock": supplier_stock}
+
+
+@app.route("/supplies/place-order", methods=["POST"])
+def place_supplier_order():
+    data = request.get_json()
+    item = data.get("item")
+    qty = data.get("quantity")
+
+    if not item or qty is None:
+        return {"status": "error", "message": "Missing 'item' or 'quantity' in request."}
+
+    if not isinstance(qty, int):
+        return {"status": "error", "message": "'quantity' must be an integer."}
+
+    category = find_category(item)
+    if not category:
+        return {"status": "error", "message": f"{item} not found in inventory."}
+
+    if inventory[category][item] < qty:
+        return {
+            "status": "error",
+            "message": f"Not enough {item} in inventory. Available: {inventory[category][item]}"
+        }
+
+    inventory[category][item] -= qty
+    restock_message = auto_restock(category, item, batch_size=20)
+
+    return {
+        "status": "success",
+        "message": f"Order placed for {qty} {item}.",
+        "remaining_inventory": inventory[category][item],
+        "remaining_supplier": supplier_stock[category][item],
+        "restock_action": restock_message or "No restock needed."
+    }
