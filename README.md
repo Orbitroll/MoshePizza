@@ -17,7 +17,20 @@ MoshePizza helps plan and manage pizza orders for family & friends and streamlin
 * **Data files** – JSON helpers & seed data in `jsons/`.
 
 > NOTE: This README is based on the current repository structure. If code moves or new modules are added, update the sections below accordingly.
-
+## 🗂️Requirements.TXT
+```
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+requests
+pypandoc
+yagmail
+discord.py
+fastapi
+pydantic
+# Note: For PDF generation via pypandoc, a Pandoc binary
+# (and a LaTeX engine for PDF output) must be installed on the system.
+```
 ## 🗂️ Project Structure
 
 ```
