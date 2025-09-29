@@ -118,18 +118,12 @@ Document your go‑to formulas here (hydration %, salt, yeast) and typical timin
 * [ ] Add screenshots/GIFs of the UI
 * [ ] Expand tests
 * [ ] Package Docker support (`Dockerfile`, `compose.yaml`)
-* [ ] CI (GitHub Actions) for lint/test
+* [ ] CI (GitHub Actions) when Hudi teach us
+* [ ] change pizza app to dinamic buisness app
 
-## 🐞 Troubleshooting
 
-* **Port in use:** change `PORT` or free 5000
-* **Permission denied writing logs/JSON:** check filesystem permissions
-* **Static not loading:** verify `static/` and template paths
 
-## 🤝 Contributing
 
-PRs are welcome! Please open an issue to discuss major changes.
 
-## 📜 License
 
-MIT (or your preferred license). Add a `LICENSE` file.
+
