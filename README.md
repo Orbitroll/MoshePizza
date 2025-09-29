@@ -1,189 +1,135 @@
 # MoshePizza
 
-Flask application for ordering pizzas, managing dine-in tables, and generating/sending invoices. It ships with a modern UI (Jinja2 templates + static assets), admin utilities, and a SQLite database for recorded invoices.
+> A personal pizza‑ordering & kitchen helper web app built with Flask.
 
-Status: Work-in-progress. This README reflects the current working codepaths and how to run them locally.
+## 📌 Overview
 
----
+MoshePizza helps plan and manage pizza orders for family & friends and streamlines prep in the kitchen. It includes menu & topping presets, order logging, a dough calculator, and simple admin screens.
 
-## Features
+## ✨ Key Features
 
-- Flask app entry `main.py` with blueprints: `admins`, `users`, `tables_system`, `invoices_system`.
-- Order flow with UI pages: `/home/`, `/menu/`, `/about/`, `/order/`.
-- Waiters dashboard UI page: `/tables/waiters/` (live status + clear tables).
-- Order API: persists the last order to `jsons/order.json` and copies to `orders/order_<id>.json`.
-- Invoice persistence: saves computed invoice rows to SQLite (`DataBase/invoice.db`).
-- Invoice generation: builds Markdown + PDF via Pandoc and emails the PDF using Gmail (yagmail).
-- Tables management: allocate/clear tables for dine-in and track waiter load with JSON state.
-- Admin tools: weather-aware dough recipe and pizza build flow.
-- Logging: append-only file `orders.log` plus debug endpoints for DB stats.
+* **Order flow** – create, edit and track pizza orders.
+* **Menu presets** – common pies & toppings pre‑configured (see `pizza moshe menu.md`).
+* **Dough & timing helpers** – utilities and classes for dough, timers and workflow (see `Pizza_Classes.py`, `pizza_types.py`, `clock.py`).
+* **Logging** – order/activity logs under `loggs/`.
+* **Admin panels** – folders such as `admins/`, `users/`, `tables_system/`, and `invoices_system/` indicate basic management pages.
+* **Static & templates** – UI assets under `static/` and HTML under `templates/`.
+* **Data files** – JSON helpers & seed data in `jsons/`.
 
----
+> NOTE: This README is based on the current repository structure. If code moves or new modules are added, update the sections below accordingly.
 
-## Project Structure (high level)
+## 🗂️ Project Structure
+
 ```
-MoshePizza/
-  admins/                # Admin endpoints (blueprint)
-  DataBase/              # SQLAlchemy setup + SQLite DB file
-  invoices/              # Generated invoices (.md/.pdf)
-  invoices_system/       # Invoice blueprint + email/Pandoc logic
-  jsons/                 # App JSON data (e.g., last order)
-  loggs/                 # Simple logger helper
-  orders/                # Saved orders as JSON files
-  static/                # CSS/JS/assets for the UI
-  tables_system/         # Tables blueprint + table class + JSON state
-  templates/             # Jinja2 HTML pages
-  used_tables/           # Saved occupied table files
-  users/                 # User blueprint
-  main.py                # Flask app entrypoint
-  classes.py             # Weather + Pizza + Order helpers
-  pizza_types.py         # Pizza type classes
-  prices.py              # Prices for toppings/drinks
-  requirements.txt       # Python dependencies
-```
-
----
-
-## Quick Start
-
-### Requirements
-- Python 3.10+
-- Install Python deps: `pip install -r requirements.txt`
-- For invoice PDF generation: install Pandoc and a LaTeX engine (e.g., MiKTeX on Windows, TeX Live on Linux/macOS)
-
-Notes
-- Email sending uses Gmail via `yagmail`. Use an app password and avoid committing secrets. See “Email setup” below.
-- SQLite DB is created automatically at `DataBase/invoice.db` on first run.
-
-### Setup
-```
-python -m venv .venv
-
-# Windows
-.venv\Scripts\activate
-
-# macOS/Linux
-source .venv/bin/activate
-
-pip install -r requirements.txt
+DataBase/            # DB assets / scripts (if used)
+admins/              # Admin-related views / logic
+assets/              # Images, diagrams (e.g., drawio files)
+bot/                 # (Optional) helper scripts/bots
+invoices_system/     # Invoices pages / logic
+data.py              # Data helpers / adapters
+jsons/               # JSON data / seeds
+loggs/               # Logs (orders, activity) – e.g., orders.log
+static/              # CSS/JS/images
+templates/           # Flask/Jinja templates (HTML)
+users/               # User pages / logic
+tables_system/       # Tables/DB-ish management screens
+Pizza_Classes.py     # Core pizza classes & helpers
+pizza_types.py       # Pizza types, toppings and presets
+clock.py             # Timers / reminders for prep
+classes.py           # Additional classes/utilities
+utils.py             # Shared utilities
+main.py              # App entrypoint (Flask)
 ```
 
-### Run
-Option A — Flask CLI
+## 🧰 Tech Stack
+
+* **Backend:** Python (Flask)
+* **Frontend:** HTML, CSS, JavaScript
+* **Storage:** JSON files and/or simple DB (see `DataBase/`)
+
+## 🚀 Getting Started (Local)
+
+1. **Prereqs:** Python 3.10+ and Git
+2. **Clone:**
+
+   ```bash
+   git clone https://github.com/Orbitroll/MoshePizza.git
+   cd MoshePizza
+   ```
+3. **Create venv & install deps:**
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+   pip install -r requirements.txt  # If missing, see Minimal Deps below
+   ```
+4. **Run:**
+
+   ```bash
+   python main.py
+   # or, if you use FLASK_APP:
+   # flask --app main run --debug
+   ```
+5. **Open:** [http://localhost:5000](http://localhost:5000)
+
+### Minimal Deps (if `requirements.txt` doesn’t exist yet)
+
+Create a `requirements.txt` with:
+
 ```
-# PowerShell
-$env:FLASK_APP = "main.py"
-$env:FLASK_ENV = "development"
-flask run
-
-# bash
-export FLASK_APP=main.py
-export FLASK_ENV=development
-flask run
+Flask>=2.3
 ```
 
-Option B — Python
-```
-python main.py
-```
+Add more as your modules require.
 
-The app listens on `http://127.0.0.1:5000` by default.
+## ⚙️ Configuration
 
----
+* **Environment variables** (optional):
 
-## Key Endpoints
+  * `FLASK_DEBUG=1` – enable debug
+  * `PORT=5000` – change server port
+* **Paths** – ensure JSON/log directories exist and the app has write permissions.
 
-- Pages
-  - `GET /home/`, `GET /menu/`, `GET /about/`, `GET /order/`
-  - `GET /tables/waiters/` — Waiters dashboard UI
+## 🧪 Sample Data
 
-- Orders
-  - `POST /order/place-order` — Accepts JSON from the Order UI, writes to `jsons/order.json` and `orders/order_<id>.json`, logs to `orders.log`, and creates an `Invoice` DB row with computed totals.
-  - `GET /order/<id>` — Return an order JSON from `orders/order_<id>.json`.
-  - `GET /order/pizza` — Return the last order (simple debug helper).
-  - `GET /order/pizza/all-pizzas` — Return all collected orders for the process lifetime.
+* `average pizza order.txt` – describes a typical order snapshot
+* `pizza moshe menu.md` – menu presets you can tailor
 
-- Invoices
-  - `GET /invoices/db` — Return latest 20 invoice rows from SQLite (id, totals, timestamps).
-  - `POST /invoices/new-md/` — Build Markdown invoice and convert to PDF (Pandoc), then email it to the order’s email address via Gmail.
+## 🧾 Invoices & Tables (Optional)
 
-- Tables (dine-in)
-  - `POST /tables/new-table/` — Allocate a table for the last order if `order_type == "dine-in"`; assigns a waiter, persists JSON under `used_tables/`.
-  - `GET /tables/free-tables` — List currently free table numbers.
-  - `GET /tables/table-<num>` — Return table JSON details for a specific table.
-  - `DELETE /tables/delete-table/<num>` — Clear a table and free the waiter.
-  - UI: `GET /tables/waiters/` — Dashboard to monitor and clear tables.
+If you’re using `invoices_system/` and `tables_system/`, document how to:
 
-- Admin
-  - `GET /admin/Kitchen_bon` — Weather-aware dough recipe suggestion.
-  - `POST /admin/order/pizza/` — Build pizzas from the last order and then redirect to invoice generation.
+* Create a new invoice/table
+* Where files are saved
+* Any exported CSV/JSON format
 
-- Debug
-  - `GET /debug/db-info` — Basic DB URL and invoice count
-  - `GET /debug/counts` — Invoice count only
+## 👤 Admin & Users
 
----
+* Admin pages are under `admins/`
+* User‑facing logic under `users/`
+* Add a note here if you use auth (session / simple login) and how to add admins
 
-## Email Setup (invoices)
+## 🧮 Dough & Timing Helpers
 
-- The current code uses Gmail + `yagmail` and imports an app password from `invoices_system/app_pass.py` as `secret`.
-- Recommended for local dev only: create `invoices_system/app_pass.py` with:
-  ```python
-  secret = "<your-gmail-app-password>"
-  ```
-- For production, load secrets from environment variables and do not commit them.
-- The sender address is currently hard-coded in `invoices_system/dynamic_invoices.py` (`pizzamosheyavne@gmail.com`). Update to your address if needed.
+Document your go‑to formulas here (hydration %, salt, yeast) and typical timing routines.
 
----
+## 🗺️ Roadmap
 
-## PDF Generation (Pandoc)
+* [ ] Add screenshots/GIFs of the UI
+* [ ] Expand tests
+* [ ] Package Docker support (`Dockerfile`, `compose.yaml`)
+* [ ] CI (GitHub Actions) for lint/test
 
-- Install Pandoc (https://pandoc.org/installing.html).
-- Install a LaTeX engine to enable PDF output (e.g., MiKTeX on Windows, TeX Live on Linux/macOS).
-- `pypandoc` will call the Pandoc binary to convert the Markdown invoice to PDF.
+## 🐞 Troubleshooting
 
----
+* **Port in use:** change `PORT` or free 5000
+* **Permission denied writing logs/JSON:** check filesystem permissions
+* **Static not loading:** verify `static/` and template paths
 
-## Data & Persistence
+## 🤝 Contributing
 
-- Orders
-  - Last order: `jsons/order.json`
-  - Historical orders: `orders/order_<id>.json`
+PRs are welcome! Please open an issue to discuss major changes.
 
-- Invoices (DB)
-  - SQLite file: `DataBase/invoice.db`
-  - Model: `Invoice(id, external_order_id, customer, subtotal, tip, total, created_at, json)`
+## 📜 License
 
-- Tables state (JSON)
-  - `tables_system/jsons/tables_taken.json` — taken table numbers
-  - `tables_system/jsons/table_instances.json` — count of active tables
-  - `tables_system/jsons/tables_waiters.json` — waiter -> assigned table count
-
----
-
-## Development Notes
-
-- Blueprints are registered in `main.py`.
-- Static assets (`static/`) and templates (`templates/`) back the UI pages, including a dynamic order builder (`static/order.js`).
-- To reset invoices DB for a clean slate, stop the server and delete `DataBase/invoice.db` (the app recreates tables on start).
-- Avoid committing secrets (e.g., email passwords). Prefer environment variables or a local, untracked config file.
-
----
-
-## Troubleshooting
-
-- “pandoc not found” or PDF generation fails
-  - Install Pandoc and a LaTeX engine; confirm `pandoc --version` works in your shell.
-
-- Email fails
-  - Ensure Gmail app password is set, and the sender address is correct in `invoices_system/dynamic_invoices.py`.
-
-- DB errors on first run
-  - Ensure your virtual environment is active and `Flask-SQLAlchemy` is installed via `pip install -r requirements.txt`.
-
----
-
-## License
-
-No explicit license provided. Treat as private/internal unless a license is added.
-
+MIT (or your preferred license). Add a `LICENSE` file.
