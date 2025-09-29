@@ -7,7 +7,7 @@ from loggs.login import login
 from clock import timestamp
 from data import  orders, order_storage, temp_dir
 from admins.orders import load_order ,order_fetch
-from loggs.logger import Logger
+from loggs.Data.logger import Logger
 from DataBase import db
 from DataBase.models import Invoice
 from inventory import inventory
@@ -271,9 +271,6 @@ def debug_counts():
     with db.engine.connect() as conn:
         cnt = conn.execute(text("SELECT COUNT(*) FROM invoices")).scalar()
     return jsonify({"invoices": int(cnt)}), 200
-
-
-
 
 
 if __name__ == '__main__':
